@@ -1,12 +1,13 @@
 <?php
 
-namespace Suin\Yaf\Twig;
+/**
+ *      [CodeJm!] Author CodeJm[codejm@163.com].
+ *
+ *
+ *      $Id: Twig.php 2014-08-27 17:12:58 codejm $
+ */
 
-use \Twig_Loader_Filesystem;
-use \Twig_Environment;
-
-class Twig implements \Yaf_View_Interface
-{
+class Core_Twig implements \Yaf_View_Interface {
 	/** @var \Twig_Loader_Filesystem */
 	protected $loader;
 	/** @var \Twig_Environment */
@@ -18,18 +19,16 @@ class Twig implements \Yaf_View_Interface
 	 * @param string $templateDir
 	 * @param array  $options
 	 */
-	public function __construct($templateDir, array $options = array())
-	{
-		$this->loader = new Twig_Loader_Filesystem($templateDir);
-		$this->twig   = new Twig_Environment($this->loader, $options);
+	public function __construct($templateDir, array $options = array()) {
+		$this->loader = new \Twig_Loader_Filesystem($templateDir);
+		$this->twig   = new \Twig_Environment($this->loader, $options);
 	}
 
 	/**
 	 * @param string $name
 	 * @return bool
 	 */
-	public function __isset($name)
-	{
+	public function __isset($name) {
 		return isset($this->variables[$name]);
 	}
 
@@ -37,8 +36,7 @@ class Twig implements \Yaf_View_Interface
 	 * @param string $name
 	 * @param mixed  $value
 	 */
-	public function __set($name, $value)
-	{
+	public function __set($name, $value) {
 		$this->variables[$name] = $value;
 	}
 
@@ -46,16 +44,14 @@ class Twig implements \Yaf_View_Interface
 	 * @param string $name
 	 * @return mixed
 	 */
-	public function __get($name)
-	{
+	public function __get($name) {
 		return $this->variables[$name];
 	}
 
 	/**
 	 * @param string $name
 	 */
-	public function __unset($name)
-	{
+	public function __unset($name) {
 		unset($this->variables[$name]);
 	}
 
@@ -63,8 +59,7 @@ class Twig implements \Yaf_View_Interface
 	 * Return twig instance
 	 * @return \Twig_Environment
 	 */
-	public function getTwig()
-	{
+	public function getTwig() {
 		return $this->twig;
 	}
 
@@ -73,8 +68,7 @@ class Twig implements \Yaf_View_Interface
 	 * @param mixed $value
 	 * @return bool
 	 */
-	public function assign($name, $value = null)
-	{
+	public function assign($name, $value = null) {
 		$this->variables[$name] = $value;
 	}
 
@@ -83,16 +77,14 @@ class Twig implements \Yaf_View_Interface
 	 * @param array  $variables
 	 * @return bool
 	 */
-	public function display($template, $variables = null)
-	{
+	public function display($template, $variables = null) {
 		echo $this->render($template, $variables);
 	}
 
 	/**
 	 * @return string
 	 */
-	public function getScriptPath()
-	{
+	public function getScriptPath() {
 		return $this->loader->getPaths();
 	}
 
@@ -101,10 +93,8 @@ class Twig implements \Yaf_View_Interface
 	 * @param array  $variables
 	 * @return string
 	 */
-	public function render($template, $variables = null)
-	{
-		if ( is_array($variables) )
-		{
+	public function render($template, $variables = null) {
+		if ( is_array($variables) ) {
 			$this->variables = array_merge($this->variables, $variables);
 		}
 
@@ -115,8 +105,9 @@ class Twig implements \Yaf_View_Interface
 	 * @param string $templateDir
 	 * @return void
 	 */
-	public function setScriptPath($templateDir)
-	{
+	public function setScriptPath($templateDir) {
 		$this->loader->setPaths($templateDir);
 	}
 }
+
+?>

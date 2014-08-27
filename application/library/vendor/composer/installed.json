@@ -57,52 +57,5 @@
         "keywords": [
             "templating"
         ]
-    },
-    {
-        "name": "suin/php-yaf-twig",
-        "version": "1.1",
-        "version_normalized": "1.1.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/suin/php-yaf-twig.git",
-            "reference": "729d9dcf01969fcd1d8b090a16a966b51c35b0db"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/suin/php-yaf-twig/zipball/729d9dcf01969fcd1d8b090a16a966b51c35b0db",
-            "reference": "729d9dcf01969fcd1d8b090a16a966b51c35b0db",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.3.0",
-            "twig/twig": ">=1.9.1"
-        },
-        "time": "2012-08-28 10:51:49",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "Suin\\Yaf\\Twig": "Source"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "suin",
-                "email": "suinyeze@gmail.com",
-                "homepage": "https://www.facebook.com/suinyeze",
-                "role": "Developer, Renaming Specialist"
-            }
-        ],
-        "description": "Twig extension for Yet Another Framework.",
-        "homepage": "https://github.com/suin/php-yaf-twig",
-        "keywords": [
-            "Yet Another Framework",
-            "twig",
-            "yaf"
-        ]
     }
 ]

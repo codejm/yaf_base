@@ -4,7 +4,7 @@ yaf base framework from codejm
 ## 运行环境
     - 运行环境:php(5.3及以上)+mysql web服务器推荐使用nginx
     - 框架:yaf(需安装php扩展)
-    - composer
+    - composer(生产环境优化自动加载：composer dump-autoload --optimize)
 
 ## nginx 配置
 

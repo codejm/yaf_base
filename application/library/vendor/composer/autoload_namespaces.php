@@ -7,5 +7,4 @@ $baseDir = dirname(dirname(dirname($vendorDir)));
 
 return array(
     'Twig_' => array($vendorDir . '/twig/twig/lib'),
-    'Suin\\Yaf\\Twig' => array($vendorDir . '/suin/php-yaf-twig/Source'),
 );

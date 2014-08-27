@@ -18,10 +18,11 @@ class TwigPlugin extends Yaf_Plugin_Abstract {
         $config = Yaf_Application::app()->getConfig();
         $dispatcher= Yaf_Dispatcher::getInstance();
         $twig = '';
+        // view 放在module 目录里
         if($request->module==$config['application']['dispatcher']['defaultModule']){
-            $twig = new Twig(APP_PATH.'views', $config->twig->toArray());
+            $twig = new \Core_Twig(APP_PATH.'views', $config->twig->toArray());
         } else {
-            $twig = new Twig(APP_PATH.'modules/'.$request->module.'/views', $config->twig->toArray());
+            $twig = new \Core_Twig(APP_PATH.'modules/'.$request->module.'/views', $config->twig->toArray());
         }
 
         // url generate
