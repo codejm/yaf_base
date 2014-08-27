@@ -84,9 +84,11 @@ class Bootstrap extends \Yaf_Bootstrap_Abstract {
         }
 
         // 加载对应语言包
+        $lang_arr = require APP_PATH.'conf/lang/'.$lang.'.php';
+        Yaf_Registry::set('lang_arr', $lang_arr);
 
         // 记录
-        Yaf_Registry::set('lang',$lang);
+        Yaf_Registry::set('lang', $lang);
     }
 }
 

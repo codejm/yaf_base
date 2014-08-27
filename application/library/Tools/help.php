@@ -147,9 +147,9 @@ class Tools_help {
      * @param string 字符串
      * @return 对应字符串
      */
-    public static function lang($str) {
-        $lang = Yaf_Registry::get('lang');
-        return $str;
+    public static function lang($str, $args=array()) {
+        $lan_arr = Yaf_Registry::get('lang_arr');
+        return vsprintf($lan_arr[$str], $args);
     }
 
     /**

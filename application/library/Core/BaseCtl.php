@@ -12,6 +12,7 @@ class Core_BaseCtl extends \Yaf_Controller_Abstract {
     public $controllerName;
     public $actionName;
     public $curr_url;
+    public $lang_arr;
 
     /**
      * 初始化
@@ -22,10 +23,12 @@ class Core_BaseCtl extends \Yaf_Controller_Abstract {
         $this->controllerName = \Yaf_Dispatcher::getInstance()->getRequest()->getControllerName();
         $this->actionName = \Yaf_Dispatcher::getInstance()->getRequest()->getActionName();
         $this->curr_url = \Yaf_Dispatcher::getInstance()->getRequest()->getRequestUri();
+        $this->lang_arr = \Yaf_Registry::get('lang_arr');
 
         $this->_view->assign("config", \Yaf_Application::app()->getConfig()->toArray());
         $this->_view->assign("curcontroller", $this->controllerName);
         $this->_view->assign("curaction", $this->actionName);
+        $this->_view->assign("langArr", $this->lang_arr);
     }
 
     /**
