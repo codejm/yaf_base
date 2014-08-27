@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50528
 File Encoding         : 65001
 
-Date: 2014-08-25 16:44:23
+Date: 2014-08-27 15:17:08
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -46,4 +46,4 @@ CREATE TABLE `yaf_members` (
 -- ----------------------------
 -- Records of yaf_members
 -- ----------------------------
-INSERT INTO `yaf_members` VALUES ('1', 'admin', '21232f297a57a5a743894a0e4a801fc3', '0', 'members/201408/22/fa1175cf0208eaaa690832b8b5179b0e655ad0d21408702385.jpg', '', '127.0.0.1', '34845', '2014', 'codejm@qq.com', '0', 'admin', '', '1');
+INSERT INTO `yaf_members` VALUES ('1', 'admin', '21232f297a57a5a743894a0e4a801fc3', '1', 'members/201408/25/114e80f1f0ad0a6fc967c9a2bd1b56044d7012b51408956568.jpg', '按时发送方的<b>sdadfasdaaa事实上事实上</b>', '127.0.0.1', '34845', '1409002464', 'codejm@qq.com', '0', 'admin', '', '1');
