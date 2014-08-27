@@ -1,0 +1,215 @@
+{{ include('layouts/header.html') }}
+
+<div class="row">
+    <div class="col-xs-12">
+        <!-- PAGE CONTENT BEGINS -->
+        <form action="{{ url('backend/members/edit', {uid:members.uid}) }}" class="form-horizontal" role="form" method="post" enctype="multipart/form-data">
+
+            <div class="form-group{% if errors['username'] is not empty %} has-error{%endif%}">
+                <label for="username" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">用户名<span class="red">*</span></label>
+                <div class="col-xs-12 col-sm-4">
+                    <span class="block input-icon input-icon-right">
+                        <input type="text" id="username" placeholder="用户名" name="username" class="col-xs-12" value="{{members.username}}" />
+                    </span>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['username'] is not empty %}{{errors['username']}}{% else %} {%endif%} </div>
+            </div>
+
+            <div class="form-group{% if errors['password'] is not empty %} has-error{%endif%}">
+                <label for="password" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">密码<span class="red">*</span></label>
+                <div class="col-xs-12 col-sm-4">
+                    <span class="block input-icon input-icon-right">
+                        <input type="password" id="password" placeholder="密码" name="password" class="col-xs-12" value="{{members.password}}" />
+                    </span>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['password'] is not empty %}{{errors['password']}}{% else %} {%endif%} </div>
+            </div>
+
+            <div class="form-group{% if errors['gender'] is not empty %} has-error{%endif%}">
+                <label for="gender" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">性别</label>
+                <div class="col-xs-12 col-sm-4">
+                    <span class="block input-icon input-icon-right">
+                        <input type="checkbox" id="gender_radio"{% if members.gender %} checked="checked"{% endif %} placeholder="性别" name="gender_radio" class="ace ace-switch ace-switch-5"/>
+                        <span class="lbl"></span>
+                        <input type="hidden" name="gender" id="gender" value="{{members.gender}}"/>
+                    </span>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['gender'] is not empty %}{{errors['gender']}}{% else %} {%endif%} </div>
+            </div>
+
+            <div class="form-group{% if errors['face'] is not empty %} has-error{%endif%}">
+                <label for="face" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">头像</label>
+                <div class="col-xs-12 col-sm-4">
+                    <span class="block input-icon input-icon-right">
+                        <input multiple="" type="file" id="face" placeholder="头像" name="face" class="col-xs-12" value="{{members.face}}" />
+                    </span>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['face'] is not empty %}{{errors['face']}}{% else %} {%endif%} </div>
+            </div>
+
+            <div class="form-group{% if errors['aboutme'] is not empty %} has-error{%endif%}">
+                <label for="aboutme" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">关于我</label>
+                <div class="wysiwyg-editor" id="aboutme_editor">{{members.aboutme | raw}}</div>
+                <input type="hidden" name="aboutme" id="aboutme" value="{{members.aboutme}}" />
+                <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['aboutme'] is not empty %}{{errors['aboutme']}}{% else %} {%endif%} </div>
+            </div>
+
+            <div class="form-group{% if errors['regip'] is not empty %} has-error{%endif%}">
+                <label for="regip" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">注册ip<span class="red">*</span></label>
+                <div class="col-xs-12 col-sm-4">
+                    <span class="block input-icon input-icon-right">
+                        <input type="text" id="regip" placeholder="注册ip" name="regip" class="col-xs-12" value="{{members.regip}}" />
+                    </span>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['regip'] is not empty %}{{errors['regip']}}{% else %} {%endif%} </div>
+            </div>
+
+            <div class="form-group{% if errors['reg_ip_port'] is not empty %} has-error{%endif%}">
+                <label for="reg_ip_port" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">注册ip端口<span class="red">*</span></label>
+                <div class="col-xs-12 col-sm-4">
+                    <span class="block input-icon input-icon-right">
+                        <input type="text" id="reg_ip_port" placeholder="注册ip端口" name="reg_ip_port" class="col-xs-12" value="{{members.reg_ip_port}}" />
+                    </span>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['reg_ip_port'] is not empty %}{{errors['reg_ip_port']}}{% else %} {%endif%} </div>
+            </div>
+
+            <div class="form-group{% if errors['regdate'] is not empty %} has-error{%endif%}">
+                <label for="regdate" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">注册时间<span class="red">*</span></label>
+                <div class="col-xs-12 col-sm-4">
+                    <span class="block input-icon input-icon-right">
+                        <input type="text" id="regdate" placeholder="注册时间" name="regdate" class="form-control date-picker" value="{{members.regdate}}"/>
+                    </span>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['regdate'] is not empty %}{{errors['regdate']}}{% else %} {%endif%} </div>
+            </div>
+
+            <div class="form-group{% if errors['email'] is not empty %} has-error{%endif%}">
+                <label for="email" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">邮箱<span class="red">*</span></label>
+                <div class="col-xs-12 col-sm-4">
+                    <span class="block input-icon input-icon-right">
+                        <input type="text" id="email" placeholder="邮箱" name="email" class="col-xs-12" value="{{members.email}}" />
+                    </span>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['email'] is not empty %}{{errors['email']}}{% else %} {%endif%} </div>
+            </div>
+
+            <div class="form-group{% if errors['email_checked'] is not empty %} has-error{%endif%}">
+                <label for="email_checked" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">邮箱是否验证</label>
+                <div class="col-xs-12 col-sm-4">
+                    <span class="block input-icon input-icon-right">
+                        <input type="checkbox" id="email_checked_radio"{% if members.email_checked %} checked="checked"{% endif %} placeholder="邮箱是否验证" name="email_checked_radio" class="ace ace-switch ace-switch-5" value="{{members.email_checked}}"/>
+                        <span class="lbl"></span>
+                        <input type="hidden" name="email_checked" id="email_checked" value="{{members.email_checked}}"/>
+                    </span>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['email_checked'] is not empty %}{{errors['email_checked']}}{% else %} {%endif%} </div>
+            </div>
+
+            <div class="form-group{% if errors['role_type'] is not empty %} has-error{%endif%}">
+                <label for="role_type" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">角色<span class="red">*</span></label>
+                <div class="col-xs-12 col-sm-4">
+                    <span class="block input-icon input-icon-right">
+                        <input type="text" id="role_type" placeholder="角色" name="role_type" class="col-xs-12" value="{{members.role_type}}" />
+                    </span>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['role_type'] is not empty %}{{errors['role_type']}}{% else %} {%endif%} </div>
+            </div>
+
+            <div class="form-group{% if errors['mobile'] is not empty %} has-error{%endif%}">
+                <label for="mobile" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">电话</label>
+                <div class="col-xs-12 col-sm-4">
+                    <span class="block input-icon input-icon-right">
+                        <input type="text" id="mobile" placeholder="电话" name="mobile" class="col-xs-12" value="{{members.mobile}}" />
+                    </span>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['mobile'] is not empty %}{{errors['mobile']}}{% else %} {%endif%} </div>
+            </div>
+
+            <div class="form-group{% if errors['status'] is not empty %} has-error{%endif%}">
+                <label for="status" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">状态<span class="red">*</span></label>
+                <div class="col-xs-12 col-sm-4">
+                    <span class="block input-icon input-icon-right">
+                        <input type="checkbox" id="status_radio"{% if members.status %} checked="checked"{% endif %} placeholder="状态" name="status_radio" class="ace ace-switch ace-switch-5" value="{{members.status}}"/>
+                        <span class="lbl"></span>
+                        <input type="hidden" name="status" id="status" value="{{members.status}}"/>
+                    </span>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['status'] is not empty %}{{errors['status']}}{% else %} {%endif%} </div>
+            </div>
+
+            <div class="clearfix form-actions">
+                <div class="col-md-offset-3 col-md-9">
+                    <button class="btn btn-info" type="submit">
+                        <i class="ace-icon fa fa-check bigger-110"></i>
+                        提交
+                    </button>
+
+                    &nbsp; &nbsp; &nbsp;
+                    <a class="btn" href="javascript:;" onclick="history.back(); ">
+                        <i class="ace-icon fa fa-undo bigger-110"></i>
+                        返回
+                    </a>
+                </div>
+            </div>
+
+        </form>
+    </div><!-- /.col -->
+</div><!-- /.row -->
+{{ include('layouts/footer.html') }}
+{% block script %}
+
+<style>
+.ace-file-multiple .ace-file-container .ace-file-name .ace-icon{
+    width:100%;
+    height:100px;
+}
+.fa-face {
+    background-image: url("{{members.face}}");
+    background-size:100% 100%;
+    background-repeat:no-repeat;
+}
+</style>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('#aboutme_editor').ace_wysiwyg({
+            'wysiwyg': {
+                uploadScript: "{{ url('backend/upload/upload', {'dir':'members'}) }}",
+                uploadOptions: {
+                    post_id: '10',
+                    revision_id: '3'
+                }
+            }
+        });
+        $('#aboutme_editor').focusout(function() {
+            $('#aboutme').val($('#aboutme_editor').html());
+        });
+       $('#face').ace_file_input({
+           style:'well',
+           btn_choose:'点击这里修改图片',
+           btn_change:null,
+           no_icon:'ace-icon fa {% if members.face %}fa-face{% else %}fa-cloud-upload{% endif %}',
+           droppable:false,
+           thumbnail:'large'//large | fit
+       });
+
+        $('#regdate').datetimepicker({format: 'YYYY-MM-DD hh:mm:ss'}).next().on(ace.click_event, function(){
+            $(this).prev().focus();
+        });
+
+        $(".ace-switch").each(function () {
+            var aceswitch = this;
+
+            aceswitch.addEventListener("click", function(){
+                id = this.id.replace("_radio", "");
+                if(this.checked){
+                    $("#"+id).val('1');
+                } else {
+                    $("#"+id).val('0');
+                }
+                });
+        });
+    });
+</script>
+
+{% endblock %}

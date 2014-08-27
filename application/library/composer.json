@@ -1,0 +1,16 @@
+{
+    "name": "codejm/lexuesha",
+    "description": "lexuesha",
+    "minimum-stability": "stable",
+    "license": "",
+    "authors": [
+        {
+            "name": "codejm",
+            "email": "codejm@163.com"
+        }
+    ],
+    "require": {
+		"php": ">=5.3.0",
+        "suin/php-yaf-twig": ">=1.0"
+    }
+}

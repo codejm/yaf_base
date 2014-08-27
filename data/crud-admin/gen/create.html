@@ -1,0 +1,48 @@
+{{ include('layouts/header.html') }}
+
+<div class="row">
+    <div class="col-xs-12">
+        <!-- PAGE CONTENT BEGINS -->
+        <form action="{{ url('backend/__TABLENAMES__/add') }}" class="form-horizontal" role="form" method="post" enctype="multipart/form-data">
+
+__EDIT_FORM_TEMPLATE__
+
+            <div class="clearfix form-actions">
+                <div class="col-md-offset-3 col-md-9">
+                    <button class="btn btn-info" type="submit">
+                        <i class="ace-icon fa fa-check bigger-110"></i>
+                        提交
+                    </button>
+
+                    &nbsp; &nbsp; &nbsp;
+                    <button class="btn" type="reset">
+                        <i class="ace-icon fa fa-undo bigger-110"></i>
+                        重置
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div><!-- /.col -->
+</div><!-- /.row -->
+
+{{ include('layouts/footer.html') }}
+{% block script %}
+__EDIT_FORM_TEMPLATE_STYLE__
+<script type="text/javascript">
+    $(document).ready(function(){
+__EDIT_FORM_TEMPLATE_SCRIPT__
+        $(".ace-switch").each(function () {
+            var aceswitch = this;
+
+            aceswitch.addEventListener("click", function(){
+                id = this.id.replace("_radio", "");
+                if(this.checked){
+                    $("#"+id).val('1');
+                } else {
+                    $("#"+id).val('0');
+                }
+                });
+        });
+    });
+</script>
+{% endblock %}

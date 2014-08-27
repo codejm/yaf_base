@@ -1,0 +1,128 @@
+                </div><!-- /.page-content -->
+            </div><!-- /.main-content -->
+			<div class="footer">
+				<div class="footer-inner">
+					<div class="footer-content">
+						<span class="bigger-120">
+							<span class="blue bolder">{{config['application']['site']['name']}}</span>
+							{{config['application']['site']['companyname']}} &copy; 2013-2014
+						</span>
+
+						&nbsp; &nbsp;
+						<span class="action-buttons">
+							<a href="#">
+								<i class="ace-icon fa fa-twitter-square light-blue bigger-150"></i>
+							</a>
+
+							<a href="#">
+								<i class="ace-icon fa fa-facebook-square text-primary bigger-150"></i>
+							</a>
+
+							<a href="#">
+								<i class="ace-icon fa fa-rss-square orange bigger-150"></i>
+							</a>
+						</span>
+					</div>
+				</div>
+			</div>
+
+			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+				<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+			</a>
+		</div><!-- /.main-container -->
+
+<!-- basic scripts -->
+
+<!--[if !IE]> -->
+<script src="//ajax.useso.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+
+<!-- <![endif]-->
+
+<!--[if IE]>
+        <script src="//ajax.useso.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+        <![endif]-->
+
+<!--[if !IE]> -->
+<script type="text/javascript">
+window.jQuery || document.write("<script src='{{config['application']['site']['assetsUri']}}assets/admin/js/jquery.min.js'>"+"<"+"/script>");
+</script>
+
+<!-- <![endif]-->
+
+<!--[if IE]>
+        <script type="text/javascript">
+         window.jQuery || document.write("<script src='{{config['application']['site']['assetsUri']}}assets/admin/js/jquery1x.min.js'>"+"<"+"/script>");
+        </script>
+        <![endif]-->
+
+		<script type="text/javascript">
+			if('ontouchstart' in document.documentElement) document.write("<script src='{{config['application']['site']['assetsUri']}}assets/admin/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+		</script>
+		<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+
+		<!-- page specific plugin scripts -->
+
+		<!--[if lte IE 8]>
+		  <script src="{{config['application']['site']['assetsUri']}}assets/admin/js/excanvas.min.js"></script>
+		<![endif]-->
+
+        <!-- page specific plugin scripts -->
+		<script src="{{config['application']['site']['assetsUri']}}assets/admin/js/jquery.dataTables.min.js"></script>
+		<script src="{{config['application']['site']['assetsUri']}}assets/admin/js/jquery.dataTables.bootstrap.js"></script>
+		<!--[if lte IE 8]>
+		  <script src="{{config['application']['site']['assetsUri']}}assets/admin/js/excanvas.min.js"></script>
+		<![endif]-->
+		<script src="{{config['application']['site']['assetsUri']}}assets/admin/js/jquery-ui.custom.min.js"></script>
+		<script src="{{config['application']['site']['assetsUri']}}assets/admin/js/jquery.ui.touch-punch.min.js"></script>
+		<script src="{{config['application']['site']['assetsUri']}}assets/admin/js/chosen.jquery.min.js"></script>
+		<script src="{{config['application']['site']['assetsUri']}}assets/admin/js/fuelux/fuelux.spinner.min.js"></script>
+		<script src="{{config['application']['site']['assetsUri']}}assets/admin/js/date-time/bootstrap-datepicker.min.js"></script>
+		<script src="{{config['application']['site']['assetsUri']}}assets/admin/js/date-time/bootstrap-timepicker.min.js"></script>
+		<script src="{{config['application']['site']['assetsUri']}}assets/admin/js/date-time/moment.min.js"></script>
+		<script src="{{config['application']['site']['assetsUri']}}assets/admin/js/date-time/daterangepicker.min.js"></script>
+		<script src="{{config['application']['site']['assetsUri']}}assets/admin/js/date-time/bootstrap-datetimepicker.min.js"></script>
+		<script src="{{config['application']['site']['assetsUri']}}assets/admin/js/bootstrap-colorpicker.min.js"></script>
+		<script src="{{config['application']['site']['assetsUri']}}assets/admin/js/jquery.knob.min.js"></script>
+		<script src="{{config['application']['site']['assetsUri']}}assets/admin/js/jquery.autosize.min.js"></script>
+		<script src="{{config['application']['site']['assetsUri']}}assets/admin/js/jquery.inputlimiter.1.3.1.min.js"></script>
+		<script src="{{config['application']['site']['assetsUri']}}assets/admin/js/jquery.maskedinput.min.js"></script>
+		<script src="{{config['application']['site']['assetsUri']}}assets/admin/js/bootstrap-tag.min.js"></script>
+
+		<!-- page specific plugin scripts -->
+		<script src="{{config['application']['site']['assetsUri']}}assets/admin/js/markdown/markdown.min.js"></script>
+		<script src="{{config['application']['site']['assetsUri']}}assets/admin/js/markdown/bootstrap-markdown.min.js"></script>
+		<script src="{{config['application']['site']['assetsUri']}}assets/admin/js/jquery.hotkeys.min.js"></script>
+		<script src="{{config['application']['site']['assetsUri']}}assets/admin/js/bootstrap-wysiwyg.js"></script>
+		<script src="{{config['application']['site']['assetsUri']}}assets/admin/js/bootbox.min.js"></script>
+
+		<!-- ace scripts -->
+		<script src="{{config['application']['site']['assetsUri']}}assets/admin/js/ace-elements.min.js"></script>
+		<script src="{{config['application']['site']['assetsUri']}}assets/admin/js/ace.min.js"></script>
+
+        {% if curaction == 'index' %}
+        <script type="text/javascript">
+$(document).ready(function($) {
+        $(document).on('click', 'th input:checkbox' , function(){
+            var that = this;
+            $(this).closest('table').find('tr > td:first-child input:checkbox')
+            .each(function(){
+                this.checked = that.checked;
+                $(this).closest('tr').toggleClass('selected');
+                });
+            });
+        $('.adel').click(function(){
+            var r=confirm("真的要删除吗？");
+            if(r == true) {
+            return true;
+            } else {
+            return false;
+            }
+            });
+
+        });
+        </script>
+        {% endif %}
+
+        {{block("script")}}
+        </body>
+</html>
