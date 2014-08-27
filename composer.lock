@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "52a91b4867b6bb1b31fe9a064b7484b4",
+    "hash": "ff613146be73b348b3a8c53153e1796b",
     "packages": [
         {
             "name": "suin/php-yaf-twig",
@@ -120,9 +120,9 @@
 
     ],
     "prefer-stable": false,
-    "platform": [
-
-    ],
+    "platform": {
+        "php": ">=5.3.0"
+    },
     "platform-dev": [
 
     ]

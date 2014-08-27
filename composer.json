@@ -1,8 +1,11 @@
 {
-    "name": "codejm/lexuesha",
-    "description": "lexuesha",
+    "name": "codejm/yaf_base",
+    "description": "yaf_base",
     "minimum-stability": "stable",
     "license": "",
+    "config": {
+        "vendor-dir": "application/library/vendor"
+    },
     "authors": [
         {
             "name": "codejm",
