@@ -1,12 +1,31 @@
 yaf base framework from codejm
 ====================================================================================================
+## 功能
+    - yaf 基础
+    - twig模版(module模版放module里)
+    - 缓存
+    - 文件上传
+    - 验证码
+    - 后台crud生成
+    - model属性验证
+    - 多语言站点
+    - ...(后期将继续添加)
 
-## 运行环境
+## 安装
+
+### 运行环境
     - 运行环境:php(5.3及以上)+mysql web服务器推荐使用nginx
     - 框架:yaf(需安装php扩展)
     - composer(生产环境优化自动加载：composer dump-autoload --optimize)
 
-## nginx 配置
+### 获取代码
+``` shell
+git clone https://github.com/codejm/yaf_base.git app
+cd app
+composer install
+```
+
+### nginx 配置
 
 ``` nginx
 server
@@ -43,10 +62,9 @@ server
 * 复制对应文件到程序对应目录
 
 ### cache code
-```
+``` php
         $config = \Yaf_Application::app()->getConfig()->cache->toArray();
         $cache = \Cache_Cache::create($config);
         $cache->set('adminUser', $data);
         echo '<pre>'; var_dump($cache->get('adminUser')); echo '</pre>';exit;
 ```
-###
