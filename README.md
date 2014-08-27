@@ -36,6 +36,11 @@ server
 
 ## coding
 
+### 后台代码生成[根据ace模版生成,public 目录提供ace模版]
+* 修改 ./data/crud-admin/src/crud.php 数据库配置
+* $ php crud.php
+* 复制对应文件到程序对应目录
+
 ### cache code
 ```
         $config = \Yaf_Application::app()->getConfig()->cache->toArray();
@@ -43,5 +48,4 @@ server
         $cache->set('adminUser', $data);
         echo '<pre>'; var_dump($cache->get('adminUser')); echo '</pre>';exit;
 ```
-
 ###
