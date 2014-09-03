@@ -90,6 +90,32 @@ class Bootstrap extends \Yaf_Bootstrap_Abstract {
         // 记录
         Yaf_Registry::set('lang', $lang);
     }
+
+
+    /**
+     * 系统级错误跳转到首页
+     * @param int errorCode
+     * @param string error detail
+     *
+     */
+    public static function errorHandler($error, $errstr) {
+        //die('<div style="display:none">'.$errstr.'</div>');
+        $config = \Yaf_Application::app()->getConfig();
+        header ('Location: '.$config['application']['site']['baseUri']);
+        exit();
+    }
+
+    /**
+     * 设定异常捕获
+     * application.dispatcher.throwException=0
+     * application.dispatcher.catchException=0
+     *
+     */
+    public function _initErrorHandler(\Yaf_Dispatcher $dispatcher) {
+        $dispatcher->setErrorHandler(array(get_class($this), "errorHandler"));
+    }
+
+
 }
 
 ?>

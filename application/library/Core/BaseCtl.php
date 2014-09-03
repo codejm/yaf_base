@@ -100,6 +100,8 @@ class Core_BaseCtl extends \Yaf_Controller_Abstract {
     protected function getAllPost() {
         return $_POST;
     }
+
+
 }
 
 ?>

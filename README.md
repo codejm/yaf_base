@@ -64,37 +64,37 @@ server
 
 ### cache code
 ``` php
-        $config = \Yaf_Application::app()->getConfig()->cache->toArray();
-        $cache = \Cache_Cache::create($config);
-        $cache->set('adminUser', $data);
-        echo '<pre>'; var_dump($cache->get('adminUser')); echo '</pre>';exit;
+$config = \Yaf_Application::app()->getConfig()->cache->toArray();
+$cache = \Cache_Cache::create($config);
+$cache->set('adminUser', $data);
+echo '<pre>'; var_dump($cache->get('adminUser')); echo '</pre>';exit;
 ```
 ### send mail
 ``` php
-        $mail = new PHPMailer();
-        $mail->isSMTP();                                      // Set mailer to use SMTP
-        $mail->Host = 'smtp.163.com;';  // Specify main and backup SMTP servers
-        $mail->SMTPAuth = true;                               // Enable SMTP authentication
-        $mail->Username = 'codejm@163.com';                 // SMTP username
-        $mail->Password = 'password';                           // SMTP password
-        $mail->SMTPSecure = 'ssl';                            // Enable TLS encryption, `ssl` also accepted
-        $mail->Port = 465;                                    // TCP port to connect to
+$mail = new PHPMailer();
+$mail->isSMTP();                                      // Set mailer to use SMTP
+$mail->Host = 'smtp.163.com;';  // Specify main and backup SMTP servers
+$mail->SMTPAuth = true;                               // Enable SMTP authentication
+$mail->Username = 'codejm@163.com';                 // SMTP username
+$mail->Password = 'password';                           // SMTP password
+$mail->SMTPSecure = 'ssl';                            // Enable TLS encryption, `ssl` also accepted
+$mail->Port = 465;                                    // TCP port to connect to
 
-        $mail->From = 'codejm@163.com';
-        $mail->FromName = 'codejm';
-        $mail->addAddress('codejm@qq.com', 'codejm');     // Add a recipient
+$mail->From = 'codejm@163.com';
+$mail->FromName = 'codejm';
+$mail->addAddress('codejm@qq.com', 'codejm');     // Add a recipient
 
-        $mail->WordWrap = 50;                                 // Set word wrap to 50 characters
-        $mail->isHTML(true);                                  // Set email format to HTML
+$mail->WordWrap = 50;                                 // Set word wrap to 50 characters
+$mail->isHTML(true);                                  // Set email format to HTML
 
-        $mail->Subject = 'Here is the subject';
-        $mail->Body    = 'This is the HTML message body <b>in bold!</b>';
-        $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+$mail->Subject = 'Here is the subject';
+$mail->Body    = 'This is the HTML message body <b>in bold!</b>';
+$mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
 
-        if(!$mail->send()) {
-            echo 'Message could not be sent.';
-            echo 'Mailer Error: ' . $mail->ErrorInfo;
-        } else {
-            echo 'Message has been sent';
-        }
+if(!$mail->send()) {
+    echo 'Message could not be sent.';
+    echo 'Mailer Error: ' . $mail->ErrorInfo;
+} else {
+    echo 'Message has been sent';
+}
 ```
