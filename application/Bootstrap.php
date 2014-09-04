@@ -99,10 +99,7 @@ class Bootstrap extends \Yaf_Bootstrap_Abstract {
      *
      */
     public static function errorHandler($error, $errstr) {
-        //die('<div style="display:none">'.$errstr.'</div>');
-        $config = \Yaf_Application::app()->getConfig();
-        header ('Location: '.$config['application']['site']['baseUri']);
-        exit();
+        die($errstr);
     }
 
     /**

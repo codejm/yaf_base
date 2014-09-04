@@ -10,6 +10,8 @@ yaf base framework from codejm
     - model属性验证
     - 多语言站点
     - send Mail
+    - PHPExcel
+    - 加密算法(Encrypt3des, Hashids)
     - ...(后期将继续添加)
 
 ## 安装

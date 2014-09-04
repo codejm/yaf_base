@@ -11,8 +11,10 @@ class ErrorController extends \Core_BaseCtl {
 
     // 错误信息输出
     public function errorAction($exception) {
-        //1. assign to view engine
-        $this->_view->assign("message", $exception->getMessage());
+        if(is_string($exception))
+            $this->_view->assign("message", $exception);
+        else
+            $this->_view->assign("message", $exception->getMessage());
 		return true;
 	}
 
