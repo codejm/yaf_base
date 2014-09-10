@@ -77,7 +77,7 @@ class Core_CMode {
      *       'per'    => 1, 每页显示数量
      *     );
      */
-    public function getList($params = array()) {
+    public function getLists($params = array(), $key='') {
         $query = "";
         if (isset($params['field']) && is_array($params['field']) && !empty($params['field'])) {
             $fieldstr = Tools_help::arraytofields($params['field']);
@@ -124,7 +124,17 @@ class Core_CMode {
             $result = $dbconn->fetchAll(PDO::FETCH_ASSOC);
             $dbconn->closeCursor();
         }
-        return isset($result) ? $result : false;
+
+        // key 键值对
+        $data = array();
+        if($result && $key) {
+            foreach($result as $value) {
+                $data[$value[$key]] = $value;
+            }
+        } else if($result) {
+            $data = $result;
+        }
+        return isset($data) ? $data: false;
     }
 
 
