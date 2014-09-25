@@ -8,6 +8,7 @@
  */
 
 // 常用目录定义
+header("Content-type: text/html; charset=utf-8");
 define("DS", '/');
 define("PUBLIC_PATH", dirname(__FILE__).DS);
 define("BASE_PATH", realpath(dirname(__FILE__).DS.'..').DS);
