@@ -10,7 +10,7 @@
 class Validation_CValidation {
     private $fields = array();
     private $labels = array();
-    private $errors = array();
+    public $errors = array();
     private $messages = array();
     private $data = array();
     private $mode = '';

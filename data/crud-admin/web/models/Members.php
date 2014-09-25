@@ -3,8 +3,8 @@
 /**
  *      [CodeJm!] Author CodeJm[codejm@163.com].
  *
- *      __TABLENAMEREMARK__
- *      $Id: Members.php 2014-08-23 00:25:11 codejm $
+ *      用户表
+ *      $Id: Members.php 2014-09-25 17:46:31 codejm $
  */
 
 class MembersModel extends \Core_CMode {

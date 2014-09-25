@@ -1,0 +1,118 @@
+{{ include('layouts/header.html') }}
+
+<div class="row">
+    <div class="col-xs-12">
+        <!-- PAGE CONTENT BEGINS -->
+        <form action="{{ url('backend/user/edit', {id:user.id}) }}" class="form-horizontal" role="form" method="post" enctype="multipart/form-data">
+
+            <div class="form-group{% if errors['username'] is not empty %} has-error{%endif%}">
+                <label for="username" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">username<span class="red">*</span></label>
+                <div class="col-xs-12 col-sm-4">
+                    <span class="block input-icon input-icon-right">
+                        <input type="text" id="username" placeholder="username" name="username" class="col-xs-12" value="{{user.username}}" />
+                    </span>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['username'] is not empty %}{{errors['username']}}{% else %} {%endif%} </div>
+            </div>
+
+            <div class="form-group{% if errors['password'] is not empty %} has-error{%endif%}">
+                <label for="password" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">password<span class="red">*</span></label>
+                <div class="col-xs-12 col-sm-4">
+                    <span class="block input-icon input-icon-right">
+                        <input type="password" id="password" placeholder="password" name="password" class="col-xs-12" value="{{user.password}}" />
+                    </span>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['password'] is not empty %}{{errors['password']}}{% else %} {%endif%} </div>
+            </div>
+
+            <div class="form-group{% if errors['isadmin'] is not empty %} has-error{%endif%}">
+                <label for="isadmin" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">isadmin<span class="red">*</span></label>
+                <div class="col-xs-12 col-sm-4">
+                    <span class="block input-icon input-icon-right">
+                        <input type="text" id="isadmin" placeholder="isadmin" name="isadmin" class="col-xs-12" value="{{user.isadmin}}" />
+                    </span>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['isadmin'] is not empty %}{{errors['isadmin']}}{% else %} {%endif%} </div>
+            </div>
+
+            <div class="form-group{% if errors['regip'] is not empty %} has-error{%endif%}">
+                <label for="regip" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">regip</label>
+                <div class="col-xs-12 col-sm-4">
+                    <span class="block input-icon input-icon-right">
+                        <input type="text" id="regip" placeholder="regip" name="regip" class="col-xs-12" value="{{user.regip}}" />
+                    </span>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['regip'] is not empty %}{{errors['regip']}}{% else %} {%endif%} </div>
+            </div>
+
+            <div class="form-group{% if errors['regtime'] is not empty %} has-error{%endif%}">
+                <label for="regtime" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">regtime</label>
+                <div class="col-xs-12 col-sm-4">
+                    <span class="block input-icon input-icon-right">
+                        <input type="text" id="regtime" placeholder="regtime" name="regtime" class="col-xs-12" value="{{user.regtime}}" />
+                    </span>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['regtime'] is not empty %}{{errors['regtime']}}{% else %} {%endif%} </div>
+            </div>
+
+            <div class="form-group{% if errors['lastip'] is not empty %} has-error{%endif%}">
+                <label for="lastip" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">lastip</label>
+                <div class="col-xs-12 col-sm-4">
+                    <span class="block input-icon input-icon-right">
+                        <input type="text" id="lastip" placeholder="lastip" name="lastip" class="col-xs-12" value="{{user.lastip}}" />
+                    </span>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['lastip'] is not empty %}{{errors['lastip']}}{% else %} {%endif%} </div>
+            </div>
+
+            <div class="form-group{% if errors['lasttime'] is not empty %} has-error{%endif%}">
+                <label for="lasttime" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">lasttime</label>
+                <div class="col-xs-12 col-sm-4">
+                    <span class="block input-icon input-icon-right">
+                        <input type="text" id="lasttime" placeholder="lasttime" name="lasttime" class="col-xs-12" value="{{user.lasttime}}" />
+                    </span>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['lasttime'] is not empty %}{{errors['lasttime']}}{% else %} {%endif%} </div>
+            </div>
+
+
+
+            <div class="clearfix form-actions">
+                <div class="col-md-offset-3 col-md-9">
+                    <button class="btn btn-info" type="submit">
+                        <i class="ace-icon fa fa-check bigger-110"></i>
+                        提交
+                    </button>
+
+                    &nbsp; &nbsp; &nbsp;
+                    <a class="btn" href="javascript:;" onclick="history.back(); ">
+                        <i class="ace-icon fa fa-undo bigger-110"></i>
+                        返回
+                    </a>
+                </div>
+            </div>
+
+        </form>
+    </div><!-- /.col -->
+</div><!-- /.row -->
+{{ include('layouts/footer.html') }}
+{% block script %}
+
+<script type="text/javascript">
+    $(document).ready(function(){
+
+        $(".ace-switch").each(function () {
+            var aceswitch = this;
+
+            aceswitch.addEventListener("click", function(){
+                id = this.id.replace("_radio", "");
+                if(this.checked){
+                    $("#"+id).val('1');
+                } else {
+                    $("#"+id).val('0');
+                }
+                });
+        });
+    });
+</script>
+{% endblock %}

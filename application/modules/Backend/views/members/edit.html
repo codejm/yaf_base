@@ -19,7 +19,7 @@
                 <label for="password" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">密码<span class="red">*</span></label>
                 <div class="col-xs-12 col-sm-4">
                     <span class="block input-icon input-icon-right">
-                        <input type="password" id="password" placeholder="密码" name="password" class="col-xs-12" value="{{members.password}}" />
+                        <input type="password" id="password" placeholder="密码" name="password" class="col-xs-12" value="" />
                     </span>
                 </div>
                 <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['password'] is not empty %}{{errors['password']}}{% else %} {%endif%} </div>
@@ -29,7 +29,7 @@
                 <label for="gender" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">性别</label>
                 <div class="col-xs-12 col-sm-4">
                     <span class="block input-icon input-icon-right">
-                        <input type="checkbox" id="gender_radio"{% if members.gender %} checked="checked"{% endif %} placeholder="性别" name="gender_radio" class="ace ace-switch ace-switch-5"/>
+                        <input type="checkbox" id="gender_radio" placeholder="性别" name="gender_radio" class="ace ace-switch ace-switch-5"{% if members.gender %} checked="checked"{% endif %}" />
                         <span class="lbl"></span>
                         <input type="hidden" name="gender" id="gender" value="{{members.gender}}"/>
                     </span>
@@ -49,8 +49,11 @@
 
             <div class="form-group{% if errors['aboutme'] is not empty %} has-error{%endif%}">
                 <label for="aboutme" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">关于我</label>
-                <div class="wysiwyg-editor" id="aboutme_editor">{{members.aboutme | raw}}</div>
-                <input type="hidden" name="aboutme" id="aboutme" value="{{members.aboutme}}" />
+                <div class="col-xs-12 col-sm-4">
+                    <span class="block input-icon input-icon-right">
+                        <textarea id="aboutme" name="aboutme" class="autosize-transition form-control" style="overflow: hidden; word-wrap: break-word; resize: horizontal; height: 52px;">{{members.aboutme}}</textarea>
+                    </span>
+                </div>
                 <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['aboutme'] is not empty %}{{errors['aboutme']}}{% else %} {%endif%} </div>
             </div>
 
@@ -78,7 +81,7 @@
                 <label for="regdate" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">注册时间<span class="red">*</span></label>
                 <div class="col-xs-12 col-sm-4">
                     <span class="block input-icon input-icon-right">
-                        <input type="text" id="regdate" placeholder="注册时间" name="regdate" class="form-control date-picker" value="{{members.regdate}}"/>
+                        <input type="text" id="regdate" placeholder="注册时间" name="regdate" class="form-control date-picker" value="{{members.regdate | date('Y-m-d H:i:s')}}"/>
                     </span>
                 </div>
                 <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['regdate'] is not empty %}{{errors['regdate']}}{% else %} {%endif%} </div>
@@ -98,7 +101,7 @@
                 <label for="email_checked" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">邮箱是否验证</label>
                 <div class="col-xs-12 col-sm-4">
                     <span class="block input-icon input-icon-right">
-                        <input type="checkbox" id="email_checked_radio"{% if members.email_checked %} checked="checked"{% endif %} placeholder="邮箱是否验证" name="email_checked_radio" class="ace ace-switch ace-switch-5" value="{{members.email_checked}}"/>
+                        <input type="checkbox" id="email_checked_radio" placeholder="邮箱是否验证" name="email_checked_radio" class="ace ace-switch ace-switch-5"{% if members.email_checked %} checked="checked"{% endif %}" />
                         <span class="lbl"></span>
                         <input type="hidden" name="email_checked" id="email_checked" value="{{members.email_checked}}"/>
                     </span>
@@ -130,13 +133,15 @@
                 <label for="status" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">状态<span class="red">*</span></label>
                 <div class="col-xs-12 col-sm-4">
                     <span class="block input-icon input-icon-right">
-                        <input type="checkbox" id="status_radio"{% if members.status %} checked="checked"{% endif %} placeholder="状态" name="status_radio" class="ace ace-switch ace-switch-5" value="{{members.status}}"/>
+                        <input type="checkbox" id="status_radio" placeholder="状态" name="status_radio" class="ace ace-switch ace-switch-5"{% if members.status %} checked="checked"{% endif %}" />
                         <span class="lbl"></span>
                         <input type="hidden" name="status" id="status" value="{{members.status}}"/>
                     </span>
                 </div>
                 <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['status'] is not empty %}{{errors['status']}}{% else %} {%endif%} </div>
             </div>
+
+
 
             <div class="clearfix form-actions">
                 <div class="col-md-offset-3 col-md-9">
@@ -160,7 +165,7 @@
 {% block script %}
 
 <style>
-.ace-file-multiple .ace-file-container .ace-file-name .ace-icon{
+    .ace-file-multiple .ace-file-container .ace-file-name .ace-icon{
     width:100%;
     height:100px;
 }
@@ -170,20 +175,10 @@
     background-repeat:no-repeat;
 }
 </style>
+
 <script type="text/javascript">
     $(document).ready(function(){
-        $('#aboutme_editor').ace_wysiwyg({
-            'wysiwyg': {
-                uploadScript: "{{ url('backend/upload/upload', {'dir':'members'}) }}",
-                uploadOptions: {
-                    post_id: '10',
-                    revision_id: '3'
-                }
-            }
-        });
-        $('#aboutme_editor').focusout(function() {
-            $('#aboutme').val($('#aboutme_editor').html());
-        });
+
        $('#face').ace_file_input({
            style:'well',
            btn_choose:'点击这里修改图片',
@@ -192,10 +187,9 @@
            droppable:false,
            thumbnail:'large'//large | fit
        });
-
-        $('#regdate').datetimepicker({format: 'YYYY-MM-DD hh:mm:ss'}).next().on(ace.click_event, function(){
-            $(this).prev().focus();
-        });
+    $('#regdate').datetimepicker({format: 'YYYY-MM-DD hh:mm:ss'}).next().on(ace.click_event, function(){
+        $(this).prev().focus();
+    });
 
         $(".ace-switch").each(function () {
             var aceswitch = this;
@@ -211,5 +205,4 @@
         });
     });
 </script>
-
 {% endblock %}

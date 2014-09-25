@@ -49,14 +49,14 @@
                         <td> {{row.uid}} </td>
                         <td> {{row.username}} </td>
                         <td> {{row.password}} </td>
-                        <td> {{row.gender}} </td>
+                        <td> {{row.gender ? '是' : '否'}} </td>
                         <td> {{row.face}} </td>
                         <td> {{row.aboutme}} </td>
                         <td> {{row.regip}} </td>
                         <td> {{row.reg_ip_port}} </td>
-                        <td> {{row.regdate}} </td>
+                        <td> {{row.regdate | date('Y-m-d H:i:s')}} </td>
                         <td> {{row.email}} </td>
-                        <td> {{row.email_checked}} </td>
+                        <td> {{row.email_checked ? '是' : '否'}} </td>
                         <td> {{row.role_type}} </td>
                         <td> {{row.mobile}} </td>
                         <td class="hidden-480">

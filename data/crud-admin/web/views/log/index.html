@@ -1,0 +1,96 @@
+{{ include('layouts/header.html') }}
+
+
+<div class="row">
+    <div class="col-xs-12">
+        <!-- PAGE CONTENT BEGINS -->
+        <div class="row">
+            <div class="col-xs-12">
+                <form action="{{ url('backend/log/batch') }}" method="post">
+                <table id="sample-table-1" class="table table-striped table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th class="center">
+                                <label class="position-relative">
+                                    <input type="checkbox" class="ace" />
+                                    <span class="lbl"></span>
+                                </label>
+                            </th>
+                            <th><a href="{{ url('curr_url', {'sort':'id'})}}">id</a></th>
+                            <th><a href="{{ url('curr_url', {'sort':'sid'})}}">sid</a></th>
+                            <th><a href="{{ url('curr_url', {'sort':'nickname'})}}">nickname</a></th>
+                            <th><a href="{{ url('curr_url', {'sort':'qq'})}}">qq</a></th>
+                            <th><a href="{{ url('curr_url', {'sort':'face'})}}">face</a></th>
+                            <th><a href="{{ url('curr_url', {'sort':'area'})}}">area</a></th>
+                            <th><a href="{{ url('curr_url', {'sort':'ip'})}}">ip</a></th>
+                            <th><a href="{{ url('curr_url', {'sort':'keywords'})}}">keywords</a></th>
+                            <th><a href="{{ url('curr_url', {'sort':'page'})}}">page</a></th>
+                            <th><a href="{{ url('curr_url', {'sort':'pagetitle'})}}">pagetitle</a></th>
+                            <th><a href="{{ url('curr_url', {'sort':'referer'})}}">referer</a></th>
+                            <th><a href="{{ url('curr_url', {'sort':'createtime'})}}">createtime</a></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+
+                    {% for row in result %}
+                    <tr>
+                        <td class="center">
+                            <label class="position-relative">
+                                <input name="dels[]" value="{{row.id}}" type="checkbox" class="ace" />
+                                <span class="lbl"></span>
+                            </label>
+                        </td>
+
+                        <td> {{row.id}} </td>
+                        <td> {{row.sid}} </td>
+                        <td> {{row.nickname}} </td>
+                        <td> {{row.qq}} </td>
+                        <td> {{row.face}} </td>
+                        <td> {{row.area}} </td>
+                        <td> {{row.ip}} </td>
+                        <td> {{row.keywords}} </td>
+                        <td> {{row.page}} </td>
+                        <td> {{row.pagetitle}} </td>
+                        <td> {{row.referer}} </td>
+                        <td> {{row.createtime}} </td>
+
+                        <td>
+                            <div class="hidden-sm hidden-xs btn-group">
+                                <a class="btn btn-xs btn-info" href="{{url('backend/log/edit', {'id':row.id})}}">
+                                    <i class="ace-icon fa fa-pencil bigger-120"></i>
+                                </a>
+
+                                <a class="btn btn-xs btn-danger adel" href="{{url('backend/log/del', {'id':row.id})}}">
+                                    <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+                <div class="row">
+                    <div class="col-xs-6"><button type="submit" class="btn btn-white btn-warning btn-bold"><i class="ace-icon fa fa-trash-o bigger-120 orange"></i>提交</button></div>
+                    <div class="col-xs-6">
+                        <div class="dataTables_paginate paging_bootstrap">
+                            <ul class="pagination">
+                                {{pagestr | raw}}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                </form>
+
+            </div><!-- /.span -->
+        </div><!-- /.row -->
+
+
+    </div>
+</div>
+
+<!-- inline scripts related to this page -->
+{{ include('layouts/footer.html') }}

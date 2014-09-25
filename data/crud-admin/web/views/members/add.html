@@ -29,8 +29,9 @@
                 <label for="gender" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">性别</label>
                 <div class="col-xs-12 col-sm-4">
                     <span class="block input-icon input-icon-right">
-                        <input type="checkbox" id="gender" placeholder="性别" name="gender" class="ace ace-switch ace-switch-5" value="{{members.gender}}" />
+                        <input type="checkbox" id="gender_radio" placeholder="性别" name="gender_radio" class="ace ace-switch ace-switch-5"{% if members.gender %} checked="checked"{% endif %}" />
                         <span class="lbl"></span>
+                        <input type="hidden" name="gender" id="gender" value="{{members.gender}}"/>
                     </span>
                 </div>
                 <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['gender'] is not empty %}{{errors['gender']}}{% else %} {%endif%} </div>
@@ -50,7 +51,7 @@
                 <label for="aboutme" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">关于我</label>
                 <div class="col-xs-12 col-sm-4">
                     <span class="block input-icon input-icon-right">
-                        <div class="wysiwyg-editor" id="aboutme"></div>
+                        <textarea id="aboutme" name="aboutme" class="autosize-transition form-control" style="overflow: hidden; word-wrap: break-word; resize: horizontal; height: 52px;">{{members.aboutme}}</textarea>
                     </span>
                 </div>
                 <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['aboutme'] is not empty %}{{errors['aboutme']}}{% else %} {%endif%} </div>
@@ -80,7 +81,7 @@
                 <label for="regdate" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">注册时间<span class="red">*</span></label>
                 <div class="col-xs-12 col-sm-4">
                     <span class="block input-icon input-icon-right">
-                        <input type="text" id="regdate" placeholder="注册时间" name="regdate" class="form-control date-picker" value="{{members.regdate}}"/>
+                        <input type="text" id="regdate" placeholder="注册时间" name="regdate" class="form-control date-picker" value="{{members.regdate | date('Y-m-d H:i:s')}}"/>
                     </span>
                 </div>
                 <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['regdate'] is not empty %}{{errors['regdate']}}{% else %} {%endif%} </div>
@@ -100,8 +101,9 @@
                 <label for="email_checked" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">邮箱是否验证</label>
                 <div class="col-xs-12 col-sm-4">
                     <span class="block input-icon input-icon-right">
-                        <input type="checkbox" id="email_checked" placeholder="邮箱是否验证" name="email_checked" class="ace ace-switch ace-switch-5" value="{{members.email_checked}}" />
+                        <input type="checkbox" id="email_checked_radio" placeholder="邮箱是否验证" name="email_checked_radio" class="ace ace-switch ace-switch-5"{% if members.email_checked %} checked="checked"{% endif %}" />
                         <span class="lbl"></span>
+                        <input type="hidden" name="email_checked" id="email_checked" value="{{members.email_checked}}"/>
                     </span>
                 </div>
                 <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['email_checked'] is not empty %}{{errors['email_checked']}}{% else %} {%endif%} </div>
@@ -131,8 +133,9 @@
                 <label for="status" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">状态<span class="red">*</span></label>
                 <div class="col-xs-12 col-sm-4">
                     <span class="block input-icon input-icon-right">
-                        <input type="checkbox" id="status" placeholder="状态" name="status" class="ace ace-switch ace-switch-5" value="{{members.status}}" />
+                        <input type="checkbox" id="status_radio" placeholder="状态" name="status_radio" class="ace ace-switch ace-switch-5"{% if members.status %} checked="checked"{% endif %}" />
                         <span class="lbl"></span>
+                        <input type="hidden" name="status" id="status" value="{{members.status}}"/>
                     </span>
                 </div>
                 <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['status'] is not empty %}{{errors['status']}}{% else %} {%endif%} </div>
@@ -172,8 +175,10 @@
     background-repeat:no-repeat;
 }
 </style>
+
 <script type="text/javascript">
     $(document).ready(function(){
+
        $('#face').ace_file_input({
            style:'well',
            btn_choose:'点击这里修改图片',
@@ -182,20 +187,22 @@
            droppable:false,
            thumbnail:'large'//large | fit
        });
-    });
-</script>
-
-<script>
-    $('#aboutme').wysiwyg(
-        {
-                uploadScript: '/admin/upload.php',
-                uploadOptions: {
-                        post_id: '10',                        revision_id: '3'                }        }    );
-</script>
-<script>
     $('#regdate').datetimepicker({format: 'YYYY-MM-DD hh:mm:ss'}).next().on(ace.click_event, function(){
         $(this).prev().focus();
     });
-</script>
 
+        $(".ace-switch").each(function () {
+            var aceswitch = this;
+
+            aceswitch.addEventListener("click", function(){
+                id = this.id.replace("_radio", "");
+                if(this.checked){
+                    $("#"+id).val('1');
+                } else {
+                    $("#"+id).val('0');
+                }
+                });
+        });
+    });
+</script>
 {% endblock %}

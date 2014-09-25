@@ -8,6 +8,7 @@
  */
 
 $options = array(PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ, PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING);
+$table_pre = 'yaf';
 $db = new PDO('mysql:host=127.0.0.1;dbname=codejm', 'root', '1234', $options);
 
 $query = "SHOW TABLES";
@@ -175,27 +176,39 @@ foreach($tables as $table_name => $table){
     foreach($table_columns as $table_column){
 
         $TABLENAMEBAK = $TABLENAME;
-        $TABLENAMEBAK = str_replace("yaf_", '', $TABLENAMEBAK);
+        $TABLENAMEBAK = str_replace($table_pre, '', $TABLENAMEBAK);
         $TABLENAMEBAK = str_replace("_", '', $TABLENAMEBAK);
         $TABLENAMEBAK = ucwords($TABLENAMEBAK);
         //$TABLENAMEBAK = str_replace(" ", '', $TABLENAMEBAK);
         $TABLENAMES = lcfirst($TABLENAMEBAK);
 
         $columnType = '';
+        $columnHidden = '';
         $comment = $table_column['name'];
         if($table_column['comment']) {
             $comment = explode(",", $table_column['comment']);
-            if(isset($comment[1])) {
+            if(isset($comment[1]) && !empty($comment[1])) {
                 $columnType = $comment[1];
+            }
+            if(isset($comment[2]) && !empty($comment[2])){
+                $columnHidden = $comment[2];
             }
             $comment = $comment[0];
         }
 
-        $FIELDS_TH .= "\t\t\t\t\t\t\t<th><a href=\"{{ url('curr_url', {'sort':'{$table_column['name']}'})}}\">{$comment}</a></th>\n";
-        if($table_column['name'] == 'status') {
-            $FIELDS_TD .= "\t\t\t\t\t\t<td class=\"hidden-480\">\n\t\t\t\t\t\t\t{% if row.status>0 %}\n\t\t\t\t\t\t\t\t<a href=\"{{ url('backend/".$TABLENAMES."/status', {'".$TABLE_PRIMARYKEY."':row.".$TABLE_PRIMARYKEY.", 'status':row.status}) }}\" class=\"label label-sm label-success\">已通过</a>\n\t\t\t\t\t\t\t{% else %}\n\t\t\t\t\t\t\t\t<a href=\"{{ url('backend/".$TABLENAMES."/status', {'".$TABLE_PRIMARYKEY."':row.".$TABLE_PRIMARYKEY.", 'status':row.status}) }}\" class=\"label label-sm label-warning\">未通过</a>\n\t\t\t\t\t\t\t{% endif %}\n\t\t\t\t\t\t</td>";
-        } else {
-            $FIELDS_TD .= "\t\t\t\t\t\t<td> {{row.{$table_column['name']}}} </td>\n";
+        if(empty($columnHidden)){
+            $FIELDS_TH .= "\t\t\t\t\t\t\t<th><a href=\"{{ url('curr_url', {'sort':'{$table_column['name']}'})}}\">{$comment}</a></th>\n";
+            if($table_column['name'] == 'status') {
+                $FIELDS_TD .= "\t\t\t\t\t\t<td class=\"hidden-480\">\n\t\t\t\t\t\t\t{% if row.status>0 %}\n\t\t\t\t\t\t\t\t<a href=\"{{ url('backend/".$TABLENAMES."/status', {'".$TABLE_PRIMARYKEY."':row.".$TABLE_PRIMARYKEY.", 'status':row.status}) }}\" class=\"label label-sm label-success\">已通过</a>\n\t\t\t\t\t\t\t{% else %}\n\t\t\t\t\t\t\t\t<a href=\"{{ url('backend/".$TABLENAMES."/status', {'".$TABLE_PRIMARYKEY."':row.".$TABLE_PRIMARYKEY.", 'status':row.status}) }}\" class=\"label label-sm label-warning\">未通过</a>\n\t\t\t\t\t\t\t{% endif %}\n\t\t\t\t\t\t</td>";
+            } else if($columnType  == 'radio') {
+                $FIELDS_TD .= "\t\t\t\t\t\t<td> {{row.{$table_column['name']} ? '是' : '否'}} </td>\n";
+            } else if($table_column['name'] != 'datelien'  && $table_column['name'] != 'updatetime' && $columnType  == 'time') {
+                $FIELDS_TD .= "\t\t\t\t\t\t<td> {{row.{$table_column['name']} | date('Y-m-d H:i:s')}} </td>\n";
+            } else if($columnType  == 'date') {
+                $FIELDS_TD .= "\t\t\t\t\t\t<td> {{row.{$table_column['name']} | date('Y-m-d')}} </td>\n";
+            } else {
+                $FIELDS_TD .= "\t\t\t\t\t\t<td> {{row.{$table_column['name']}}} </td>\n";
+            }
         }
 
         $TABLECOLUMNS_ARRAY .= "\t\t\t" . "'". $table_column['name'] . "' => '".$comment."', \n";
@@ -253,7 +266,7 @@ foreach($tables as $table_name => $table){
                     "\t\t\t" . "    <label for=\"".$table_column['name']."\" class=\"col-xs-12 col-sm-3 col-md-3 control-label no-padding-right\">".$comment.$isnull."</label>" . "\n" .
                     "\t\t\t" . "    <div class=\"col-xs-12 col-sm-4\">" . "\n" .
                     "\t\t\t" . "        <span class=\"block input-icon input-icon-right\">" . "\n" .
-                    "\t\t\t" . "            <input type=\"text\" id=\"".$table_column['name']."\" placeholder=\"".$comment."\" name=\"".$table_column['name']."\" class=\"form-control date-picker\" value=\"{{".$TABLENAMES.".".$table_column['name']."}}\"/>" . "\n" .
+                    "\t\t\t" . "            <input type=\"text\" id=\"".$table_column['name']."\" placeholder=\"".$comment."\" name=\"".$table_column['name']."\" class=\"form-control date-picker\" value=\"{{".$TABLENAMES.".".$table_column['name']." | date('Y-m-d H:i:s')}}\"/>" . "\n" .
                     "\t\t\t" . "        </span>" . "\n" .
                     "\t\t\t" . "    </div>" . "\n" .
                     "\t\t\t" . "    <div class=\"help-block col-xs-12 col-sm-reset inline\"> {% if errors['".$table_column['name']."'] is not empty %}{{errors['".$table_column['name']."']}}{% else %} {%endif%} </div>\n".
@@ -353,7 +366,7 @@ foreach($tables as $table_name => $table){
 
                 // controller
                 $CONTROLLER_EDIT_PRE .= "".
-                    "           \$imageInfo = help::upload('".$table_column['name']."', '".$TABLENAMES."');\n".
+                    "           \$imageInfo = Tools_help::upload('".$table_column['name']."', '".$TABLENAMES."');\n".
                     "           if(!empty(\$imageInfo)) {\n" .
                     "               \$pdata['".$table_column['name']."'] = \$imageInfo;\n".
                     "           } else {\n".
@@ -363,7 +376,7 @@ foreach($tables as $table_name => $table){
                 $CONTROLLER_EDIT_AFTER .= "\n".
                     "       // 图片处理\n".
                     "       if(\$".$TABLENAMES."->".$table_column['name']."){\n".
-                    "           \$".$TABLENAMES."->".$table_column['name']." = help::fbu(\$".$TABLENAMES."->".$table_column['name'].");\n".
+                    "           \$".$TABLENAMES."->".$table_column['name']." = Tools_help::fbu(\$".$TABLENAMES."->".$table_column['name'].");\n".
                     "       }\n";
 
             } else if($columnType  == 'radio') {
@@ -374,7 +387,7 @@ foreach($tables as $table_name => $table){
                     "\t\t\t" . "        <span class=\"block input-icon input-icon-right\">" . "\n" .
                     "\t\t\t" . "            <input type=\"checkbox\" id=\"".$table_column['name']."_radio\" placeholder=\"".$comment."\" name=\"".$table_column['name']."_radio\" class=\"ace ace-switch ace-switch-5\"{% if ".$TABLENAMES.".".$table_column['name']." %} checked=\"checked\"{% endif %}\" />" . "\n" .
                     "\t\t\t" . "            <span class=\"lbl\"></span>" . "\n" .
-                    "\t\t\t" . "            <input type=\"hidden\" name=\"".$table_column['name']."\" id=\"".$table_column['name']."\" value=\"{{members.gender}}\"/>\n".
+                    "\t\t\t" . "            <input type=\"hidden\" name=\"".$table_column['name']."\" id=\"".$table_column['name']."\" value=\"{{".$TABLENAMES.".".$table_column['name']."}}\"/>\n".
                     "\t\t\t" . "        </span>" . "\n" .
                     "\t\t\t" . "    </div>" . "\n" .
                     "\t\t\t" . "    <div class=\"help-block col-xs-12 col-sm-reset inline\"> {% if errors['".$table_column['name']."'] is not empty %}{{errors['".$table_column['name']."']}}{% else %} {%endif%} </div>\n".
@@ -405,20 +418,16 @@ foreach($tables as $table_name => $table){
                     "\t\t\t" . "</div>" . "\n\n";
             }
             if($columnType  == 'date'){
-                $CONTROLLER_ADD_AFTER .= "\n".
-                    "       \$".$TABLENAMES."->".$table_column['name']." = help::hdate('Y-m-d');\n";
                 $CONTROLLER_ADD .= "\n".
-                    "   \$".$TABLENAMES."->".$table_column['name']." = help::htime(\$".$TABLENAMES."->".$table_column['name'].");\n";
+                    "   \$pdata['".$table_column['name']."'] = Tools_help::htime(\$".$TABLENAMES."->".$table_column['name'].");\n";
                 $CONTROLLER_EDIT .= "\n".
-                    "   \$".$TABLENAMES."->".$table_column['name']." = help::htime(\$".$TABLENAMES."->".$table_column['name'].");\n";
+                    "   \$pdata['".$table_column['name']."'] = Tools_help::htime(\$".$TABLENAMES."->".$table_column['name'].");\n";
             }
             if($columnType  == 'time'){
-                $CONTROLLER_ADD_AFTER .= "\n".
-                    "       \$".$TABLENAMES."->".$table_column['name']." = help::hdate();\n";
                 $CONTROLLER_ADD .= "\n".
-                    "   \$".$TABLENAMES."->".$table_column['name']." = help::htime(\$".$TABLENAMES."->".$table_column['name'].");\n";
+                    "   \$pdata['".$table_column['name']."'] = Tools_help::htime(\$".$TABLENAMES."->".$table_column['name'].");\n";
                 $CONTROLLER_EDIT .= "\n".
-                    "   \$".$TABLENAMES."->".$table_column['name']." = help::htime(\$".$TABLENAMES."->".$table_column['name'].");\n";
+                    "   \$pdata['".$table_column['name']."'] = Tools_help::htime(\$".$TABLENAMES."->".$table_column['name'].");\n";
             }
         }
 
@@ -509,6 +518,7 @@ foreach($tables as $table_name => $table){
 
     $_models = file_get_contents(__DIR__.'/../gen/model.php');
     $_models = str_replace("__TNAME__", $TABLENAME, $_models);
+    $_models = str_replace("__TABLENAMEREMARK__", $getTablesResult[0]['Comment'], $_models);
     $_models = str_replace("__TABLENAME__", $TABLENAMEBAK, $_models);
     $_models = str_replace("__TABLENAMES__", $TABLENAMES, $_models);
     $_models = str_replace("__TABLE_PRIMARYKEY__", $TABLE_PRIMARYKEY, $_models);

@@ -3,8 +3,8 @@
 /**
  *      [CodeJm!] Author CodeJm[codejm@163.com].
  *
- *      __TABLENAMEREMARK__
- *      $Id: Members.php 2014-08-22 17:54:37 codejm $
+ *      用户表
+ *      $Id: Members.php 2014-09-25 17:46:31 codejm $
  */
 
 class MembersModel extends \Core_CMode {
@@ -40,24 +40,20 @@ class MembersModel extends \Core_CMode {
     public function rules() {
         return array(
             'default'=> array(
-                array('username', 'required|maxlength[100]|minlength[5]'),
-                array('password', 'required|maxlength[100]|minlength[5]'),
+                array('username', 'required|maxlength[100]'),
+                array('password', 'required|maxlength[100]'),
                 array('gender', 'maxlength[1]|integer'),
                 array('face', 'maxlength[120]'),
                 array('aboutme', 'maxlength[255]'),
                 array('regip', 'required|maxlength[15]'),
                 array('reg_ip_port', 'required|maxlength[6]'),
-                array('regdate', 'required'),
+                //array('regdate', 'required|maxlength[10]|integer'),
                 array('email', 'required|maxlength[50]|email'),
                 array('email_checked', 'maxlength[1]|integer'),
                 array('role_type', 'required|maxlength[10]'),
                 array('mobile', 'maxlength[15]|phone'),
                 array('status', 'maxlength[1]|integer'),
-            ),
-            'only_login' => array(
-                array('username', 'required|maxlength[100]|minlength[5]'),
-                array('password', 'required|maxlength[100]|minlength[5]'),
-                array('captcha', 'required|captcha', '验证码'),
+
             ),
         );
     }

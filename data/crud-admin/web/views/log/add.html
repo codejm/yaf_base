@@ -1,0 +1,158 @@
+{{ include('layouts/header.html') }}
+
+<div class="row">
+    <div class="col-xs-12">
+        <!-- PAGE CONTENT BEGINS -->
+        <form action="{{ url('backend/log/add') }}" class="form-horizontal" role="form" method="post" enctype="multipart/form-data">
+
+            <div class="form-group{% if errors['sid'] is not empty %} has-error{%endif%}">
+                <label for="sid" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">sid<span class="red">*</span></label>
+                <div class="col-xs-12 col-sm-4">
+                    <span class="block input-icon input-icon-right">
+                        <input type="text" id="sid" placeholder="sid" name="sid" class="col-xs-12" value="{{log.sid}}" />
+                    </span>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['sid'] is not empty %}{{errors['sid']}}{% else %} {%endif%} </div>
+            </div>
+
+            <div class="form-group{% if errors['nickname'] is not empty %} has-error{%endif%}">
+                <label for="nickname" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">nickname</label>
+                <div class="col-xs-12 col-sm-4">
+                    <span class="block input-icon input-icon-right">
+                        <input type="text" id="nickname" placeholder="nickname" name="nickname" class="col-xs-12" value="{{log.nickname}}" />
+                    </span>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['nickname'] is not empty %}{{errors['nickname']}}{% else %} {%endif%} </div>
+            </div>
+
+            <div class="form-group{% if errors['qq'] is not empty %} has-error{%endif%}">
+                <label for="qq" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">qq<span class="red">*</span></label>
+                <div class="col-xs-12 col-sm-4">
+                    <span class="block input-icon input-icon-right">
+                        <input type="text" id="qq" placeholder="qq" name="qq" class="col-xs-12" value="{{log.qq}}" />
+                    </span>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['qq'] is not empty %}{{errors['qq']}}{% else %} {%endif%} </div>
+            </div>
+
+            <div class="form-group{% if errors['face'] is not empty %} has-error{%endif%}">
+                <label for="face" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">face</label>
+                <div class="col-xs-12 col-sm-4">
+                    <span class="block input-icon input-icon-right">
+                        <input type="text" id="face" placeholder="face" name="face" class="col-xs-12" value="{{log.face}}" />
+                    </span>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['face'] is not empty %}{{errors['face']}}{% else %} {%endif%} </div>
+            </div>
+
+            <div class="form-group{% if errors['area'] is not empty %} has-error{%endif%}">
+                <label for="area" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">area</label>
+                <div class="col-xs-12 col-sm-4">
+                    <span class="block input-icon input-icon-right">
+                        <input type="text" id="area" placeholder="area" name="area" class="col-xs-12" value="{{log.area}}" />
+                    </span>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['area'] is not empty %}{{errors['area']}}{% else %} {%endif%} </div>
+            </div>
+
+            <div class="form-group{% if errors['ip'] is not empty %} has-error{%endif%}">
+                <label for="ip" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">ip</label>
+                <div class="col-xs-12 col-sm-4">
+                    <span class="block input-icon input-icon-right">
+                        <input type="text" id="ip" placeholder="ip" name="ip" class="col-xs-12" value="{{log.ip}}" />
+                    </span>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['ip'] is not empty %}{{errors['ip']}}{% else %} {%endif%} </div>
+            </div>
+
+            <div class="form-group{% if errors['keywords'] is not empty %} has-error{%endif%}">
+                <label for="keywords" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">keywords</label>
+                <div class="col-xs-12 col-sm-4">
+                    <span class="block input-icon input-icon-right">
+                        <input type="text" id="keywords" placeholder="keywords" name="keywords" class="col-xs-12" value="{{log.keywords}}" />
+                    </span>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['keywords'] is not empty %}{{errors['keywords']}}{% else %} {%endif%} </div>
+            </div>
+
+            <div class="form-group{% if errors['page'] is not empty %} has-error{%endif%}">
+                <label for="page" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">page</label>
+                <div class="col-xs-12 col-sm-4">
+                    <span class="block input-icon input-icon-right">
+                        <input type="text" id="page" placeholder="page" name="page" class="col-xs-12" value="{{log.page}}" />
+                    </span>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['page'] is not empty %}{{errors['page']}}{% else %} {%endif%} </div>
+            </div>
+
+            <div class="form-group{% if errors['pagetitle'] is not empty %} has-error{%endif%}">
+                <label for="pagetitle" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">pagetitle</label>
+                <div class="col-xs-12 col-sm-4">
+                    <span class="block input-icon input-icon-right">
+                        <input type="text" id="pagetitle" placeholder="pagetitle" name="pagetitle" class="col-xs-12" value="{{log.pagetitle}}" />
+                    </span>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['pagetitle'] is not empty %}{{errors['pagetitle']}}{% else %} {%endif%} </div>
+            </div>
+
+            <div class="form-group{% if errors['referer'] is not empty %} has-error{%endif%}">
+                <label for="referer" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">referer</label>
+                <div class="col-xs-12 col-sm-4">
+                    <span class="block input-icon input-icon-right">
+                        <input type="text" id="referer" placeholder="referer" name="referer" class="col-xs-12" value="{{log.referer}}" />
+                    </span>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['referer'] is not empty %}{{errors['referer']}}{% else %} {%endif%} </div>
+            </div>
+
+            <div class="form-group{% if errors['createtime'] is not empty %} has-error{%endif%}">
+                <label for="createtime" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">createtime<span class="red">*</span></label>
+                <div class="col-xs-12 col-sm-4">
+                    <span class="block input-icon input-icon-right">
+                        <input type="text" id="createtime" placeholder="createtime" name="createtime" class="col-xs-12" value="{{log.createtime}}" />
+                    </span>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['createtime'] is not empty %}{{errors['createtime']}}{% else %} {%endif%} </div>
+            </div>
+
+
+
+            <div class="clearfix form-actions">
+                <div class="col-md-offset-3 col-md-9">
+                    <button class="btn btn-info" type="submit">
+                        <i class="ace-icon fa fa-check bigger-110"></i>
+                        提交
+                    </button>
+
+                    &nbsp; &nbsp; &nbsp;
+                    <button class="btn" type="reset">
+                        <i class="ace-icon fa fa-undo bigger-110"></i>
+                        重置
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div><!-- /.col -->
+</div><!-- /.row -->
+
+{{ include('layouts/footer.html') }}
+{% block script %}
+
+<script type="text/javascript">
+    $(document).ready(function(){
+
+        $(".ace-switch").each(function () {
+            var aceswitch = this;
+
+            aceswitch.addEventListener("click", function(){
+                id = this.id.replace("_radio", "");
+                if(this.checked){
+                    $("#"+id).val('1');
+                } else {
+                    $("#"+id).val('0');
+                }
+                });
+        });
+    });
+</script>
+{% endblock %}

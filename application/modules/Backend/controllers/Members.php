@@ -4,7 +4,7 @@
  *      [CodeJm!] Author CodeJm[codejm@163.com].
  *
  *      用户表 管理类
- *      $Id: Members.php 2014-08-22 17:52:14 codejm $
+ *      $Id: Members.php 2014-09-25 17:46:31 codejm $
  */
 
 class MembersController extends \Core_BackendCtl {
@@ -36,7 +36,7 @@ class MembersController extends \Core_BackendCtl {
             'per' => $pageSize,
         );
         // 列表
-        $result = $members->getList($params);
+        $result = $members->getLists($params);
         // 数据总条数
         $total = $members->getCount($params);
 
@@ -73,18 +73,17 @@ class MembersController extends \Core_BackendCtl {
             $result = $members->validation->validate($pdata, 'add');
             $members->parseAttributes($pdata);
 
-            // 用户名验证
             $data = $members->select(array('where'=>array('username'=>$members->username)));
             if($data) {
                 $result = false;
-                $members->errors['username'][] = '用户名 已经存在，请重新填写!';
+                $members->validation->errors['username'][] = '用户名 已经存在，请重新填写!';
             }
 
             // 通过验证
             if($result) {
                 // 入库前数据处理
-                $members->regdate = Tools_help::htime($members->regdate);
-                $members->password = Tools_help::hash($members->password);
+
+                $pdata['regdate'] = Tools_help::htime($members->regdate);
 
                 // Model转换成数组
                 $data = $members->toArray($pdata);
@@ -106,10 +105,7 @@ class MembersController extends \Core_BackendCtl {
         }
 
         // 格式化表单数据
-        $members->regdate = Tools_help::hdate();
-        $members->regip = Tools_help::getIp();
-        $members->reg_ip_port = Tools_help::getIpPort();
-        $members->role_type = 'admin';
+
 
         // 模版分配数据
         $this->_view->assign("members", $members);
@@ -150,20 +146,13 @@ class MembersController extends \Core_BackendCtl {
             $data = $members->select(array('where'=>array('username'=>$members->username)));
             if($data && $data['uid'] != $uid) {
                 $result = false;
-                $members->errors['username'][] = '用户名 已经存在，请重新填写!';
+                $members->validation->errors['username'][] = '用户名 已经存在，请重新填写!';
             }
 
             // 通过验证
             if($result) {
-
                 // 入库前数据处理
                 $pdata['regdate'] = Tools_help::htime($members->regdate);
-                // 密码
-                if(isset($pdata['password']) && !empty($pdata['password'])){
-                    $pdata['password'] = Tools_help::hash($pdata['password']);
-                } else {
-                    unset($pdata['password']);
-                }
 
                 // Model转换成数组
                 $data = $members->toArray($pdata);
@@ -183,16 +172,14 @@ class MembersController extends \Core_BackendCtl {
                 Tools_help::setSession('ErrorMessage', '修改失败, 请检查错误项');
                 $this->_view->assign("errors", $members->validation->getErrorSummary());
             }
+            $members->uid = $uid;
         }
 
         // 如果Model数据为空，则获取
         if(!empty($uid) && empty($members->uid)) {
             $data = $members->select(array('where'=>array('uid'=>$uid)));
-            $members->parseAttributes($data, 0);
+            $members->parseAttributes($data);
         }
-
-        // 格式化表单数据
-        $members->regdate = Tools_help::hdate('Y-m-d H:i:s', $members->regdate);
 
         // 图片处理
         if($members->face){

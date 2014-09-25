@@ -4,7 +4,7 @@
  *      [CodeJm!] Author CodeJm[codejm@163.com].
  *
  *      用户表 管理类
- *      $Id: Members.php 2014-08-23 00:25:11 codejm $
+ *      $Id: Members.php 2014-09-25 17:46:31 codejm $
  */
 
 class MembersController extends \Core_BackendCtl {
@@ -36,13 +36,13 @@ class MembersController extends \Core_BackendCtl {
             'per' => $pageSize,
         );
         // 列表
-        $result = $members->getList($params);
+        $result = $members->getLists($params);
         // 数据总条数
         $total = $members->getCount($params);
 
         // 分页url
-        $url = help::url('backend/members/index').'?page=';
-        $pagestr = help::pager($page, $total, $pageSize, $url);
+        $url = Tools_help::url('backend/members/index').'?page=';
+        $pagestr = Tools_help::pager($page, $total, $pageSize, $url);
 
         // 模版分配数据
         $this->_view->assign('pagestr', $pagestr);
@@ -62,7 +62,7 @@ class MembersController extends \Core_BackendCtl {
             // 获取所有post数据
             $pdata = $this->getAllPost();
             // 处理图片等特殊数据
-           $imageInfo = help::upload('face', 'members');
+           $imageInfo = Tools_help::upload('face', 'members');
            if(!empty($imageInfo)) {
                $pdata['face'] = $imageInfo;
            } else {
@@ -70,37 +70,35 @@ class MembersController extends \Core_BackendCtl {
            }
 
             // 验证
-            $result = $members->validate($pdata, 'add');
+            $result = $members->validation->validate($pdata, 'add');
             $members->parseAttributes($pdata);
 
             // 通过验证
             if($result) {
                 // 入库前数据处理
 
-   $members->regdate = help::htime($members->regdate);
+   $pdata['regdate'] = Tools_help::htime($members->regdate);
 
                 // Model转换成数组
                 $data = $members->toArray($pdata);
                 $result = $members->insert($data);
                 if($result) {
                     // 提示信息并跳转到列表
-                    help::setSession('Message', '添加成功！');
+                    Tools_help::setSession('Message', '添加成功！');
                     $this->redirect('/backend/members/index');
                 } else {
                     // 验证失败
                     $this->_view->assign('ErrorMessage', '添加失败！');
-                    $this->_view->assign("errors", $members->getErrorSummary());
+                    $this->_view->assign("errors", $members->validation->getErrorSummary());
                 }
             } else {
                 // 验证失败
                 $this->_view->assign('ErrorMessage', '添加失败！');
-                $this->_view->assign("errors", $members->getErrorSummary());
+                $this->_view->assign("errors", $members->validation->getErrorSummary());
             }
         }
 
         // 格式化表单数据
-
-       $members->regdate = help::hdate();
 
 
         // 模版分配数据
@@ -127,7 +125,7 @@ class MembersController extends \Core_BackendCtl {
             // 获取所有post数据
             $pdata = $this->getAllPost();
             // 处理图片等特殊数据
-           $imageInfo = help::upload('face', 'members');
+           $imageInfo = Tools_help::upload('face', 'members');
            if(!empty($imageInfo)) {
                $pdata['face'] = $imageInfo;
            } else {
@@ -135,14 +133,14 @@ class MembersController extends \Core_BackendCtl {
            }
 
             // 验证
-            $result = $members->validate($pdata, 'edit');
+            $result = $members->validation->validate($pdata, 'edit');
             $members->parseAttributes($pdata);
 
             // 通过验证
             if($result) {
                 // 入库前数据处理
 
-   $members->regdate = help::htime($members->regdate);
+   $pdata['regdate'] = Tools_help::htime($members->regdate);
 
 
                 // Model转换成数组
@@ -151,17 +149,17 @@ class MembersController extends \Core_BackendCtl {
 
                 if($result) {
                     // 提示信息并跳转到列表
-                    help::setSession('Message', '修改成功！');
+                    Tools_help::setSession('Message', '修改成功！');
                     $this->redirect('/backend/members/index');
                 } else {
                     // 出错
-                    help::setSession('ErrorMessage', '修改失败, 请确定已修改了某项！');
-                    $this->_view->assign("errors", $members->getErrorSummary());
+                    Tools_help::setSession('ErrorMessage', '修改失败, 请确定已修改了某项！');
+                    $this->_view->assign("errors", $members->validation->getErrorSummary());
                 }
             } else {
                 // 验证失败
-                help::setSession('ErrorMessage', '修改失败, 请检查错误项');
-                $this->_view->assign("errors", $members->getErrorSummary());
+                Tools_help::setSession('ErrorMessage', '修改失败, 请检查错误项');
+                $this->_view->assign("errors", $members->validation->getErrorSummary());
             }
         }
 
@@ -175,7 +173,7 @@ class MembersController extends \Core_BackendCtl {
 
        // 图片处理
        if($members->face){
-           $members->face = help::fbu($members->face);
+           $members->face = Tools_help::fbu($members->face);
        }
 
 
