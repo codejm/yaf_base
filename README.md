@@ -59,6 +59,33 @@ server
 
 ## coding
 
+### 目录结构
+    ▾ application/      -- 应用程序核心目录
+      ▾ conf/           -- 配置文件目录
+        ▸ lang/         -- 语言包
+          application.ini*  -- 总配置
+          defines.inc.php*  -- 系统公共常量
+      ▸ controllers/    -- 默认模块controller
+      ▾ library/        -- 组件目录
+        ▸ Cache/        -- 缓存类
+        ▸ Captcha/      -- 验证码
+        ▸ Core/         -- 框架核心
+        ▸ Files/        -- 文件相关:上传文件
+        ▸ Tools/        -- 帮助类
+        ▸ Validation/   -- 验证类
+        ▸ vendor/       -- composer文件目录
+      ▸ models/         -- model 目录
+      ▸ modules/        -- 模块目录
+      ▸ plugins/        -- 插件目录
+      ▸ views/          -- 默认模块view
+        Bootstrap.php*  -- 程序引导初始化文件
+    ▸ data/             -- 数据生成工具
+    ▸ public/           -- 站点目录
+    ▸ runtime/          -- 运行时缓存
+      composer.json*    -- composer 配置文件
+      composer.lock*
+      README.md*
+
 ### 后台代码生成[根据ace模版生成,public 目录提供ace模版]
 * 修改 ./data/crud-admin/src/crud.php 数据库配置
 * $ php crud.php
@@ -100,3 +127,16 @@ if(!$mail->send()) {
     echo 'Message has been sent';
 }
 ```
+
+
+
+
+
+## yaf 相关
+
+### yaf安装
+    - php官方 http://pecl.php.net/package/yaf
+    - github https://github.com/laruence/php-yaf
+
+### yaf帮助文档
+    - http://cn2.php.net/manual/en/book.yaf.php
