@@ -4,7 +4,7 @@
  *      [CodeJm!] Author CodeJm[codejm@163.com].
  *
  *       管理类
- *      $Id: Log.php 2014-09-25 17:46:31 codejm $
+ *      $Id: Log.php 2014-09-26 14:54:06 codejm $
  */
 
 class LogController extends \Core_BackendCtl {
@@ -140,6 +140,7 @@ class LogController extends \Core_BackendCtl {
                     Tools_help::setSession('ErrorMessage', '修改失败, 请确定已修改了某项！');
                     $this->_view->assign("errors", $log->validation->getErrorSummary());
                 }
+                $log->id = $id;
             } else {
                 // 验证失败
                 Tools_help::setSession('ErrorMessage', '修改失败, 请检查错误项');

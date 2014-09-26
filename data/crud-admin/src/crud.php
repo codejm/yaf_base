@@ -8,7 +8,7 @@
  */
 
 $options = array(PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ, PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING);
-$table_pre = 'yaf';
+$table_pre = 'yaf_';
 $db = new PDO('mysql:host=127.0.0.1;dbname=codejm', 'root', '1234', $options);
 
 $query = "SHOW TABLES";
@@ -202,7 +202,7 @@ foreach($tables as $table_name => $table){
                 $FIELDS_TD .= "\t\t\t\t\t\t<td class=\"hidden-480\">\n\t\t\t\t\t\t\t{% if row.status>0 %}\n\t\t\t\t\t\t\t\t<a href=\"{{ url('backend/".$TABLENAMES."/status', {'".$TABLE_PRIMARYKEY."':row.".$TABLE_PRIMARYKEY.", 'status':row.status}) }}\" class=\"label label-sm label-success\">已通过</a>\n\t\t\t\t\t\t\t{% else %}\n\t\t\t\t\t\t\t\t<a href=\"{{ url('backend/".$TABLENAMES."/status', {'".$TABLE_PRIMARYKEY."':row.".$TABLE_PRIMARYKEY.", 'status':row.status}) }}\" class=\"label label-sm label-warning\">未通过</a>\n\t\t\t\t\t\t\t{% endif %}\n\t\t\t\t\t\t</td>";
             } else if($columnType  == 'radio') {
                 $FIELDS_TD .= "\t\t\t\t\t\t<td> {{row.{$table_column['name']} ? '是' : '否'}} </td>\n";
-            } else if($table_column['name'] != 'datelien'  && $table_column['name'] != 'updatetime' && $columnType  == 'time') {
+            } else if($columnType  == 'time') {
                 $FIELDS_TD .= "\t\t\t\t\t\t<td> {{row.{$table_column['name']} | date('Y-m-d H:i:s')}} </td>\n";
             } else if($columnType  == 'date') {
                 $FIELDS_TD .= "\t\t\t\t\t\t<td> {{row.{$table_column['name']} | date('Y-m-d')}} </td>\n";
@@ -260,7 +260,7 @@ foreach($tables as $table_name => $table){
                     "\t\t\t" . "    </div>" . "\n" .
                     "\t\t\t" . "    <div class=\"help-block col-xs-12 col-sm-reset inline\"> {% if errors['".$table_column['name']."'] is not empty %}{{errors['".$table_column['name']."']}}{% else %} {%endif%} </div>\n".
                     "\t\t\t" . "</div>" . "\n\n";
-            } else if($table_column['name'] != 'datelien'  && $table_column['name'] != 'updatetime' && $columnType  == 'time') {
+            } else if($columnType  == 'time') {
                 $EDIT_FORM_TEMPLATE .= "" .
                     "\t\t\t" . "<div class=\"form-group{% if errors['".$table_column['name']."'] is not empty %} has-error{%endif%}\">" . "\n" .
                     "\t\t\t" . "    <label for=\"".$table_column['name']."\" class=\"col-xs-12 col-sm-3 col-md-3 control-label no-padding-right\">".$comment.$isnull."</label>" . "\n" .

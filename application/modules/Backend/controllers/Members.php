@@ -82,8 +82,8 @@ class MembersController extends \Core_BackendCtl {
             // 通过验证
             if($result) {
                 // 入库前数据处理
-
                 $pdata['regdate'] = Tools_help::htime($members->regdate);
+                $pdata['password'] = Tools_help::hash($members->password);
 
                 // Model转换成数组
                 $data = $members->toArray($pdata);
@@ -153,6 +153,7 @@ class MembersController extends \Core_BackendCtl {
             if($result) {
                 // 入库前数据处理
                 $pdata['regdate'] = Tools_help::htime($members->regdate);
+                $pdata['password'] = Tools_help::hash($members->password);
 
                 // Model转换成数组
                 $data = $members->toArray($pdata);

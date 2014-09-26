@@ -4,7 +4,7 @@
  *      [CodeJm!] Author CodeJm[codejm@163.com].
  *
  *      
- *      $Id: Log.php 2014-09-25 17:46:31 codejm $
+ *      $Id: Log.php 2014-09-26 14:54:06 codejm $
  */
 
 class LogModel extends \Core_CMode {
