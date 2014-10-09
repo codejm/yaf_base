@@ -59,7 +59,10 @@ class Tools_help {
      *
      */
     public static function fbu($url='') {
-        $uploadBaseUrl = rtrim('http://' . $_SERVER['HTTP_HOST']) . '/upload/';
+        $config = \Yaf_Application::app()->getConfig()->toArray();
+        $uploaddir = $config['application']['site']['uploadUri'];
+
+        $uploadBaseUrl = rtrim('http://' . $_SERVER['HTTP_HOST']) . '/'.$uploaddir.'/';
 
         if (empty($url)) {
             return $uploadBaseUrl;
@@ -73,14 +76,13 @@ class Tools_help {
      *
      */
     public static function sfbu($url='') {
-        $uploadBaseUrl = rtrim('http://' . $_SERVER['HTTP_HOST']) . '/';
+        $config = \Yaf_Application::app()->getConfig()->toArray();
+        $uploaddir = $config['application']['site']['uploadUri'];
 
-        if (empty($url)) {
-            return $uploadBaseUrl.'assets/';
-        } else if(strpos($url, 'upload') === false) {
-            return (stripos($url, 'http://') === 0) ? $url : $uploadBaseUrl.'assets/'.ltrim($url, '/');
+        if(empty($url)){
+            return PUBLIC_PATH.$uploaddir.'/';
         } else {
-            return (stripos($url, 'http://') === 0) ? $url : $uploadBaseUrl.'upload/'.ltrim($url, '/');
+            return PUBLIC_PATH.$uploaddir.'/'.$url;
         }
     }
 
@@ -287,7 +289,7 @@ class Tools_help {
         $subdir1 = date ('Ym');
         $subdir2 = date ('d');
         $subdir = $dir.'/'.$subdir1.'/'.$subdir2.'/';
-        $dir = PUBLIC_PATH.'upload/'.$subdir;
+        $dir = self::sfbu().$subdir;
         self::make_dir($dir);
 
         $fileUpload = new Files_FileUpload();
@@ -345,6 +347,39 @@ class Tools_help {
      */
     public static function getIpPort() {
         return (int) (getenv('REMOTE_PORT') ? getenv('REMOTE_PORT') : $_SERVER['REMOTE_PORT']);
+    }
+
+
+    /**
+     *  curl方式post数据  $arr数组用来设置要post的字段和数值 help::getpost("http://www.123.com",$array);
+     *  $array = array('name'=>'good','pass'=>'wrong');
+     *
+     */
+    public static function getpost($URL, $arr) {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $URL);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);      //设置返回信息的内容和方式
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $arr);       //发送post数据
+        curl_setopt($ch, CURLOPT_TIMEOUT, 30);            //设置30秒超时
+        $result = curl_exec($ch);                         //进行数据传输
+        curl_close($ch);                                  //关闭
+        return $result;
+    }
+
+    /**
+     * curl 方式 get数据 help::getget('http://www.123.com')
+     *
+     */
+    public static function getget($url) {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 30);            //设置30秒超时
+        $result = curl_exec($ch);
+        curl_close($ch);
+        return $result;
     }
 
     /**

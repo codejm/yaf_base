@@ -7,8 +7,8 @@
  *      $Id: index.php 2014-07-27 12:04:10 codejm $
  */
 
-// 常用目录定义
 header("Content-type: text/html; charset=utf-8");
+// 常用目录定义
 define("DS", '/');
 define("PUBLIC_PATH", dirname(__FILE__).DS);
 define("BASE_PATH", realpath(dirname(__FILE__).DS.'..').DS);

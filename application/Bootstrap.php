@@ -91,7 +91,6 @@ class Bootstrap extends \Yaf_Bootstrap_Abstract {
         Yaf_Registry::set('lang', $lang);
     }
 
-
     /**
      * 系统级错误跳转到首页
      * @param int errorCode
