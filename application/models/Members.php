@@ -47,13 +47,17 @@ class MembersModel extends \Core_CMode {
                 array('aboutme', 'maxlength[255]'),
                 array('regip', 'required|maxlength[15]'),
                 array('reg_ip_port', 'required|maxlength[6]'),
-                //array('regdate', 'required|maxlength[10]|integer'),
+                array('regdate', 'required'),
                 array('email', 'required|maxlength[50]|email'),
                 array('email_checked', 'maxlength[1]|integer'),
                 array('role_type', 'required|maxlength[10]'),
                 array('mobile', 'maxlength[15]|phone'),
                 array('status', 'maxlength[1]|integer'),
-
+            ),
+            'only_login' => array(
+                array('username', 'required|maxlength[100]|minlength[5]'),
+                array('password', 'required|maxlength[100]|minlength[5]'),
+                array('captcha', 'required|captcha', '验证码'),
             ),
         );
     }
