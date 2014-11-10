@@ -11,7 +11,11 @@ class IndexController extends \Core_BaseCtl {
 
     // 默认Action
     public function indexAction() {
-        phpinfo();
+    }
+
+    public function testAction() {
+        echo $this->geta('name');
+        exit;
     }
 }
 

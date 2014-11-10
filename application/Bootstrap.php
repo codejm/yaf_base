@@ -36,8 +36,21 @@ class Bootstrap extends \Yaf_Bootstrap_Abstract {
     // 路由
     public function _initRoute(\Yaf_Dispatcher $dispatcher) {
         $router = Yaf_Dispatcher::getInstance()->getRouter();
-        //载入config中路由
-        $router->addConfig(\Yaf_Application::app()->getConfig()->routes);
+
+        $route['backend'] = new Yaf_Route_Rewrite(
+            '/(backend|backend/)$',
+            array(
+                'controller' => 'index',
+                'action' => 'index',
+                'module' => 'backend'
+            )
+        );
+
+        //使用路由器装载路由协议
+        foreach ($route as $k => $v) {
+            $router->addRoute($k, $v);
+        }
+        Yaf_Registry::set('rewrite_route', $route);
     }
 
     /**

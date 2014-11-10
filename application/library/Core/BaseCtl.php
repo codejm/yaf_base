@@ -29,6 +29,7 @@ class Core_BaseCtl extends \Yaf_Controller_Abstract {
         $this->_view->assign("curcontroller", $this->controllerName);
         $this->_view->assign("curaction", $this->actionName);
         $this->_view->assign("langArr", $this->lang_arr);
+        $this->_view->assign("currURL", Tools_help::getCurrURL());
     }
 
     /**
@@ -87,8 +88,8 @@ class Core_BaseCtl extends \Yaf_Controller_Abstract {
      * request
      *
      */
-    protected function getParam($name, $default = '') {
-        $value = $this->getRequest()->getParam($name, $default);
+    protected function geta($name, $default = '') {
+        $value = $this->getRequest()->getRequest($name, $default);
         $value = Tools_help::filter($value);
         return $value;
     }
@@ -98,6 +99,9 @@ class Core_BaseCtl extends \Yaf_Controller_Abstract {
      *
      */
     protected function getAllPost() {
+        foreach($_POST as $key=>$value) {
+            $_POST[$key] = Tools_help::filter($value);
+        }
         return $_POST;
     }
 

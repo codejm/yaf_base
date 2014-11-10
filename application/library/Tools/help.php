@@ -93,14 +93,42 @@ class Tools_help {
      */
     public static function url($route, $params = array()) {
 
-        $moduleName = \Yaf_Dispatcher::getInstance()->getRequest()->getModuleName();
-        $controllerName = \Yaf_Dispatcher::getInstance()->getRequest()->getControllerName();
-        $actionName = \Yaf_Dispatcher::getInstance()->getRequest()->getActionName();
+        $config = \Yaf_Application::app()->getConfig()->toArray();
+        $url = $config['application']['site']['baseUri'];
 
-        // 当前url
-        if($route == 'curr_url') {
+        // rewrite start
+        $router = Yaf_Dispatcher::getInstance()->getRouter();
+        $rewrite_route = Yaf_Registry::get('rewrite_route');
+        $route_lower = strtolower($route);
+
+        $query = '';
+        // 是否存在现有设定规则内
+        if(isset($rewrite_route[$route_lower])){
+            $rewrite = $router->getRoute($route_lower)->assemble($params, array());
+            if($rewrite){
+                $http_data = array();
+                foreach ($params as $key=>$value) {
+                    if(strpos($rewrite, ':'.$key) !== false){
+                        $rewrite = str_replace(':'.$key, $value, $rewrite);
+                        unset($params[$key]);
+                    } else {
+                        $http_data[$key] = $value;
+                    }
+                }
+                $route = $rewrite;
+                $params = $http_data;
+            }
+        } else if($route == 'curr_url') {
+            // 系统默认
+            $moduleName = \Yaf_Dispatcher::getInstance()->getRequest()->getModuleName();
+            $controllerName = \Yaf_Dispatcher::getInstance()->getRequest()->getControllerName();
+            $actionName = \Yaf_Dispatcher::getInstance()->getRequest()->getActionName();
+
             $route = $moduleName.'/'.$controllerName.'/'.$actionName;
-            $arr = \Yaf_Dispatcher::getInstance()->getRequest()->getParams();
+            $arr_request = \Yaf_Dispatcher::getInstance()->getRequest()->getRequest();
+            $arr_params = \Yaf_Dispatcher::getInstance()->getRequest()->getParams();
+            array_shift($arr_request);
+            $arr = array_merge($arr_params, $arr_request);
 
             // backend sort 处理
             if(isset($arr['sort'])){
@@ -118,28 +146,15 @@ class Tools_help {
                     $params['sort'] = $params['sort'].'.desc';
                 }
             }
-
-        } elseif($route[0]  == '/') {
-            // 合并参数
-            $arr = \Yaf_Dispatcher::getInstance()->getRequest()->getParams();
-            $params = array_merge($arr, $params);
-            if(isset($params['page'])) {
-                unset($params['page']);
-                $params['page'] = '';
-            }
-            $route = $moduleName.'/'.$controllerName.'/'.$actionName;
         }
-        $config = \Yaf_Application::app()->getConfig()->toArray();
-        $url = $config['application']['site']['baseUri'];
         $url = $url.$route;
-        $url = rtrim($url, '/');
-        foreach ($params as $key=>$value) {
-            if(empty($value) && $key!='page')
-                continue;
-            $url .= '/'.$key.'/'.$value;
-        }
 
+        $query = http_build_query($params);
+        if($query) {
+            $url = $url.'?'.$query;
+        }
         return $url;
+        // end
     }
 
     /**
@@ -348,6 +363,40 @@ class Tools_help {
     }
 
     /**
+     *  curl方式post数据  $arr数组用来设置要post的字段和数值 help::getpost("http://www.123.com",$array);
+     *  $array = array('name'=>'good','pass'=>'wrong');
+     *
+     */
+    public static function getpost($URL, $arr) {
+        $arr = http_build_query($arr);
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $URL);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);      //设置返回信息的内容和方式
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $arr);       //发送post数据
+        curl_setopt($ch, CURLOPT_TIMEOUT, 30);            //设置30秒超时
+        $result = curl_exec($ch);                         //进行数据传输
+        curl_close($ch);                                  //关闭
+        return $result;
+    }
+
+    /**
+     * curl 方式 get数据 help::getget('http://www.123.com')
+     *
+     */
+    public static function getget($url) {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 30);            //设置30秒超时
+        $result = curl_exec($ch);
+        curl_close($ch);
+        return $result;
+    }
+
+
+    /**
      * 数字转为汉字
      * @param $num_str
      * @return mixed
@@ -483,6 +532,79 @@ class Tools_help {
         }
         $now_age = $full_age + 1;
         return $now_age;
+    }
+
+    /**
+     * 将数组中所有的值转换为整形
+     * @param array $array
+     * @return array
+     *
+     */
+    static function arrayValue2num($array) {
+        foreach($array as $key=>$value){
+            $array[$key] = intval($value);
+        }
+        return $array;
+    }
+
+    /**
+     * 生成订单id随机数
+     * @return string
+     *
+     */
+    static function createOrder() {
+        $idstr = time().rand(10000, 20000);
+        $idstr = md5($idstr);
+        return $idstr;
+    }
+
+
+    /**
+     * 主键为key
+     *
+     */
+    static function formatkey($result, $key) {
+        // key 键值对
+        $data = array();
+        if($result && $key) {
+            foreach($result as $value) {
+                $data[$value[$key]] = $value;
+            }
+        } else if($result) {
+            $data = $result;
+        }
+        return $data;
+    }
+
+    /**
+     * 获取当前请求的完整URL
+     */
+    public static function getCurrURL() {
+        $pageURL = 'http';
+        if (isset($_SERVER["HTTPS"])  && $_SERVER["HTTPS"] == "on") {
+            $pageURL .= "s";
+        }
+        $pageURL .= "://";
+        if ($_SERVER["SERVER_PORT"] != "80") {
+            $pageURL .= $_SERVER["SERVER_NAME"] . ":" . $_SERVER["SERVER_PORT"] . $_SERVER["REQUEST_URI"];
+        } else {
+            $pageURL .= $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"];
+        }
+        $pageURL = str_replace(array('?lang=en-us', '&lang=en-us', '?lang=zh-cn', '&lang=zh-cn', '?lang=zh-tw', '&lang=zh-tw'), '', $pageURL);
+        return $pageURL;
+    }
+
+    /***
+     * 清除html
+     *
+     */
+    public static function clearHTML($str) {
+        $str = preg_replace(array("/<br[^>]*>\s*\r*\n*/is", "/<br \/>/is"), "\r\n\r\n", $str);
+        $str = preg_replace("/\n\n/is", "\r\n\r\n", $str);
+
+        $str = str_replace(array('&nbsp;', '&bull;', '&mdash;', '&quot;', '&rdquo;', '&ldquo;', '&#8226;', '&#160;'), ' ', strip_tags(htmlspecialchars_decode($str, ENT_NOQUOTES)));
+        return $str;
+
     }
 }
 

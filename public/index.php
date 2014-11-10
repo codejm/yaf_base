@@ -7,6 +7,7 @@
  *      $Id: index.php 2014-07-27 12:04:10 codejm $
  */
 
+date_default_timezone_set('PRC');
 // 常用目录定义
 header("Content-type: text/html; charset=utf-8");
 define("DS", '/');
