@@ -371,38 +371,6 @@ class Tools_help {
      *
      */
     public static function getpost($URL, $arr) {
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $URL);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);      //设置返回信息的内容和方式
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $arr);       //发送post数据
-        curl_setopt($ch, CURLOPT_TIMEOUT, 30);            //设置30秒超时
-        $result = curl_exec($ch);                         //进行数据传输
-        curl_close($ch);                                  //关闭
-        return $result;
-    }
-
-    /**
-     * curl 方式 get数据 help::getget('http://www.123.com')
-     *
-     */
-    public static function getget($url) {
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_HEADER, 0);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 30);            //设置30秒超时
-        $result = curl_exec($ch);
-        curl_close($ch);
-        return $result;
-    }
-
-    /**
-     *  curl方式post数据  $arr数组用来设置要post的字段和数值 help::getpost("http://www.123.com",$array);
-     *  $array = array('name'=>'good','pass'=>'wrong');
-     *
-     */
-    public static function getpost($URL, $arr) {
         $arr = http_build_query($arr);
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $URL);
