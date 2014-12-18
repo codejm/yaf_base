@@ -16,13 +16,14 @@ class Bootstrap extends \Yaf_Bootstrap_Abstract {
 	}
 
 
-    // 是否显示错误提示
+    // 是否显示错误提示 设定异常捕获
     public function _initError(\Yaf_Dispatcher $dispatcher) {
         $config = \Yaf_Application::app()->getConfig();
         if($config['application']['showErrors']) {
             error_reporting(-1);
         } else {
             error_reporting(0);
+            $dispatcher->setErrorHandler(array(get_class($this), "errorHandler"));
         }
     }
 
@@ -111,19 +112,9 @@ class Bootstrap extends \Yaf_Bootstrap_Abstract {
      *
      */
     public static function errorHandler($error, $errstr) {
-        die($errstr);
+        die();
+        //die($errstr);
     }
-
-    /**
-     * 设定异常捕获
-     * application.dispatcher.throwException=0
-     * application.dispatcher.catchException=0
-     *
-     */
-    public function _initErrorHandler(\Yaf_Dispatcher $dispatcher) {
-        $dispatcher->setErrorHandler(array(get_class($this), "errorHandler"));
-    }
-
 
 }
 

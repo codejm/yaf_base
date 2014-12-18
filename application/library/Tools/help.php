@@ -378,6 +378,7 @@ class Tools_help {
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);      //设置返回信息的内容和方式
         curl_setopt($ch, CURLOPT_POSTFIELDS, $arr);       //发送post数据
         curl_setopt($ch, CURLOPT_TIMEOUT, 30);            //设置30秒超时
+
         $result = curl_exec($ch);                         //进行数据传输
         curl_close($ch);                                  //关闭
         return $result;
