@@ -22,11 +22,11 @@ class __TABLENAME__Controller extends \Core_BackendCtl {
         if($orderby) {
             $orderby = str_replace('.', ' ', $orderby);
         } else {
-            $orderby = '__TABLE_PRIMARYKEY__ asc';
+            $orderby = '__TABLE_PRIMARYKEY__ desc';
         }
 
         // 实例化Model
-        $__TABLENAMES__ = new __TABLENAME__Model();
+        $__TABLENAMES__Model = new __TABLENAME__Model();
         // 查询条件
         $params = array(
             'field' => array(),
@@ -36,9 +36,9 @@ class __TABLENAME__Controller extends \Core_BackendCtl {
             'per' => $pageSize,
         );
         // 列表
-        $result = $__TABLENAMES__->getLists($params);
+        $result = $__TABLENAMES__Model->getLists($params);
         // 数据总条数
-        $total = $__TABLENAMES__->getCount($params);
+        $total = $__TABLENAMES__Model->getCount($params);
 
         // 分页url
         $url = Tools_help::url('backend/__TABLENAMES__/index').'?page=';
@@ -56,7 +56,7 @@ class __TABLENAME__Controller extends \Core_BackendCtl {
      */
     public function addAction() {
         // 实例化Model
-        $__TABLENAMES__ = new __TABLENAME__Model();
+        $__TABLENAMES__Model = new __TABLENAME__Model();
         // 处理post数据
         if($this->getRequest()->isPost()) {
             // 获取所有post数据
@@ -64,16 +64,16 @@ class __TABLENAME__Controller extends \Core_BackendCtl {
             // 处理图片等特殊数据
 __CONTROLLER_EDIT_PRE__
             // 验证
-            $result = $__TABLENAMES__->validation->validate($pdata, 'add');
-            $__TABLENAMES__->parseAttributes($pdata);
+            $result = $__TABLENAMES__Model->validation->validate($pdata, 'add');
+            $__TABLENAMES__Model->parseAttributes($pdata);
 
             // 通过验证
             if($result) {
                 // 入库前数据处理
 __CONTROLLER_ADD__
                 // Model转换成数组
-                $data = $__TABLENAMES__->toArray($pdata);
-                $result = $__TABLENAMES__->insert($data);
+                $data = $__TABLENAMES__Model->toArray($pdata);
+                $result = $__TABLENAMES__Model->insert($data);
                 if($result) {
                     // 提示信息并跳转到列表
                     Tools_help::setSession('Message', '添加成功！');
@@ -81,12 +81,12 @@ __CONTROLLER_ADD__
                 } else {
                     // 验证失败
                     $this->_view->assign('ErrorMessage', '添加失败！');
-                    $this->_view->assign("errors", $__TABLENAMES__->validation->getErrorSummary());
+                    $this->_view->assign("errors", $__TABLENAMES__Model->validation->getErrorSummary());
                 }
             } else {
                 // 验证失败
                 $this->_view->assign('ErrorMessage', '添加失败！');
-                $this->_view->assign("errors", $__TABLENAMES__->validation->getErrorSummary());
+                $this->_view->assign("errors", $__TABLENAMES__Model->validation->getErrorSummary());
             }
         }
 
@@ -94,7 +94,7 @@ __CONTROLLER_ADD__
 __CONTROLLER_ADD_AFTER__
 
         // 模版分配数据
-        $this->_view->assign("__TABLENAMES__", $__TABLENAMES__);
+        $this->_view->assign("__TABLENAMES__", $__TABLENAMES__Model);
         $this->_view->assign("pageTitle", '添加__TABLENAMEREMARK__');
     }
 
@@ -110,7 +110,7 @@ __CONTROLLER_ADD_AFTER__
         }
 
         // 实例化Model
-        $__TABLENAMES__ = new __TABLENAME__Model();
+        $__TABLENAMES__Model = new __TABLENAME__Model();
 
         // 处理Post
         if($this->getRequest()->isPost()) {
@@ -119,8 +119,8 @@ __CONTROLLER_ADD_AFTER__
             // 处理图片等特殊数据
 __CONTROLLER_EDIT_PRE__
             // 验证
-            $result = $__TABLENAMES__->validation->validate($pdata, 'edit');
-            $__TABLENAMES__->parseAttributes($pdata);
+            $result = $__TABLENAMES__Model->validation->validate($pdata, 'edit');
+            $__TABLENAMES__Model->parseAttributes($pdata);
 
             // 通过验证
             if($result) {
@@ -128,8 +128,8 @@ __CONTROLLER_EDIT_PRE__
 __CONTROLLER_EDIT__
 
                 // Model转换成数组
-                $data = $__TABLENAMES__->toArray($pdata);
-                $result = $__TABLENAMES__->update(array('__TABLE_PRIMARYKEY__'=>$__TABLE_PRIMARYKEY__), $data);
+                $data = $__TABLENAMES__Model->toArray($pdata);
+                $result = $__TABLENAMES__Model->update(array('__TABLE_PRIMARYKEY__'=>$__TABLE_PRIMARYKEY__), $data);
 
                 if($result) {
                     // 提示信息并跳转到列表
@@ -138,27 +138,27 @@ __CONTROLLER_EDIT__
                 } else {
                     // 出错
                     Tools_help::setSession('ErrorMessage', '修改失败, 请确定已修改了某项！');
-                    $this->_view->assign("errors", $__TABLENAMES__->validation->getErrorSummary());
+                    $this->_view->assign("errors", $__TABLENAMES__Model->validation->getErrorSummary());
                 }
-                $__TABLENAMES__->__TABLE_PRIMARYKEY__ = $__TABLE_PRIMARYKEY__;
             } else {
                 // 验证失败
                 Tools_help::setSession('ErrorMessage', '修改失败, 请检查错误项');
-                $this->_view->assign("errors", $__TABLENAMES__->validation->getErrorSummary());
+                $this->_view->assign("errors", $__TABLENAMES__Model->validation->getErrorSummary());
             }
+            $__TABLENAMES__Model->__TABLE_PRIMARYKEY__ = $__TABLE_PRIMARYKEY__;
         }
 
         // 如果Model数据为空，则获取
-        if(!empty($__TABLE_PRIMARYKEY__) && empty($__TABLENAMES__->__TABLE_PRIMARYKEY__)) {
-            $data = $__TABLENAMES__->select(array('where'=>array('__TABLE_PRIMARYKEY__'=>$__TABLE_PRIMARYKEY__)));
-            $__TABLENAMES__->parseAttributes($data);
+        if(!empty($__TABLE_PRIMARYKEY__) && empty($__TABLENAMES__Model->__TABLE_PRIMARYKEY__)) {
+            $data = $__TABLENAMES__Model->select(array('where'=>array('__TABLE_PRIMARYKEY__'=>$__TABLE_PRIMARYKEY__)));
+            $__TABLENAMES__Model->parseAttributes($data);
         }
 
         // 格式化表单数据
 __CONTROLLER_EDIT_AFTER__
 
         // 模版分配数据
-        $this->_view->assign("__TABLENAMES__", $__TABLENAMES__);
+        $this->_view->assign("__TABLENAMES__", $__TABLENAMES__Model);
         $this->_view->assign("pageTitle", '修改__TABLENAMEREMARK__');
     }
 
@@ -172,8 +172,8 @@ __CONTROLLER_EDIT_AFTER__
             $this->error('__TABLE_PRIMARYKEY__ 不能为空!');
         }
         // 实例化Model
-        $__TABLENAMES__ = new __TABLENAME__Model();
-        $row = $__TABLENAMES__->update(array('__TABLE_PRIMARYKEY__'=>$__TABLE_PRIMARYKEY__), array('status'=>-1));
+        $__TABLENAMES__Model = new __TABLENAME__Model();
+        $row = $__TABLENAMES__Model->update(array('__TABLE_PRIMARYKEY__'=>$__TABLE_PRIMARYKEY__), array('status'=>-1));
         if($row) {
             $this->error('恭喜，删除成功', 'Message');
         } else {
@@ -191,8 +191,8 @@ __CONTROLLER_EDIT_AFTER__
             $this->error('__TABLE_PRIMARYKEY__ 不能为空!');
         }
         // 实例化Model
-        $__TABLENAMES__ = new __TABLENAME__Model();
-        $row = $__TABLENAMES__->del__TABLENAME__s($__TABLE_PRIMARYKEY__s);
+        $__TABLENAMES__Model = new __TABLENAME__Model();
+        $row = $__TABLENAMES__Model->del__TABLENAME__s($__TABLE_PRIMARYKEY__s);
         if($row) {
             $this->error('恭喜，删除成功', 'Message');
         } else {
@@ -213,8 +213,8 @@ __CONTROLLER_EDIT_AFTER__
         $status = $this->getg('status', 0);
         $status = $status ? 0 : 1;
         // 实例化Model
-        $__TABLENAMES__ = new __TABLENAME__Model();
-        $row = $__TABLENAMES__->update(array('__TABLE_PRIMARYKEY__'=>$__TABLE_PRIMARYKEY__), array('status'=>$status));
+        $__TABLENAMES__Model = new __TABLENAME__Model();
+        $row = $__TABLENAMES__Model->update(array('__TABLE_PRIMARYKEY__'=>$__TABLE_PRIMARYKEY__), array('status'=>$status));
         if($row) {
             $this->error('恭喜，操作成功', 'Message');
         } else {

@@ -20,11 +20,11 @@ class Core_CMode {
      */
     public function __get($name) {
         if($name == 'db'){
-            $config = \Yaf_Application::app()->getConfig()->database;
+            $config = \Yaf_Registry::get('configarr');
             $options = array(PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ, PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING);
-            $database = new PDO($config->dbtype . ':host=' . $config->host . ';dbname=' . $config->dbname, $config->username, $config->password, $options);
+            $database = new PDO($config['database']['dbtype'] . ':host=' . $config['database']['host'] . ';dbname=' . $config['database']['dbname'], $config['database']['username'], $config['database']['password'], $options);
             $database->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $database->exec('SET CHARACTER SET '.$config->charset);
+            $database->exec('SET CHARACTER SET '.$config['database']['charset']);
             $this->$name = $database;
         } else if($name == 'validation'){
             // 表单验证类
@@ -55,11 +55,13 @@ class Core_CMode {
      *
      */
     public function parseAttributes($data = array(), $filter=1) {
-        foreach ($data as $key=>$value) {
-            if($filter)
-                $this->$key = Tools_help::filter($data[$key]);
-            else
-                $this->$key = $data[$key];
+        if($data){
+            foreach ($data as $key=>$value) {
+                if($filter)
+                    $this->$key = Tools_help::filter($data[$key]);
+                else
+                    $this->$key = $data[$key];
+            }
         }
     }
 
@@ -77,7 +79,7 @@ class Core_CMode {
      *       'per'    => 1, 每页显示数量
      *     );
      */
-    public function getLists($params = array(), $key='') {
+    public function getLists($params = array('field'=>array(), 'where'=>array()), $key='') {
         $query = "";
         if (isset($params['field']) && is_array($params['field']) && !empty($params['field'])) {
             $fieldstr = Tools_help::arraytofields($params['field']);
@@ -118,6 +120,7 @@ class Core_CMode {
 
             $query .= ' limit '.$offset.', '.$params['per'];
         }
+
         if ($query) {
             $dbconn = $this->db->prepare($query);
             $dbconn->execute(array_values($params['where']));
@@ -142,7 +145,7 @@ class Core_CMode {
      * 单条查询
      *
      */
-    public function select($params=array()) {
+    public function select($params=array('where'=>array())) {
         $query = "";
         if (isset($params['field']) && is_array($params['field']) && !empty($params['field'])) {
             $fieldstr = Tools_help::arraytofields($params['field']);
@@ -218,7 +221,6 @@ class Core_CMode {
         }
 
         $data = array_merge($pdata, $where);
-
         $dbconn = $this->db->prepare($query);
         $dbconn->execute(array_values($data));
         $row = $dbconn->rowCount();
@@ -230,7 +232,7 @@ class Core_CMode {
      * 获取条数
      *
      */
-    public function getCount($params) {
+    public function getCount($params = array('where'=>array())) {
         $query = 'select count(*) from '.$this->_table;
         if (isset($params['where']) && is_array($params['where']) && !empty($params['where'])) {
             $query .= ' where 1=1 ';

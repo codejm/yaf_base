@@ -37,12 +37,11 @@ __FIELDS_TD_
 
                         <td>
                             <div class="hidden-sm hidden-xs btn-group">
-                                <a class="btn btn-xs btn-info" href="{{url('backend/__TABLENAMES__/edit', {'__TABLE_PRIMARYKEY__':row.__TABLE_PRIMARYKEY__})}}">
-                                    <i class="ace-icon fa fa-pencil bigger-120"></i>
-                                </a>
-
                                 <a class="btn btn-xs btn-danger adel" href="{{url('backend/__TABLENAMES__/del', {'__TABLE_PRIMARYKEY__':row.__TABLE_PRIMARYKEY__})}}">
                                     <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                                </a>
+                                <a class="btn btn-xs btn-info" href="{{url('backend/__TABLENAMES__/edit', {'__TABLE_PRIMARYKEY__':row.__TABLE_PRIMARYKEY__})}}">
+                                    <i class="ace-icon fa fa-pencil bigger-120"></i>
                                 </a>
                             </div>
                         </td>

@@ -6,10 +6,10 @@
  *
  *      $Id: crud.php 2014-08-22 16:32:43 codejm $
  */
-
+date_default_timezone_get('PRC');
 $options = array(PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ, PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING);
-$table_pre = 'yaf_';
-$db = new PDO('mysql:host=127.0.0.1;dbname=codejm', 'root', '1234', $options);
+$table_pre = '_';
+$db = new PDO('mysql:host=localhost;dbname=demo', 'root', '1234', $options);
 
 $query = "SHOW TABLES";
 $sth = $db->prepare($query);
@@ -176,7 +176,13 @@ foreach($tables as $table_name => $table){
     foreach($table_columns as $table_column){
 
         $TABLENAMEBAK = $TABLENAME;
-        $TABLENAMEBAK = str_replace($table_pre, '', $TABLENAMEBAK);
+        if($table_pre == '_') {
+            $TABLENAMEBAK = str_replace($table_pre, '', $TABLENAMEBAK);
+            $TABLENAMEBAK = ucwords($TABLENAMEBAK);
+            //$TABLENAMEBAK = str_replace(' ', '', $TABLENAMEBAK);
+        } else {
+            $TABLENAMEBAK = str_replace($table_pre, '', $TABLENAMEBAK);
+        }
         $TABLENAMEBAK = str_replace("_", '', $TABLENAMEBAK);
         $TABLENAMEBAK = ucwords($TABLENAMEBAK);
         //$TABLENAMEBAK = str_replace(" ", '', $TABLENAMEBAK);
@@ -375,8 +381,8 @@ foreach($tables as $table_name => $table){
 
                 $CONTROLLER_EDIT_AFTER .= "\n".
                     "       // 图片处理\n".
-                    "       if(\$".$TABLENAMES."->".$table_column['name']."){\n".
-                    "           \$".$TABLENAMES."->".$table_column['name']." = Tools_help::fbu(\$".$TABLENAMES."->".$table_column['name'].");\n".
+                    "       if(\$".$TABLENAMES."Model->".$table_column['name']."){\n".
+                    "           \$".$TABLENAMES."Model->".$table_column['name']." = Tools_help::fbu(\$".$TABLENAMES."Model->".$table_column['name'].");\n".
                     "       }\n";
 
             } else if($columnType  == 'radio') {
@@ -385,7 +391,7 @@ foreach($tables as $table_name => $table){
                     "\t\t\t" . "    <label for=\"".$table_column['name']."\" class=\"col-xs-12 col-sm-3 col-md-3 control-label no-padding-right\">".$comment.$isnull."</label>" . "\n" .
                     "\t\t\t" . "    <div class=\"col-xs-12 col-sm-4\">" . "\n" .
                     "\t\t\t" . "        <span class=\"block input-icon input-icon-right\">" . "\n" .
-                    "\t\t\t" . "            <input type=\"checkbox\" id=\"".$table_column['name']."_radio\" placeholder=\"".$comment."\" name=\"".$table_column['name']."_radio\" class=\"ace ace-switch ace-switch-5\"{% if ".$TABLENAMES.".".$table_column['name']." %} checked=\"checked\"{% endif %}\" />" . "\n" .
+                    "\t\t\t" . "            <input type=\"checkbox\" id=\"".$table_column['name']."_radio\" placeholder=\"".$comment."\" name=\"".$table_column['name']."_radio\" class=\"ace ace-switch ace-switch-5\"{% if ".$TABLENAMES.".".$table_column['name']." %} checked=\"checked\"{% endif %} />" . "\n" .
                     "\t\t\t" . "            <span class=\"lbl\"></span>" . "\n" .
                     "\t\t\t" . "            <input type=\"hidden\" name=\"".$table_column['name']."\" id=\"".$table_column['name']."\" value=\"{{".$TABLENAMES.".".$table_column['name']."}}\"/>\n".
                     "\t\t\t" . "        </span>" . "\n" .
@@ -418,16 +424,12 @@ foreach($tables as $table_name => $table){
                     "\t\t\t" . "</div>" . "\n\n";
             }
             if($columnType  == 'date'){
-                $CONTROLLER_ADD .= "\n".
-                    "   \$pdata['".$table_column['name']."'] = Tools_help::htime(\$".$TABLENAMES."->".$table_column['name'].");\n";
-                $CONTROLLER_EDIT .= "\n".
-                    "   \$pdata['".$table_column['name']."'] = Tools_help::htime(\$".$TABLENAMES."->".$table_column['name'].");\n";
+                $CONTROLLER_EDIT_PRE .= "\n".
+                    "   \$pdata['".$table_column['name']."'] = Tools_help::htime(\$".$TABLENAMES."Model->".$table_column['name'].");\n";
             }
             if($columnType  == 'time'){
-                $CONTROLLER_ADD .= "\n".
-                    "   \$pdata['".$table_column['name']."'] = Tools_help::htime(\$".$TABLENAMES."->".$table_column['name'].");\n";
-                $CONTROLLER_EDIT .= "\n".
-                    "   \$pdata['".$table_column['name']."'] = Tools_help::htime(\$".$TABLENAMES."->".$table_column['name'].");\n";
+                $CONTROLLER_EDIT_PRE .= "\n".
+                    "   \$pdata['".$table_column['name']."'] = Tools_help::htime(\$".$TABLENAMES."Model->".$table_column['name'].");\n";
             }
         }
 

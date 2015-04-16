@@ -17,14 +17,14 @@ class Core_BackendCtl extends \Core_BaseCtl {
 
 
         // ---------------- 判断登录 --------------------------------------
-        $member = '';
+        $admin = '';
         $relogin = false;
         // 判断session
-        $member = Tools_help::getSession('member');
-        if(empty($member)){
+        $admin = Tools_help::getSession('admin');
+        if(empty($admin)){
             // 判断cookie
-            $member = Tools_help::getCookie('member');
-            if(empty($member) || $member['role_type'] !== 'admin'){
+            $admin = Tools_help::getCookie('admin');
+            if(empty($admin)){
                 $this->redirect('/backend/Login/index');
             } else {
                 $relogin = true;
@@ -32,21 +32,36 @@ class Core_BackendCtl extends \Core_BaseCtl {
         }
 
         // cookie重新验证
-        if($member && $relogin) {
-            $m = new MemberModel();
-            $data = $m->getMemberByName($member['username']);
-            if(empty($data)  || $data['role_type'] !== 'admin' ||  $data['password'] !== $member['password']) {
+        if($admin && $relogin) {
+            $adminModel = new AdminModel();
+            $data = $adminModel->getAdminById($admin['id']);
+            if(empty($data)  || $data['roleid'] != 1 || $data['password'] != $admin['password']) {
                 $this->redirect('/backend/Login/index');
             }
-            $m->reMemberMe($data);
-            $member = $data;
+            $adminModel->reMemberMe($data);
+            $admin = $data;
         }
 
         // E
-        $this->_view->assign("member", $member);
+        $this->_view->assign("curr_admin", $admin);
+
+
+        // 用户权限判断
+        /*$checkTitle = strtolower($this->moduleName.'_'.$this->controllerName.'_'.$this->actionName);
+        $pid = Rbac_Core::getPermissions()->returnId($checkTitle);
+        if($pid) {
+            if($admin['id']!=1){
+                if(!Rbac_Core::getInstance()->check($pid, $admin['id'])) {
+                    exit('您没有权限访问该网页1！<a href="javascript:window.history.back();">返回</a> ');
+                }
+            }
+        } else {
+            Rbac_Core::getPermissions()->add($checkTitle, $checkTitle);
+            //exit('您没有权限访问该网页2！<a href="javascript:window.history.back();">返回</a> ');
+        }*/
 
         // 后台菜单数组 S
-        $backendMenu = new \Core_CBackendMenu(ConstDefine::$backendMenu, $this->controllerName, $this->actionName);
+        $backendMenu = new \Core_CBackendMenu(ConstDefine::$backendMenu, $this->controllerName, $this->actionName, $purview);
         $menustr = $backendMenu->get();
         $this->_view->assign('backendMenu', $menustr);
         // E

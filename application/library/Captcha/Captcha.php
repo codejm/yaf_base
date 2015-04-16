@@ -31,12 +31,11 @@ class Captcha_Captcha {
 	public static function generate($len, $width = 110, $height = 30, $font_size = 18) {
 		$sizes = array('18' => array('width' => 25, 'height' => 25));
 		$words = self::words($len);
-        if(!session_id())
-            session_start();
 		$session_key = 'captcha';
-		$_SESSION[$session_key] = strtolower($words);
+		//$_SESSION[$session_key] = strtolower($words);
+        Tools_help::setSession($session_key, strtolower($words));
 
-		$image = Captcha_ImageManager::createWhiteImage($width, $height);
+		$image = Files_ImageManager::createWhiteImage($width, $height);
 
 		$font_config = array('spacing' => -17, 'font' => '5.ttf');
 		$font_path = dirname(__FILE__) . '/' . $font_config['font'];
@@ -63,10 +62,9 @@ class Captcha_Captcha {
 
 	public static function simple($len, $width = 48, $height = 22) {
 		$words = self::words($len);
-        if(!session_id())
-            session_start();
 		$session_key = 'captcha';
-		$_SESSION[$session_key] = strtolower($words);
+		//$_SESSION[$session_key] = strtolower($words);
+        Tools_help::setSession($session_key, strtolower($words));
 
 		$width = ($len * 10 + 10) > $width ? $len * 10 + 10 : $width;
 		$canvas = imagecreatetruecolor($width, $height);

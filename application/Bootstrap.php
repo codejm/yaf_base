@@ -9,50 +9,60 @@
 
 class Bootstrap extends \Yaf_Bootstrap_Abstract {
 
+    protected $config;
     // 配置初始化
-    public function _initConfig(\Yaf_Dispatcher $dispatcher) {
+    public function _initConfig(\Yaf_Dispatcher $dispatcher) {/*{{{*/
+        $this->config = Yaf_Application::app()->getConfig()->toArray();
+        Yaf_Registry::set('configarr', $this->config);
+
         // 加载默认定义
         \Yaf_Loader::import(APP_PATH.'/conf/defines.inc.php');
-	}
+    }/*}}}*/
 
 
-    // 是否显示错误提示 设定异常捕获
-    public function _initError(\Yaf_Dispatcher $dispatcher) {
-        $config = \Yaf_Application::app()->getConfig();
-        if($config['application']['showErrors']) {
+    // 是否显示错误提示
+    public function _initError(\Yaf_Dispatcher $dispatcher) {/*{{{*/
+        if($this->config['application']['showErrors']) {
             error_reporting(-1);
         } else {
             error_reporting(0);
-            $dispatcher->setErrorHandler(array(get_class($this), "errorHandler"));
         }
-    }
+    }/*}}}*/
 
     // 注册插件
-    public function _initPlugin(\Yaf_Dispatcher $dispatcher) {
+    public function _initPlugin(\Yaf_Dispatcher $dispatcher) {/*{{{*/
         // 初始化模版引擎 twig
         $Twig = new TwigPlugin();
         $dispatcher->registerPlugin($Twig);
-    }
+    }/*}}}*/
 
     // 路由
-    public function _initRoute(\Yaf_Dispatcher $dispatcher) {
+    public function _initRoute(\Yaf_Dispatcher $dispatcher) {/*{{{*/
         $router = Yaf_Dispatcher::getInstance()->getRouter();
+        $route = array();
 
-        $route['backend'] = new Yaf_Route_Rewrite(
-            '/(backend|backend/)$',
-            array(
-                'controller' => 'index',
-                'action' => 'index',
-                'module' => 'backend'
-            )
-        );
+        // 默认进入index/index
+        $modules = \Yaf_Application::app()->getModules();
+        if($modules) {
+            foreach ($modules as $module) {
+                $name = strtolower($module);
+                $route[$name] = new Yaf_Route_Rewrite(
+                    '/('.$name.'|'.$name.'/|'.$name.'/index|'.$name.'/index/)$',
+                    array(
+                        'controller' => 'index',
+                        'action' => 'index',
+                        'module' => $name,
+                    )
+                );
+            }
+        }
 
         //使用路由器装载路由协议
         foreach ($route as $k => $v) {
             $router->addRoute($k, $v);
         }
         Yaf_Registry::set('rewrite_route', $route);
-    }
+    }/*}}}*/
 
     /**
      * 初始化多语言包，判断优先级：GET参数 > COOKIE > 浏览器ACCEPT_LANGUAGE > 默认zh_CN

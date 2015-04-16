@@ -15,20 +15,29 @@ class TwigPlugin extends Yaf_Plugin_Abstract {
 
     // 模板路径
     public function routerShutdown(Yaf_Request_Abstract $request, Yaf_Response_Abstract $response) {
-        $config = Yaf_Application::app()->getConfig();
+        $config = \Yaf_Registry::get('configarr');
         $dispatcher= Yaf_Dispatcher::getInstance();
         $twig = '';
         // view 放在module 目录里
         if($request->module==$config['application']['dispatcher']['defaultModule']){
-            $twig = new \Core_Twig(APP_PATH.'views', $config->twig->toArray());
+            $twig = new \Core_Twig(APP_PATH.'views', $config['twig']);
         } else {
-            $twig = new \Core_Twig(APP_PATH.'modules/'.$request->module.'/views', $config->twig->toArray());
+            if($request->module == 'Backend' || $request->module == 'Comment' || $request->module == 'M' || $request->module == 'Station')
+                $config['twig']['cache'] = '';
+            $twig = new \Core_Twig(APP_PATH.'modules/'.$request->module.'/views', $config['twig']);
         }
+        $twig->addPath(APP_PATH.'modules/Global/views/');
 
         // url generate
         $twig->twig->addFunction("url", new Twig_Function_Function("Tools_help::url"));
         // 语言对应
         $twig->twig->addFunction("lang", new Twig_Function_Function("Tools_help::lang"));
+        // 图片路径
+        $twig->twig->addFunction("fbu", new Twig_Function_Function("Tools_help::fbu"));
+        // 数字验证
+        $twig->twig->addFunction("is_numeric", new Twig_Function_Function("is_numeric"));
+        // 对象拼接并返回
+        $twig->twig->addFunction("objectmosaic", new Twig_Function_Function("Tools_help::objectmosaic"));
 
         // 处理错误提醒
         $session_key = array('ErrorMessageStop', 'ErrorMessage', 'Message');

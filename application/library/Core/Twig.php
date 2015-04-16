@@ -108,6 +108,14 @@ class Core_Twig implements \Yaf_View_Interface {
 	public function setScriptPath($templateDir) {
 		$this->loader->setPaths($templateDir);
 	}
+
+    /**
+     * @param string $path
+     * @return void
+     */
+    public function addPath($path) {
+        $this->loader->addPath($path);
+    }
 }
 
 ?>

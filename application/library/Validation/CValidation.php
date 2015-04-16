@@ -297,7 +297,7 @@ class Validation_CValidation {
         $messages['numeric'] = '{name} 必须是数字.';
         $messages['email'] = '{name} 必须是一个有效的电子邮件地址.';
         $messages['url'] = '{name} 必须是一个有效的URL.';
-        $messages['phone'] = '{name} 必须是一个有效的电话号码.';
+        $messages['phone'] = '{name} 必须是一个有效的手机号码.';
         $messages['zipcode'] = '{name} 必须是一个有效的邮政编码.';
         $messages['startswith'] = '{name} 必需开始与 %s.';
         $messages['endswith'] = '{name} 必须结束与 %s.';

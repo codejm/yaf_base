@@ -12,7 +12,12 @@ class Validation_Validation {
      * 必填
      */
     public static function required($input = null) {
-        return empty($input) ? false : true;
+        $input = $input.'';
+        if(isset($input{0})){
+            return true;
+        }
+        return false;
+        //return empty($input) ? false : true;
     }
 
     /**
@@ -24,39 +29,39 @@ class Validation_Validation {
         }
 
         switch($format) {
-            case 'YYYY/MM/DD':
-            case 'YYYY-MM-DD':
+        case 'YYYY/MM/DD':
+        case 'YYYY-MM-DD':
             list($y, $m, $d) = preg_split('/[-\.\/ ]/', $input);
             break;
 
-            case 'YYYY/DD/MM':
-            case 'YYYY-DD-MM':
+        case 'YYYY/DD/MM':
+        case 'YYYY-DD-MM':
             list($y, $d, $m) = preg_split('/[-\.\/ ]/', $input);
             break;
 
-            case 'DD-MM-YYYY':
-            case 'DD/MM/YYYY':
+        case 'DD-MM-YYYY':
+        case 'DD/MM/YYYY':
             list($d, $m, $y) = preg_split('/[-\.\/ ]/', $input);
             break;
 
-            case 'MM-DD-YYYY':
-            case 'MM/DD/YYYY':
+        case 'MM-DD-YYYY':
+        case 'MM/DD/YYYY':
             list($m, $d, $y) = preg_split('/[-\.\/ ]/', $input);
             break;
 
-            case 'YYYYMMDD':
+        case 'YYYYMMDD':
             $y = substr($input, 0, 4);
             $m = substr($input, 4, 2);
             $d = substr($input, 6, 2);
             break;
 
-            case 'YYYYDDMM':
+        case 'YYYYDDMM':
             $y = substr($input, 0, 4);
             $d = substr($input, 4, 2);
             $m = substr($input, 6, 2);
             break;
 
-            default:
+        default:
             throw new \InvalidArgumentException("Invalid Date Format");
         }
         return checkdate($m, $d, $y);
@@ -219,7 +224,7 @@ class Validation_Validation {
             return true;
         }
 
-        return (bool) preg_match('/^\(?([0-9]{3})\)?[- ]?([0-9]{3})[- ]?([0-9]{4})$/', $input);
+        return (bool) preg_match("/^13[0-9]{9}$|15[0-9]{9}$|18[0-9]{9}$/", $input);
     }
 
     /**
@@ -297,7 +302,7 @@ class Validation_Validation {
         }
         $sys_captcha =  Tools_help::getSession('captcha');
         if(strtolower($input) !== $sys_captcha){;
-            return false;
+        return false;
         }
         return true;
     }
@@ -311,4 +316,67 @@ class Validation_Validation {
         $result = filter_var($input, FILTER_VALIDATE_IP);
         return empty($result) ? false : true;
     }
+
+    // PHP中身份证号的验证函数
+    /**
+     * * 检查身份账号的格式是否正确
+     * @param  [type]  $id_card [description]
+     * @return boolean          [description]
+     */
+    public static function checkIdentity($id_card){
+        if(strlen($id_card)==18){
+            return self::idcard_checksum18($id_card);
+        }elseif((strlen($id_card)==15)){
+            $id_card=self::idcard_15to18($id_card);
+            return self::idcard_checksum18($id_card);
+        }else{
+            return false;
+        }
+    }
+
+    // 计算身份证校验码，根据国家标准GB 11643-1999
+    public static function idcard_verify_number($idcard_base){
+        if(strlen($idcard_base)!=17){
+            return false;
+        }
+        //加权因子
+        $factor=array(7,9,10,5,8,4,2,1,6,3,7,9,10,5,8,4,2);
+        //校验码对应值
+        $verify_number_list=array('1','0','X','9','8','7','6','5','4','3','2');
+        $checksum=0; for($i=0;$i<strlen($idcard_base);$i++){
+            $checksum += substr($idcard_base,$i,1) * $factor[$i];
+        }
+        $mod=$checksum % 11;
+        $verify_number=$verify_number_list[$mod]; return $verify_number;
+    }
+
+    //将15位身份证升级到18位
+    public static function idcard_15to18($idcard){
+        if(strlen($idcard)!=15){
+            return false;
+        }else{
+            // 如果身份证顺序码是996 997 998 999，这些是为百岁以上老人的特殊编码
+            if(array_search(substr($idcard,12,3),array('996','997','998','999')) !==false){
+                $idcard=substr($idcard,0,6).'18'.substr($idcard,6,9);
+            }else{
+                $idcard=substr($idcard,0,6).'19'.substr($idcard,6,9);
+            }
+        }
+        $idcard=$idcard.self::idcard_verify_number($idcard);
+        return $idcard;
+    }
+
+    //18位身份证校验码有效性检查
+    public static function idcard_checksum18($idcard){
+        if(strlen($idcard)!=18){
+            return false;
+        }
+        $idcard_base=substr($idcard,0,17);
+        if(self::idcard_verify_number($idcard_base)!=strtoupper(substr($idcard,17,1))){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
 }

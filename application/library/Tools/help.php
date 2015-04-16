@@ -20,11 +20,9 @@ class Tools_help {
                 }
             } else {
                 $string = self::remove_xss($string, $allow);
-                //$string = htmlspecialchars($string);
-                //$string = addslashes($string);
+                $string = addslashes($string);
             }
-        }
-        return $string;
+        } return $string;
     }
 
     /**
@@ -55,19 +53,26 @@ class Tools_help {
     }
 
     /**
+     * 获取GET数据 help::getg("name");
+     */
+    public static function getg($p, $t = "") {
+        return isset($_GET[$p]) ? self::filter($_GET[$p], $t) : $t;
+    }
+
+    /**
      * 获取完整上传地址
      *
      */
     public static function fbu($url='') {
-        $config = \Yaf_Application::app()->getConfig()->toArray();
-        $uploaddir = $config['application']['site']['uploadUri'];
 
-        $uploadBaseUrl = rtrim('http://' . $_SERVER['HTTP_HOST']) . '/'.$uploaddir.'/';
+        $config = \Yaf_Registry::get('configarr');
+        $url = $config['application']['site']['uploadUri'].$url;
+        $uploadBaseUrl = rtrim('http://' . $_SERVER['HTTP_HOST']) . $url;
 
         if (empty($url)) {
             return $uploadBaseUrl;
         } else {
-            return (stripos($url, 'http://') === 0) ? $url : $uploadBaseUrl . ltrim($url, '/');
+            return (stripos($url, 'http://') === 0) ? $url : $uploadBaseUrl;
         }
     }
 
@@ -76,14 +81,9 @@ class Tools_help {
      *
      */
     public static function sfbu($url='') {
-        $config = \Yaf_Application::app()->getConfig()->toArray();
-        $uploaddir = $config['application']['site']['uploadUri'];
-
-        if(empty($url)){
-            return PUBLIC_PATH.$uploaddir.'/';
-        } else {
-            return PUBLIC_PATH.$uploaddir.'/'.$url;
-        }
+        $config = \Yaf_Registry::get('configarr');
+        $url = $config['application']['site']['uploadUri'].$url;
+        return PUBLIC_PATH.$url;
     }
 
     /**
@@ -94,43 +94,58 @@ class Tools_help {
      * @return string $url
      */
     public static function url($route, $params = array()) {
-
-        $config = \Yaf_Application::app()->getConfig()->toArray();
-        $url = $config['application']['site']['baseUri'];
-
+        //$route = preg_replace('/^m\//is', 'mm/', $route);
         // rewrite start
-        $router = Yaf_Dispatcher::getInstance()->getRouter();
-        $rewrite_route = Yaf_Registry::get('rewrite_route');
+        $rewrite_route = \Yaf_Registry::get('rewrite_route');
         $route_lower = strtolower($route);
-
-        $query = '';
-        // 是否存在现有设定规则内
         if(isset($rewrite_route[$route_lower])){
-            $rewrite = $router->getRoute($route_lower)->assemble($params, array());
-            if($rewrite){
-                $http_data = array();
+            $router = Yaf_Dispatcher::getInstance()->getRouter();
+            $currRoute = $router->getRoute($route_lower);
+            if($currRoute instanceof Yaf_Route_Regex){
+                $route_temp = explode('/', $route);
+                $info = array(':m'=>$route_temp[0], ':c'=>$route_temp[1], ':a'=>$route_temp[2]);
+                $url = $currRoute->assemble($info, array());
+            } else {
+                $url = $currRoute->assemble($params, array());
+            }
+            if($url){
+                $config = \Yaf_Registry::get('configarr');
+                $url = $config['application']['site']['baseUri'].$url;
+                $params_other = array();
                 foreach ($params as $key=>$value) {
-                    if(strpos($rewrite, ':'.$key) !== false){
-                        $rewrite = str_replace(':'.$key, $value, $rewrite);
+                    if($value === 0 || $key=='page')
+                        continue;
+                    if(strpos($url, ':'.$key) !== false){
+                        $url = str_replace(':'.$key, $value, $url);
                         unset($params[$key]);
                     } else {
-                        $http_data[$key] = $value;
+                        $params_other[$key] = $value;
                     }
                 }
-                $route = $rewrite;
-                $params = $http_data;
-            }
-        } else if($route == 'curr_url') {
-            // 系统默认
-            $moduleName = \Yaf_Dispatcher::getInstance()->getRequest()->getModuleName();
-            $controllerName = \Yaf_Dispatcher::getInstance()->getRequest()->getControllerName();
-            $actionName = \Yaf_Dispatcher::getInstance()->getRequest()->getActionName();
 
+                $url = rtrim($url, '/');
+                if($params_other){
+                    $query = http_build_query($params_other);
+                    if($query) {
+                        $url = $url.'?'.$query;
+                    }
+                }
+                return $url;
+            }
+        }
+        // rewrite end
+
+
+        // 系统默认
+        $moduleName = \Yaf_Dispatcher::getInstance()->getRequest()->getModuleName();
+        $controllerName = \Yaf_Dispatcher::getInstance()->getRequest()->getControllerName();
+        $actionName = \Yaf_Dispatcher::getInstance()->getRequest()->getActionName();
+
+        // 当前url
+        if($route == 'curr_url') {
             $route = $moduleName.'/'.$controllerName.'/'.$actionName;
-            $arr_request = \Yaf_Dispatcher::getInstance()->getRequest()->getRequest();
-            $arr_params = \Yaf_Dispatcher::getInstance()->getRequest()->getParams();
-            array_shift($arr_request);
-            $arr = array_merge($arr_params, $arr_request);
+            $route = strtolower($route);
+            $arr = \Yaf_Dispatcher::getInstance()->getRequest()->getParams();
 
             // backend sort 处理
             if(isset($arr['sort'])){
@@ -148,15 +163,34 @@ class Tools_help {
                     $params['sort'] = $params['sort'].'.desc';
                 }
             }
-        }
-        $url = $url.$route;
 
-        $query = http_build_query($params);
-        if($query) {
-            $url = $url.'?'.$query;
+        } elseif($route[0]  == '/') {
+            // 合并参数
+            $arr = \Yaf_Dispatcher::getInstance()->getRequest()->getParams();
+            $params = array_merge($arr, $params);
+            if(isset($params['page'])) {
+                unset($params['page']);
+                $params['page'] = '';
+            }
+            $route = $moduleName.'/'.$controllerName.'/'.$actionName;
+        }
+        $config = \Yaf_Registry::get('configarr');
+        $url = $config['application']['site']['baseUri'];
+        $url = $url.$route;
+        $url = rtrim($url, '/');
+        foreach ($params as $key=>$value) {
+            if(empty($value) && $key!='page')
+                continue;
+            $url .= '/'.$key.'/'.$value;
+        }
+
+        $currModule = \Yaf_Registry::get('currModule');
+        if($currModule == 'm'){
+            $url = preg_replace(array('/index\/index$/i', '/\/index$/i'), '', $url);
+        } else {
+            $url = preg_replace('/index\/index$/i', '', $url);
         }
         return $url;
-        // end
     }
 
     /**
@@ -175,6 +209,9 @@ class Tools_help {
      * @param mixed $value
      */
     public static function setSession($key, $value) {
+        if($value){
+            $value = base64_encode(serialize($value));
+        }
         Yaf_Session::getInstance()->set($key, $value);
     }
 
@@ -187,6 +224,9 @@ class Tools_help {
         $val = Yaf_Session::getInstance()->get($key);
         if(empty($val))
             $val = $value;
+        else{
+            $val = unserialize(base64_decode($val));
+        }
         return $val;
     }
 
@@ -194,28 +234,31 @@ class Tools_help {
      * 获取cookie数据 getcookie($p);
      */
     public static function setCookie($key, $value, $time) {
-        $config = \Yaf_Application::app()->getConfig()->toArray();
+        $config = \Yaf_Registry::get('configarr');
         $pre = $config['application']['cookie']['pre'];
 
         $key = $pre.$key;
-        if(is_array($value))
-            $value = json_encode($value);
-        setcookie($key, $value, time()+$time, '/');
+        if($value != '1'){
+            $value = base64_encode(serialize($value));
+        }
+        setcookie($key, $value, time()+$time, '/', '.qingdaonews.com');
     }
 
     /**
      * 获取cookie数据 getcookie($p);
      */
     public static function getCookie($key, $value = "") {
-        $config = \Yaf_Application::app()->getConfig()->toArray();
+        $config = \Yaf_Registry::get('configarr');
         $pre = $config['application']['cookie']['pre'];
 
         $key = $pre.$key;
         $value = isset($_COOKIE[$key]) ? $_COOKIE[$key] : $value;
-        $value = json_decode($value, true);
+
+        if($value){
+            $value = unserialize(base64_decode($value));
+        }
         return $value;
     }
-
 
     /**
      * 加密方式
@@ -276,7 +319,7 @@ class Tools_help {
             $page_end = $page_num + 1;
         }
 
-        $cur > 1 ? $pagestr = '<li class="prev"><a href="'.$url.'1'.$url_suffix.'"><i class="fa fa-angle-double-left"></i></a></li><li class="prev"><a href="'.$url.($cur - 1).$url_suffix.'"><i class="fa fa-angle-left"></i></a></li>' : $pagestr = '<li class="prev disabled"><a href="#"><i class="fa fa-angle-double-left"></i></a></li><li class="prev disabled"><a href="#"><i class="fa fa-angle-left"></i>';
+        $cur > 1 ? $pagestr = '<li class="prev"><a href="'.$url.'1'.$url_suffix.'"><i class="fa fa-angle-double-left"></i></a></li><li class="prev"><a href="'.$url.($cur - 1).$url_suffix.'"><i class="fa fa-angle-left"></i></a></li>' : $pagestr = '<li class="prev disabled"><a href="#"><i class="fa fa-angle-double-left"></i></a></li><li class="prev disabled"><a href="#"><i class="fa fa-angle-left"></i></a>';
 
         for ($i = $page_start; $i < $page_end; $i++){
             $pagestr .= ($i == $cur) ? '<li class="active"><a href="#">'.$cur.'</a></li>' : '<li><a href="'.$url.$i.$url_suffix.'">'.$i.'</a></li>';
@@ -297,48 +340,35 @@ class Tools_help {
      * @param string $size 大小
      *
      */
-    public static function upload($input, $dir, $type="image", $size="10M") {
+    public static function upload($input, $dir, $return="url", $type="image", $size="10M") {
         if(empty($_FILES[$input]['tmp_name'])){
             return false;
         }
         $subdir1 = date ('Ym');
         $subdir2 = date ('d');
         $subdir = $dir.'/'.$subdir1.'/'.$subdir2.'/';
-        $dir = self::sfbu().$subdir;
-        self::make_dir($dir);
+
+        $config = \Yaf_Registry::get('configarr');
+        $url = $config['application']['site']['uploadUri'];
+        $dir = PUBLIC_PATH.$url.$subdir;
+        $dir = str_replace("//", "/", $dir);
+
 
         $fileUpload = new Files_FileUpload();
         $fileUpload->setInput($input);
-        $fileUpload->setDestinationDirectory($dir);
+        $fileUpload->setDestinationDirectory($dir, true);
         $fileUpload->setAllowMimeType($type);
         $fileUpload->setMaxFileSize($size);
         $fileUpload->setAutoFilename();
         $fileUpload->save();
         $fileInfo = $fileUpload->getInfo();
         if($fileUpload->getStatus()) {
-            return $subdir.$fileInfo->filename;
+            if($return == 'url')
+                return $subdir.$fileInfo->filename;
+            else
+                return $fileInfo;
         }
         return false;
-    }
-
-    /**
-     * 检查文件是否存在, 否则就建立
-     *
-     * @param  $dir string
-     * @param  $index boolean是否创建index文件
-     * @return 创建结果
-     */
-    public static function make_dir($dir, $index = true) {
-        if(!is_dir($dir)) {
-            if(!self::make_dir(dirname($dir))) {
-                return false;
-            }
-            if(!@mkdir($dir,0777)) {
-                return false;
-            }
-            $index && @touch($dir . '/index.htm');
-        }
-        return true;
     }
 
     /**
@@ -353,7 +383,7 @@ class Tools_help {
         } elseif(isset($_SERVER['HTTP_CLIENT_IP'])  && !empty($_SERVER['HTTP_CLIENT_IP'])) {
             $ip = $_SERVER['HTTP_CLIENT_IP'];
         }
-		return $ip;
+        return $ip;
     }
 
     /**
@@ -366,19 +396,37 @@ class Tools_help {
 
 
     /**
+     * 通过新浪接口 获取ip地理位置
+     */
+    public static function iplookup($ip){
+        $add = '未知区域';
+
+        $str = file_get_contents("http://ip.taobao.com/service/getIpInfo.php?ip=".$ip);
+        $str = json_decode($str, true);
+        if($str) {
+            $add = $str['data']['region'].' '.$str['data']['city'];
+        }
+        return $add;
+    }
+
+    /**
      *  curl方式post数据  $arr数组用来设置要post的字段和数值 help::getpost("http://www.123.com",$array);
      *  $array = array('name'=>'good','pass'=>'wrong');
      *
      */
-    public static function getpost($URL, $arr) {
-        $arr = http_build_query($arr);
+    public static function getpost($URL, $arr, $build=1, $header=false) {
+        if($build)
+            $arr = http_build_query($arr);
+
         $ch = curl_init();
+        if($header){
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
+        }
         curl_setopt($ch, CURLOPT_URL, $URL);
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);      //设置返回信息的内容和方式
         curl_setopt($ch, CURLOPT_POSTFIELDS, $arr);       //发送post数据
         curl_setopt($ch, CURLOPT_TIMEOUT, 30);            //设置30秒超时
-
         $result = curl_exec($ch);                         //进行数据传输
         curl_close($ch);                                  //关闭
         return $result;
@@ -399,6 +447,115 @@ class Tools_help {
         return $result;
     }
 
+    /**
+     * 获取内存限制
+     *
+     * @return int
+     */
+    public static function getMemoryLimit() {
+        $memory_limit = @ini_get('memory_limit');
+        return self::sizeInBytes($memory_limit);
+    }
+
+    /**
+     * 获取系统临时文件路径
+     */
+    public static function sys_get_temp_dir() {
+        if (function_exists('sys_get_temp_dir')) {
+            return sys_get_temp_dir();
+        }
+        if ($temp = getenv('TMP')) {
+            return $temp;
+        }
+        if ($temp = getenv('TEMP')) {
+            return $temp;
+        }
+        if ($temp = getenv('TMPDIR')) {
+            return $temp;
+        }
+        $temp = tempnam(__FILE__, '');
+        if (file_exists($temp)) {
+            unlink($temp);
+            return dirname($temp);
+        }
+        return null;
+    }
+
+    /**
+     * 下载文件保存到指定位置
+     *
+     * @param $url
+     * @param $filepath
+     *
+     * @return bool
+     */
+    public static function saveFile($url, $filepath) {
+        if ($url && !empty($filepath)) {
+            $file = file_get_contents($url);
+            $fp = @fopen($filepath, 'w');
+            if ($fp) {
+                @fwrite($fp, $file);
+                @fclose($fp);
+                return $filepath;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 获取文件扩展名
+     *
+     */
+    public static function getFileExt($filename) {
+        return addslashes(strtolower(substr(strrchr($filename, '.'), 1, 10)));
+    }
+
+    /**
+     * 人性化文件大小单位
+     */
+    public static function sizeFormat($size, $precision = 2) {
+        $base       = log($size) / log(1024);
+        $suffixes   = array('B', 'K', 'M', 'G');
+        return round(pow(1024, $base-floor($base)), $precision) . $suffixes[floor($base)];
+    }
+
+    /**
+     * 将人性化的文件大小转换成byte
+     */
+    public static function sizeInBytes($size) {
+        $unit = 'B';
+        $units = array('B'=>0, 'K'=>1, 'M'=>2, 'G'=>3);
+        $matches = array();
+        preg_match('/(?<size>[\d\.]+)\s*(?<unit>b|k|m|g)?/i', $size, $matches);
+        if(array_key_exists('unit', $matches)) {
+            $unit = strtoupper($matches['unit']);
+        }
+        return (floatval($matches['size']) * pow(1024, $units[$unit]) ) ;
+    }
+
+    /**
+     * 显示错误信息
+     *
+     * @param string $string
+     * @param array $error
+     * @param bool $htmlentities
+     *
+     * @return mixed|string
+     */
+    public static function displayError($string = 'Fatal error', $error = array(), $htmlentities = true) {
+        if (DEBUG_MODE)
+        {
+            if (!is_array($error) || empty($error))
+                return str_replace('"', '&quot;', $string) . ('<pre>' . print_r(debug_backtrace(), true) . '</pre>');
+            $key = md5(str_replace('\'', '\\\'', $string));
+            $str = (isset($error) AND is_array($error) AND key_exists($key, $error)) ? ($htmlentities ? htmlentities($error[$key], ENT_COMPAT, 'UTF-8') : $error[$key]) : $string;
+            return str_replace('"', '&quot;', stripslashes($str));
+        }
+        else
+        {
+            return str_replace('"', '&quot;', $string);
+        }
+    }
 
     /**
      * 数字转为汉字
@@ -567,7 +724,7 @@ class Tools_help {
      * 主键为key
      *
      */
-    static function formatkey($result, $key) {
+    static function formatkey($result, $key='') {
         // key 键值对
         $data = array();
         if($result && $key) {
@@ -583,7 +740,7 @@ class Tools_help {
     /**
      * 获取当前请求的完整URL
      */
-    public static function getCurrURL() {
+    static function getCurrURL() {
         $pageURL = 'http';
         if (isset($_SERVER["HTTPS"])  && $_SERVER["HTTPS"] == "on") {
             $pageURL .= "s";
@@ -610,6 +767,124 @@ class Tools_help {
         return $str;
 
     }
+
+    /***
+     * ajaxReturn
+     * @param mixed $data 要返回的数据
+     * @param String $type AJAX返回数据格式
+     */
+    static function ajaxReturn($data,$type='JSON'){
+        switch (strtoupper($type)){
+        case 'JSON':
+            // 返回JSON数据格式到客户端 包含状态信息
+            header('Content-Type:application/json; charset=utf-8');
+            exit(json_encode($data));
+        case 'JSONP':
+            // 返回JSON数据格式到客户端 包含状态信息
+            header('Content-Type:application/json; charset=utf-8');
+            $handler = self::getg('callback', 'callfun');
+            exit($handler.'('.json_encode($data).');');
+        }
+    }
+
+    /**
+     * 获取用户浏览器型号。新加浏览器，修改代码，增加特征字符串.把IE加到12.0 可以使用5-10年了.
+     */
+    static function getBrowser(){
+        if (strpos($_SERVER['HTTP_USER_AGENT'], 'Maxthon')) {
+            $browser = 'Maxthon';
+        } elseif(strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE 12.0')) {
+            $browser = 'IE12.0';
+        } elseif(strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE 11.0')) {
+            $browser = 'IE11.0';
+        } elseif(strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE 10.0')) {
+            $browser = 'IE10.0';
+        } elseif(strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE 9.0')) {
+            $browser = 'IE9.0';
+        } elseif(strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE 8.0')) {
+            $browser = 'IE8.0';
+        } elseif(strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE 7.0')) {
+            $browser = 'IE7.0';
+        } elseif(strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE 6.0')) {
+            $browser = 'IE6.0';
+        } elseif(strpos($_SERVER['HTTP_USER_AGENT'], 'NetCaptor')) {
+            $browser = 'NetCaptor';
+        } elseif(strpos($_SERVER['HTTP_USER_AGENT'], 'Netscape')) {
+            $browser = 'Netscape';
+        } elseif(strpos($_SERVER['HTTP_USER_AGENT'], 'Lynx')) {
+            $browser = 'Lynx';
+        } elseif(strpos($_SERVER['HTTP_USER_AGENT'], 'Opera')) {
+            $browser = 'Opera';
+        } elseif(strpos($_SERVER['HTTP_USER_AGENT'], 'Chrome')) {
+            $browser = 'Google';
+        } elseif(strpos($_SERVER['HTTP_USER_AGENT'], 'Firefox')) {
+            $browser = 'Firefox';
+        } elseif(strpos($_SERVER['HTTP_USER_AGENT'], 'Safari')) {
+            $browser = 'Safari';
+        } elseif(strpos($_SERVER['HTTP_USER_AGENT'], 'iphone')) {
+            $browser = 'iphone';
+        } elseif(strpos($_SERVER['HTTP_USER_AGENT'], 'ipod')) {
+            $browser = 'ipod';
+        } elseif(strpos($_SERVER['HTTP_USER_AGENT'], 'ipad')) {
+            $browser = 'ipad';
+        } elseif(strpos($_SERVER['HTTP_USER_AGENT'], 'android')) {
+            $browser = 'android';
+        } else {
+            $browser = 'other';
+        }
+        return $browser;
+    }
+
+    /**
+     * 检测是否为手机访问
+     *
+     */
+    static function is_mobile() {
+        $mobilebrowser_list =array('iphone', 'android', 'phone', 'mobile', 'wap', 'netfront', 'java', 'opera mobi', 'opera mini',
+            'ucweb', 'windows ce', 'symbian', 'series', 'webos', 'sony', 'blackberry', 'dopod', 'nokia', 'samsung',
+            'palmsource', 'xda', 'pieplus', 'meizu', 'midp', 'cldc', 'motorola', 'foma', 'docomo', 'up.browser',
+            'up.link', 'blazer', 'helio', 'hosin', 'huawei', 'novarra', 'coolpad', 'webos', 'techfaith', 'palmsource',
+            'alcatel', 'amoi', 'ktouch', 'nexian', 'ericsson', 'philips', 'sagem', 'wellcom', 'bunjalloo', 'maui', 'smartphone',
+            'iemobile', 'spice', 'bird', 'zte-', 'longcos', 'pantech', 'gionee', 'portalmmm', 'jig browser', 'hiptop',
+            'benq', 'haier', '^lct', '320x320', '240x320', '176x220', 'pad', 'gt-p1000');
+
+        $useragent = strtolower($_SERVER['HTTP_USER_AGENT']);
+
+        foreach($mobilebrowser_list as $v) {
+            if(strpos($useragent, $v) !== false) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 数组转换成xml
+     *
+     */
+    static function arrayToXml($arr){
+        $xml = '<xml>';
+        foreach ($arr as $key=>$val) {
+            if (is_numeric($val)) {
+                $xml.='<'.$key.'>'.$val.'</'.$key.'>';
+            }
+            else {
+                $xml.='<'.$key.'><![CDATA['.$val.']]></'.$key.'>';
+            }
+        }
+        $xml.='</xml>';
+        return $xml;
+    }
+
+    /**
+     * xml转换成数据
+     *
+     */
+    static function xmlToArray($xml){
+		$array_data = json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
+		return $array_data;
+    }
+
 }
 
 ?>

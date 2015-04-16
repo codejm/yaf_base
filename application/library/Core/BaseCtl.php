@@ -8,11 +8,13 @@
  */
 
 class Core_BaseCtl extends \Yaf_Controller_Abstract {
+
     public $moduleName;
     public $controllerName;
     public $actionName;
     public $curr_url;
     public $lang_arr;
+    public $config;
 
     /**
      * 初始化
@@ -24,12 +26,15 @@ class Core_BaseCtl extends \Yaf_Controller_Abstract {
         $this->actionName = \Yaf_Dispatcher::getInstance()->getRequest()->getActionName();
         $this->curr_url = \Yaf_Dispatcher::getInstance()->getRequest()->getRequestUri();
         $this->lang_arr = \Yaf_Registry::get('lang_arr');
+        $this->config = \Yaf_Registry::get('configarr');
 
-        $this->_view->assign("config", \Yaf_Application::app()->getConfig()->toArray());
+
+        $this->_view->assign("config", $this->config);
         $this->_view->assign("curcontroller", $this->controllerName);
         $this->_view->assign("curaction", $this->actionName);
+        $this->_view->assign("curmodule", strtolower($this->moduleName));
         $this->_view->assign("langArr", $this->lang_arr);
-        $this->_view->assign("currURL", Tools_help::getCurrURL());
+        $this->_view->assign("currURL", @Tools_help::getCurrURL());
     }
 
     /**
@@ -52,10 +57,13 @@ class Core_BaseCtl extends \Yaf_Controller_Abstract {
      * 返回上一页并显示错误
      *
      */
-    protected function error($msg, $type='ErrorMessage') {
+    protected function error($msg, $type='ErrorMessage', $url='') {
         // 验证失败
         Tools_help::setSession($type, $msg);
-        if(isset($_SERVER['HTTP_REFERER'])) {
+
+        if($url) {
+            header ("Location: ".$url);
+        } else if(isset($_SERVER['HTTP_REFERER'])) {
             header ("Location: ".$_SERVER['HTTP_REFERER']);
         } else {
             $url = Tools_help::url(strtolower($this->moduleName).'/'.strtolower($this->controllerName).'/index');
@@ -63,7 +71,6 @@ class Core_BaseCtl extends \Yaf_Controller_Abstract {
         }
         $this->_exit();
     }
-
     /**
      * get
      *
@@ -88,8 +95,8 @@ class Core_BaseCtl extends \Yaf_Controller_Abstract {
      * request
      *
      */
-    protected function geta($name, $default = '') {
-        $value = $this->getRequest()->getRequest($name, $default);
+    protected function getParam($name, $default = '') {
+        $value = $this->getRequest()->getQuery($name, $default);
         $value = Tools_help::filter($value);
         return $value;
     }
@@ -99,12 +106,8 @@ class Core_BaseCtl extends \Yaf_Controller_Abstract {
      *
      */
     protected function getAllPost() {
-        foreach($_POST as $key=>$value) {
-            $_POST[$key] = Tools_help::filter($value);
-        }
         return $_POST;
     }
-
 
 }
 

@@ -53,6 +53,7 @@ class Files_FileUpload {
             'image/pjpeg',
             'image/png',
             'image/gif',
+            'application/octet-stream',
         ),
         'document' => array(
             'application/msword',
@@ -141,19 +142,19 @@ class Files_FileUpload {
 
     // 设置文件允许大小
     public function setMaxFileSize($file_size) {
-        $file_size = $this->sizeInBytes($file_size);
+        $file_size = Tools_help::sizeInBytes($file_size);
         if(is_numeric($file_size) && $file_size>-1) {
             // Get php config
-            $size = $this->sizeInBytes(ini_get('upload_max_filesize'));
-            $this->log('PHP settings have set the maximum file upload size to %s(%d)', $this->sizeFormat($size), $size);
+            $size = Tools_help::sizeInBytes(ini_get('upload_max_filesize'));
+            $this->log('PHP settings have set the maximum file upload size to %s(%d)', Tools_help::sizeFormat($size), $size);
 
             // Calculate difference
             if($size<$file_size) {
-                $this->log('WARNING! The PHP configuration allows a maximum size of %s', $this->sizeFormat($size));
+                $this->log('WARNING! The PHP configuration allows a maximum size of %s', Tools_help::sizeFormat($size));
                 return false;
             }
 
-            $this->log('[INFO]Maximum allowed size set at %s(%d)', $this->sizeFormat($file_size), $file_size);
+            $this->log('[INFO]Maximum allowed size set at %s(%d)', Tools_help::sizeFormat($file_size), $file_size);
 
             $this->max_file_size = $file_size;
             return true;
@@ -340,7 +341,7 @@ class Files_FileUpload {
                     //'$1',
                     //$this->file_array[$this->input]["name"]
                 //);
-                $extension = addslashes(strtolower(substr(strrchr($this->file_array[$this->input]['name'], '.'), 1, 10)));
+                $extension = Tools_help::getFileExt($this->file_array[$this->input]['name']);
                 $this->filename = sprintf($this->filename, $extension);
 
                 // set file info
@@ -348,7 +349,7 @@ class Files_FileUpload {
                 $this->file['tmp']          = $this->file_array[$this->input]['tmp_name'];
                 $this->file['original']     = $this->file_array[$this->input]['name'];
                 $this->file['size']         = $this->file_array[$this->input]['size'];
-                $this->file['sizeFormated'] = $this->sizeFormat($this->file['size']);
+                $this->file['sizeFormated'] = Tools_help::sizeFormat($this->file['size']);
                 $this->file['destination']  = $this->destination_directory . $this->filename;
                 $this->file['filename']     = $this->filename;
                 $this->file['error']        = $this->file_array[$this->input]['error'];
@@ -384,7 +385,7 @@ class Files_FileUpload {
                     $this->log('Checking file size');
 
                     if($this->max_file_size < $this->file["size"]) {
-                        $this->log('The file exceeds the maximum size allowed(Max: %s; File: %s)', $this->sizeFormat($this->max_file_size), $this->sizeFormat($this->file["size"]));
+                        $this->log('The file exceeds the maximum size allowed(Max: %s; File: %s)', Tools_help::sizeFormat($this->max_file_size), Tools_help::sizeFormat($this->file["size"]));
                         return false;
                     }
                 }
@@ -415,25 +416,6 @@ class Files_FileUpload {
         $params = func_get_args();
         $this->file['log'][] = call_user_func_array('sprintf', $params);
         return true;
-    }
-
-    // 人性化大小
-    public function sizeFormat($size, $precision = 2) {
-        $base       = log($size) / log(1024);
-        $suffixes   = array('B', 'K', 'M', 'G');
-        return round(pow(1024, $base-floor($base)), $precision) . $suffixes[floor($base)];
-    }
-
-    // 将人性化的文件大小转换成byte
-    public function sizeInBytes($size) {
-        $unit = 'B';
-        $units = array('B'=>0, 'K'=>1, 'M'=>2, 'G'=>3);
-        $matches = array();
-        preg_match('/(?<size>[\d\.]+)\s*(?<unit>b|k|m|g)?/i', $size, $matches);
-        if(array_key_exists('unit', $matches)) {
-            $unit = strtoupper($matches['unit']);
-        }
-        return (floatval($matches['size']) * pow(1024, $units[$unit]) ) ;
     }
 
 }

@@ -56,6 +56,11 @@ server
 	}
 ```
 
+## CLI 模式
+### 运行方式
+``` php
+php cli.php request_uri="/controller/action"
+```
 
 ## coding
 
