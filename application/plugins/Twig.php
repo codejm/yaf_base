@@ -22,8 +22,6 @@ class TwigPlugin extends Yaf_Plugin_Abstract {
         if($request->module==$config['application']['dispatcher']['defaultModule']){
             $twig = new \Core_Twig(APP_PATH.'views', $config['twig']);
         } else {
-            if($request->module == 'Backend' || $request->module == 'Comment' || $request->module == 'M' || $request->module == 'Station')
-                $config['twig']['cache'] = '';
             $twig = new \Core_Twig(APP_PATH.'modules/'.$request->module.'/views', $config['twig']);
         }
         $twig->addPath(APP_PATH.'modules/Global/views/');
@@ -36,8 +34,6 @@ class TwigPlugin extends Yaf_Plugin_Abstract {
         $twig->twig->addFunction("fbu", new Twig_Function_Function("Tools_help::fbu"));
         // 数字验证
         $twig->twig->addFunction("is_numeric", new Twig_Function_Function("is_numeric"));
-        // 对象拼接并返回
-        $twig->twig->addFunction("objectmosaic", new Twig_Function_Function("Tools_help::objectmosaic"));
 
         // 处理错误提醒
         $session_key = array('ErrorMessageStop', 'ErrorMessage', 'Message');
