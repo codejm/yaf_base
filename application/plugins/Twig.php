@@ -24,7 +24,6 @@ class TwigPlugin extends Yaf_Plugin_Abstract {
         } else {
             $twig = new \Core_Twig(APP_PATH.'modules/'.$request->module.'/views', $config['twig']);
         }
-        $twig->addPath(APP_PATH.'modules/Global/views/');
 
         // url generate
         $twig->twig->addFunction("url", new Twig_Function_Function("Tools_help::url"));

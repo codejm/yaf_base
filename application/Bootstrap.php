@@ -68,7 +68,7 @@ class Bootstrap extends \Yaf_Bootstrap_Abstract {
      * 初始化多语言包，判断优先级：GET参数 > COOKIE > 浏览器ACCEPT_LANGUAGE > 默认zh_CN
      * @param Yaf_Dispatcher $dispatcher
      */
-    public function _initI18n(Yaf_Dispatcher $dispatcher) {
+    public function _initI18n(Yaf_Dispatcher $dispatcher) {/*{{{*/
         $lang_map = array(
             'zh-cn' => 'zh_CN',
             'zh-tw' => 'zh_TW',
@@ -113,7 +113,7 @@ class Bootstrap extends \Yaf_Bootstrap_Abstract {
 
         // 记录
         Yaf_Registry::set('lang', $lang);
-    }
+    }/*}}}*/
 
     /**
      * 系统级错误跳转到首页
