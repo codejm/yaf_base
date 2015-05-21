@@ -11,11 +11,16 @@ class IndexController extends \Core_BaseCtl {
 
     // 默认Action
     public function indexAction() {
-        echo 2; exit;
+
+        Tools_help::setCookie('key', 'value', 3600);
+        phpinfo();
+
+
+        exit;
     }
 
     public function testAction() {
-        echo $this->geta('name');
+        echo Tools_help::getCookie('key');
         exit;
     }
 }

@@ -241,7 +241,7 @@ class Tools_help {
         if($value != '1'){
             $value = base64_encode(serialize($value));
         }
-        setcookie($key, $value, time()+$time, '/', '.qingdaonews.com');
+        setcookie($key, $value, time()+$time, '/', $config['application']['cookie']['domain']);
     }
 
     /**
