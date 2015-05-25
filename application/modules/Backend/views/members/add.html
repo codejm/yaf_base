@@ -1,5 +1,5 @@
-{{ include('layouts/header.html') }}
-
+{% extends 'layouts/base.html' %}
+{% block content %}
 <div class="row">
     <div class="col-xs-12">
         <!-- PAGE CONTENT BEGINS -->
@@ -160,8 +160,7 @@
         </form>
     </div><!-- /.col -->
 </div><!-- /.row -->
-
-{{ include('layouts/footer.html') }}
+{% endblock %}
 {% block script %}
 
 <style>

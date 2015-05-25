@@ -33,6 +33,23 @@ class ConstDefine{
                 ),
             ),
         ),
+        array(
+            'name' => '新闻管理',
+            'url' => '',
+            'controller' => array('News'),
+            'sub' => array(
+                array(
+                    'name' => '新闻列表',
+                    'url' => 'backend/news/index',
+                    'action' => 'Index',
+                ),
+                array(
+                    'name' => '添加新闻',
+                    'url' => 'backend/news/add',
+                    'action' => 'Add',
+                ),
+            ),
+        ),
     );
 }
 

@@ -85,10 +85,10 @@ class MembersModel extends \Core_CMode {
             'password' => $data['password'],
             'role_type' => $data['role_type']
         );
-        Tools_help::setSession('member', $temp);
+        Tools_help::setSession('admin', $temp);
         // rememberme 记住密码
         if($isWriteCookie) {
-            Tools_help::setCookie('member', $temp, 24*60*60*7);
+            Tools_help::setCookie('admin', $temp, 24*60*60*7);
         }
     }
 }

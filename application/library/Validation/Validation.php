@@ -12,9 +12,14 @@ class Validation_Validation {
      * 必填
      */
     public static function required($input = null) {
-        $input = $input.'';
-        if(isset($input{0})){
-            return true;
+        if(is_array($input)){
+            if(!empty($input))
+                return true;
+        } else {
+            $input = $input.'';
+            if(isset($input{0})){
+                return true;
+            }
         }
         return false;
         //return empty($input) ? false : true;

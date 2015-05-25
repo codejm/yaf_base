@@ -60,6 +60,8 @@ class Core_BackendCtl extends \Core_BaseCtl {
             //exit('您没有权限访问该网页2！<a href="javascript:window.history.back();">返回</a> ');
         }*/
 
+        $purview = null;
+
         // 后台菜单数组 S
         $backendMenu = new \Core_CBackendMenu(ConstDefine::$backendMenu, $this->controllerName, $this->actionName, $purview);
         $menustr = $backendMenu->get();

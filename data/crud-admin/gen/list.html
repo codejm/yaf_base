@@ -1,5 +1,5 @@
-{{ include('layouts/header.html') }}
-
+{% extends 'layouts/base.html' %}
+{% block content %}
 
 <div class="row">
     <div class="col-xs-12">
@@ -70,4 +70,4 @@ __FIELDS_TD_
 </div>
 
 <!-- inline scripts related to this page -->
-{{ include('layouts/footer.html') }}
+{% endblock %}
