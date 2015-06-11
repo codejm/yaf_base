@@ -263,7 +263,7 @@ class Core_CMode {
                     $query .= ' and '.$k.'=?';
                 }
             }
-        } else if(is_string($where && !empty($where))) {
+        } else if(is_string($where) && !empty($where)) {
             $query .= ' where '.$where;
         }
         $dbconn = $this->db->prepare($query);
