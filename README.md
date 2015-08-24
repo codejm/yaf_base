@@ -12,6 +12,7 @@ yaf base framework from codejm
     - send Mail
     - PHPExcel
     - 加密算法(Encrypt3des, Hashids)
+    - 后台权限RBAC
     - ...(后期将继续添加)
 
 ## 安装

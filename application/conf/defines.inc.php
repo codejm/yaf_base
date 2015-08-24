@@ -9,7 +9,7 @@
 
 class ConstDefine{
 
-    // 后台菜单数组
+    // 后台菜单数组 1.3 后废弃，不使用rbac可以使用该方式
     public static $backendMenu = array(
         array(
             'name' => '后台主页',
@@ -51,6 +51,7 @@ class ConstDefine{
             ),
         ),
     );
+
 }
 
 ?>
