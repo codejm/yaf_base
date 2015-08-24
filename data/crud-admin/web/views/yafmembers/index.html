@@ -1,0 +1,105 @@
+{% extends 'layouts/base.html' %}
+{% block content %}
+
+<div class="row">
+    <div class="col-xs-12">
+        <!-- PAGE CONTENT BEGINS -->
+        <div class="row">
+            <div class="col-xs-12">
+                <form action="{{ url('backend/yafmembers/batch') }}" method="post">
+                <table id="sample-table-1" class="table table-striped table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th class="center">
+                                <label class="position-relative">
+                                    <input type="checkbox" class="ace" />
+                                    <span class="lbl"></span>
+                                </label>
+                            </th>
+                            <th><a href="{{ url('curr_url', {'sort':'uid'})}}">UID</a></th>
+                            <th><a href="{{ url('curr_url', {'sort':'username'})}}">用户名</a></th>
+                            <th><a href="{{ url('curr_url', {'sort':'password'})}}">密码</a></th>
+                            <th><a href="{{ url('curr_url', {'sort':'gender'})}}">性别</a></th>
+                            <th><a href="{{ url('curr_url', {'sort':'face'})}}">头像</a></th>
+                            <th><a href="{{ url('curr_url', {'sort':'aboutme'})}}">关于我</a></th>
+                            <th><a href="{{ url('curr_url', {'sort':'regip'})}}">注册ip</a></th>
+                            <th><a href="{{ url('curr_url', {'sort':'regipport'})}}">注册ip端口</a></th>
+                            <th><a href="{{ url('curr_url', {'sort':'regdate'})}}">注册时间</a></th>
+                            <th><a href="{{ url('curr_url', {'sort':'email'})}}">邮箱</a></th>
+                            <th><a href="{{ url('curr_url', {'sort':'emailchecked'})}}">邮箱是否验证</a></th>
+                            <th><a href="{{ url('curr_url', {'sort':'rid'})}}">角色</a></th>
+                            <th><a href="{{ url('curr_url', {'sort':'mobile'})}}">电话</a></th>
+                            <th><a href="{{ url('curr_url', {'sort':'status'})}}">状态</a></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+
+                    {% for row in result %}
+                    <tr>
+                        <td class="center">
+                            <label class="position-relative">
+                                <input name="dels[]" value="{{row.uid}}" type="checkbox" class="ace" />
+                                <span class="lbl"></span>
+                            </label>
+                        </td>
+
+                        <td> {{row.uid}} </td>
+                        <td> {{row.username}} </td>
+                        <td> {{row.password}} </td>
+                        <td> {{row.gender ? '是' : '否'}} </td>
+                        <td> {{row.face}} </td>
+                        <td> {{row.aboutme}} </td>
+                        <td> {{row.regip}} </td>
+                        <td> {{row.regipport}} </td>
+                        <td> {{row.regdate | date('Y-m-d H:i:s')}} </td>
+                        <td> {{row.email}} </td>
+                        <td> {{row.emailchecked ? '是' : '否'}} </td>
+                        <td> {{row.rid}} </td>
+                        <td> {{row.mobile}} </td>
+                        <td class="hidden-480">
+                            {% if row.status>0 %}
+                                <a href="{{ url('backend/yafmembers/status', {'uid':row.uid, 'status':row.status}) }}" class="label label-sm label-success">已通过</a>
+                            {% else %}
+                                <a href="{{ url('backend/yafmembers/status', {'uid':row.uid, 'status':row.status}) }}" class="label label-sm label-warning">未通过</a>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            <div class="hidden-sm hidden-xs btn-group">
+                                <a class="btn btn-xs btn-danger adel" href="{{url('backend/yafmembers/del', {'uid':row.uid})}}">
+                                    <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                                </a>
+                                <a class="btn btn-xs btn-info" href="{{url('backend/yafmembers/edit', {'uid':row.uid})}}">
+                                    <i class="ace-icon fa fa-pencil bigger-120"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+                <div class="row">
+                    <div class="col-xs-6"><button type="submit" class="btn btn-white btn-warning btn-bold"><i class="ace-icon fa fa-trash-o bigger-120 orange"></i>提交</button></div>
+                    <div class="col-xs-6">
+                        <div class="dataTables_paginate paging_bootstrap">
+                            <ul class="pagination">
+                                {{pagestr | raw}}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                </form>
+
+            </div><!-- /.span -->
+        </div><!-- /.row -->
+
+
+    </div>
+</div>
+
+<!-- inline scripts related to this page -->
+{% endblock %}

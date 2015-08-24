@@ -1,4 +1,26 @@
-* 1.18.0 (2015-XX-XX)
+* 1.19.0 (2015-07-31)
+
+ * fixed wrong error message when including an undefined template in a child template
+ * added support for variadic filters, functions, and tests
+ * added support for extra positional arguments in macros
+ * added ignore_missing flag to the source function
+ * fixed batch filter with zero items
+ * deprecated Twig_Environment::clearTemplateCache()
+ * fixed sandbox disabling when using the include function
+
+* 1.18.2 (2015-06-06)
+
+ * fixed template/line guessing in exceptions for nested templates
+ * optimized the number of inodes and the size of realpath cache when using the cache
+
+* 1.18.1 (2015-04-19)
+
+ * fixed memory leaks in the C extension
+ * deprecated Twig_Loader_String
+ * fixed the slice filter when used with a SimpleXMLElement object
+ * fixed filesystem loader when trying to load non-files (like directories)
+
+* 1.18.0 (2015-01-25)
 
  * fixed some error messages where the line was wrong (unknown variables or argument names)
  * added a new way to customize the main Module node (via empty nodes)

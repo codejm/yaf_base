@@ -101,9 +101,21 @@ Interfaces
   those constants Twig_Template::ANY_CALL, Twig_Template::ARRAY_CALL,
   Twig_Template::METHOD_CALL)
 
+Loaders
+-------
+
+* As of Twig 1.x, ``Twig_Loader_String`` is deprecated and will be removed in
+  2.0.
+
 Globals
 -------
 
 * As of Twig 2.x, the ability to register a global variable after the runtime
   or the extensions have been initialized is not possible anymore (but
   changing the value of an already registered global is possible).
+
+Miscellaneous
+-------------
+
+* As of Twig 1.x, ``Twig_Environment::clearTemplateCache()`` is deprecated and
+  will be removed in 2.0.

@@ -4,7 +4,7 @@
  *      [CodeJm!] Author CodeJm[codejm@163.com].
  *
  *       管理类
- *      $Id: Log.php 2014-09-26 14:54:06 codejm $
+ *      $Id: Log.php 2015-08-21 10:31:24 codejm $
  */
 
 class LogController extends \Core_BackendCtl {
@@ -22,11 +22,11 @@ class LogController extends \Core_BackendCtl {
         if($orderby) {
             $orderby = str_replace('.', ' ', $orderby);
         } else {
-            $orderby = 'id asc';
+            $orderby = 'id desc';
         }
 
         // 实例化Model
-        $log = new LogModel();
+        $logModel = new LogModel();
         // 查询条件
         $params = array(
             'field' => array(),
@@ -36,9 +36,9 @@ class LogController extends \Core_BackendCtl {
             'per' => $pageSize,
         );
         // 列表
-        $result = $log->getLists($params);
+        $result = $logModel->getLists($params);
         // 数据总条数
-        $total = $log->getCount($params);
+        $total = $logModel->getCount($params);
 
         // 分页url
         $url = Tools_help::url('backend/log/index').'?page=';
@@ -56,7 +56,7 @@ class LogController extends \Core_BackendCtl {
      */
     public function addAction() {
         // 实例化Model
-        $log = new LogModel();
+        $logModel = new LogModel();
         // 处理post数据
         if($this->getRequest()->isPost()) {
             // 获取所有post数据
@@ -64,16 +64,16 @@ class LogController extends \Core_BackendCtl {
             // 处理图片等特殊数据
 
             // 验证
-            $result = $log->validation->validate($pdata, 'add');
-            $log->parseAttributes($pdata);
+            $result = $logModel->validation->validate($pdata, 'add');
+            $logModel->parseAttributes($pdata);
 
             // 通过验证
             if($result) {
                 // 入库前数据处理
 
                 // Model转换成数组
-                $data = $log->toArray($pdata);
-                $result = $log->insert($data);
+                $data = $logModel->toArray($pdata);
+                $result = $logModel->insert($data);
                 if($result) {
                     // 提示信息并跳转到列表
                     Tools_help::setSession('Message', '添加成功！');
@@ -81,12 +81,12 @@ class LogController extends \Core_BackendCtl {
                 } else {
                     // 验证失败
                     $this->_view->assign('ErrorMessage', '添加失败！');
-                    $this->_view->assign("errors", $log->validation->getErrorSummary());
+                    $this->_view->assign("errors", $logModel->validation->getErrorSummary());
                 }
             } else {
                 // 验证失败
                 $this->_view->assign('ErrorMessage', '添加失败！');
-                $this->_view->assign("errors", $log->validation->getErrorSummary());
+                $this->_view->assign("errors", $logModel->validation->getErrorSummary());
             }
         }
 
@@ -94,7 +94,7 @@ class LogController extends \Core_BackendCtl {
 
 
         // 模版分配数据
-        $this->_view->assign("log", $log);
+        $this->_view->assign("log", $logModel);
         $this->_view->assign("pageTitle", '添加');
     }
 
@@ -110,7 +110,7 @@ class LogController extends \Core_BackendCtl {
         }
 
         // 实例化Model
-        $log = new LogModel();
+        $logModel = new LogModel();
 
         // 处理Post
         if($this->getRequest()->isPost()) {
@@ -119,8 +119,8 @@ class LogController extends \Core_BackendCtl {
             // 处理图片等特殊数据
 
             // 验证
-            $result = $log->validation->validate($pdata, 'edit');
-            $log->parseAttributes($pdata);
+            $result = $logModel->validation->validate($pdata, 'edit');
+            $logModel->parseAttributes($pdata);
 
             // 通过验证
             if($result) {
@@ -128,8 +128,8 @@ class LogController extends \Core_BackendCtl {
 
 
                 // Model转换成数组
-                $data = $log->toArray($pdata);
-                $result = $log->update(array('id'=>$id), $data);
+                $data = $logModel->toArray($pdata);
+                $result = $logModel->update(array('id'=>$id), $data);
 
                 if($result) {
                     // 提示信息并跳转到列表
@@ -138,27 +138,27 @@ class LogController extends \Core_BackendCtl {
                 } else {
                     // 出错
                     Tools_help::setSession('ErrorMessage', '修改失败, 请确定已修改了某项！');
-                    $this->_view->assign("errors", $log->validation->getErrorSummary());
+                    $this->_view->assign("errors", $logModel->validation->getErrorSummary());
                 }
-                $log->id = $id;
             } else {
                 // 验证失败
                 Tools_help::setSession('ErrorMessage', '修改失败, 请检查错误项');
-                $this->_view->assign("errors", $log->validation->getErrorSummary());
+                $this->_view->assign("errors", $logModel->validation->getErrorSummary());
             }
+            $logModel->id = $id;
         }
 
         // 如果Model数据为空，则获取
-        if(!empty($id) && empty($log->id)) {
-            $data = $log->select(array('where'=>array('id'=>$id)));
-            $log->parseAttributes($data);
+        if(!empty($id) && empty($logModel->id)) {
+            $data = $logModel->select(array('where'=>array('id'=>$id)));
+            $logModel->parseAttributes($data);
         }
 
         // 格式化表单数据
 
 
         // 模版分配数据
-        $this->_view->assign("log", $log);
+        $this->_view->assign("log", $logModel);
         $this->_view->assign("pageTitle", '修改');
     }
 
@@ -172,8 +172,8 @@ class LogController extends \Core_BackendCtl {
             $this->error('id 不能为空!');
         }
         // 实例化Model
-        $log = new LogModel();
-        $row = $log->update(array('id'=>$id), array('status'=>-1));
+        $logModel = new LogModel();
+        $row = $logModel->update(array('id'=>$id), array('status'=>-1));
         if($row) {
             $this->error('恭喜，删除成功', 'Message');
         } else {
@@ -191,8 +191,8 @@ class LogController extends \Core_BackendCtl {
             $this->error('id 不能为空!');
         }
         // 实例化Model
-        $log = new LogModel();
-        $row = $log->delLogs($ids);
+        $logModel = new LogModel();
+        $row = $logModel->delLogs($ids);
         if($row) {
             $this->error('恭喜，删除成功', 'Message');
         } else {
@@ -213,8 +213,8 @@ class LogController extends \Core_BackendCtl {
         $status = $this->getg('status', 0);
         $status = $status ? 0 : 1;
         // 实例化Model
-        $log = new LogModel();
-        $row = $log->update(array('id'=>$id), array('status'=>$status));
+        $logModel = new LogModel();
+        $row = $logModel->update(array('id'=>$id), array('status'=>$status));
         if($row) {
             $this->error('恭喜，操作成功', 'Message');
         } else {

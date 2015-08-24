@@ -1,0 +1,128 @@
+{% extends 'layouts/base.html' %}
+{% block content %}
+<div class="row">
+    <div class="col-xs-12">
+        <!-- PAGE CONTENT BEGINS -->
+        <form action="{{ url('backend/wzcxuser/add') }}" class="form-horizontal" role="form" method="post" enctype="multipart/form-data">
+
+            <div class="form-group{% if errors['num'] is not empty %} has-error{%endif%}">
+                <label for="num" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">车牌号<span class="red">*</span></label>
+                <div class="col-xs-12 col-sm-4">
+                    <span class="block input-icon input-icon-right">
+                        <input type="text" id="num" placeholder="车牌号" name="num" class="col-xs-12" value="{{wzcxuser.num}}" />
+                    </span>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['num'] is not empty %}{{errors['num']}}{% else %} {%endif%} </div>
+            </div>
+
+            <div class="form-group{% if errors['evin'] is not empty %} has-error{%endif%}">
+                <label for="evin" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">识别代号</label>
+                <div class="col-xs-12 col-sm-4">
+                    <span class="block input-icon input-icon-right">
+                        <input type="text" id="evin" placeholder="识别代号" name="evin" class="col-xs-12" value="{{wzcxuser.evin}}" />
+                    </span>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['evin'] is not empty %}{{errors['evin']}}{% else %} {%endif%} </div>
+            </div>
+
+            <div class="form-group{% if errors['ecarType'] is not empty %} has-error{%endif%}">
+                <label for="ecarType" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">车辆类型</label>
+                <div class="col-xs-12 col-sm-4">
+                    <span class="block input-icon input-icon-right">
+                        <input type="text" id="ecarType" placeholder="车辆类型" name="ecarType" class="col-xs-12" value="{{wzcxuser.ecarType}}" />
+                    </span>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['ecarType'] is not empty %}{{errors['ecarType']}}{% else %} {%endif%} </div>
+            </div>
+
+            <div class="form-group{% if errors['dateline'] is not empty %} has-error{%endif%}">
+                <label for="dateline" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">最后查询日期</label>
+                <div class="col-xs-12 col-sm-4">
+                    <span class="block input-icon input-icon-right">
+                        <input type="text" id="dateline" placeholder="最后查询日期" name="dateline" class="col-xs-12" value="{{wzcxuser.dateline}}" />
+                    </span>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['dateline'] is not empty %}{{errors['dateline']}}{% else %} {%endif%} </div>
+            </div>
+
+            <div class="form-group{% if errors['mobile'] is not empty %} has-error{%endif%}">
+                <label for="mobile" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">手机号</label>
+                <div class="col-xs-12 col-sm-4">
+                    <span class="block input-icon input-icon-right">
+                        <input type="text" id="mobile" placeholder="手机号" name="mobile" class="col-xs-12" value="{{wzcxuser.mobile}}" />
+                    </span>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['mobile'] is not empty %}{{errors['mobile']}}{% else %} {%endif%} </div>
+            </div>
+
+            <div class="form-group{% if errors['code'] is not empty %} has-error{%endif%}">
+                <label for="code" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">验证码</label>
+                <div class="col-xs-12 col-sm-4">
+                    <span class="block input-icon input-icon-right">
+                        <input type="text" id="code" placeholder="验证码" name="code" class="col-xs-12" value="{{wzcxuser.code}}" />
+                    </span>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['code'] is not empty %}{{errors['code']}}{% else %} {%endif%} </div>
+            </div>
+
+            <div class="form-group{% if errors['mobiledate'] is not empty %} has-error{%endif%}">
+                <label for="mobiledate" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">定制时间</label>
+                <div class="col-xs-12 col-sm-4">
+                    <span class="block input-icon input-icon-right">
+                        <input type="text" id="mobiledate" placeholder="定制时间" name="mobiledate" class="col-xs-12" value="{{wzcxuser.mobiledate}}" />
+                    </span>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['mobiledate'] is not empty %}{{errors['mobiledate']}}{% else %} {%endif%} </div>
+            </div>
+
+            <div class="form-group{% if errors['status'] is not empty %} has-error{%endif%}">
+                <label for="status" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">状态</label>
+                <div class="col-xs-12 col-sm-4">
+                    <span class="block input-icon input-icon-right">
+                        <input type="text" id="status" placeholder="状态" name="status" class="col-xs-12" value="{{wzcxuser.status}}" />
+                    </span>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['status'] is not empty %}{{errors['status']}}{% else %} {%endif%} </div>
+            </div>
+
+
+
+            <div class="clearfix form-actions">
+                <div class="col-md-offset-3 col-md-9">
+                    <button class="btn btn-info" type="submit">
+                        <i class="ace-icon fa fa-check bigger-110"></i>
+                        提交
+                    </button>
+
+                    &nbsp; &nbsp; &nbsp;
+                    <button class="btn" type="reset">
+                        <i class="ace-icon fa fa-undo bigger-110"></i>
+                        重置
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div><!-- /.col -->
+</div><!-- /.row -->
+
+{% endblock %}
+{% block script %}
+
+<script type="text/javascript">
+    $(document).ready(function(){
+
+        $(".ace-switch").each(function () {
+            var aceswitch = this;
+
+            aceswitch.addEventListener("click", function(){
+                id = this.id.replace("_radio", "");
+                if(this.checked){
+                    $("#"+id).val('1');
+                } else {
+                    $("#"+id).val('0');
+                }
+                });
+        });
+    });
+</script>
+{% endblock %}

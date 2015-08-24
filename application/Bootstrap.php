@@ -9,11 +9,12 @@
 
 class Bootstrap extends \Yaf_Bootstrap_Abstract {
 
-    protected $config;
+	protected $config;
+
     // 配置初始化
     public function _initConfig(\Yaf_Dispatcher $dispatcher) {/*{{{*/
-        $this->config = Yaf_Application::app()->getConfig()->toArray();
-        Yaf_Registry::set('configarr', $this->config);
+		$this->config = Yaf_Application::app()->getConfig()->toArray();
+		Yaf_Registry::set('configarr', $this->config);
 
         // 加载默认定义
         \Yaf_Loader::import(APP_PATH.'/conf/defines.inc.php');

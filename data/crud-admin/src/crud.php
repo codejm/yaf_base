@@ -9,7 +9,7 @@
 date_default_timezone_get('PRC');
 $options = array(PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ, PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING);
 $table_pre = '_';
-$db = new PDO('mysql:host=localhost;dbname=demo', 'root', '1234', $options);
+$db = new PDO('mysql:host=localhost;dbname=yaf_demo', 'root', 'root', $options);
 
 $query = "SHOW TABLES";
 $sth = $db->prepare($query);

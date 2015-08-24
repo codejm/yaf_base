@@ -24,7 +24,7 @@ class LoginController extends \Core_BaseCtl {
             if($result) {
                 $data = $member->select(array('where'=>array('username'=>$member->username, 'status>'=>'1')));
                 // 验证是否可以登录
-                if($data  && $data['role_type'] == 'admin' &&  $data['password'] == Tools_help::hash($member->password)) {
+                if($data && $data['password'] == Tools_help::hash($member->password)) {
 
                     $member->reMemberMe($data, $member->rememberme);
                     $this->redirect(Tools_help::url('backend/index/index'));

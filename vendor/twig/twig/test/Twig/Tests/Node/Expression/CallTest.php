@@ -73,12 +73,36 @@ class Twig_Tests_Node_Expression_CallTest extends PHPUnit_Framework_TestCase
 
     public function testResolveArgumentsOnlyNecessaryArgumentsForCustomFunction()
     {
-        $node = new Twig_Tests_Node_Expression_Call(array(), array('type' => 'function', 'name' =>  'custom_function'));
+        $node = new Twig_Tests_Node_Expression_Call(array(), array('type' => 'function', 'name' => 'custom_function'));
 
         $this->assertEquals(array('arg1'), $node->getArguments(array($this, 'customFunction'), array('arg1' => 'arg1')));
     }
 
+    public function testGetArgumentsForStaticMethod()
+    {
+        $node = new Twig_Tests_Node_Expression_Call(array(), array('type' => 'function', 'name' => 'custom_static_function'));
+        $this->assertEquals(array('arg1'), $node->getArguments(__CLASS__.'::customStaticFunction', array('arg1' => 'arg1')));
+    }
+
+    /**
+     * @expectedException        LogicException
+     * @expectedExceptionMessage The last parameter of "Twig_Tests_Node_Expression_CallTest::customFunctionWithArbitraryArguments" for function "foo" must be an array with default value, eg. "array $arg = array()".
+     */
+    public function testResolveArgumentsWithMissingParameterForArbitraryArguments()
+    {
+        $node = new Twig_Tests_Node_Expression_Call(array(), array('type' => 'function', 'name' => 'foo', 'is_variadic' => true));
+        $node->getArguments(array($this, 'customFunctionWithArbitraryArguments'), array());
+    }
+
+    public static function customStaticFunction($arg1, $arg2 = 'default', $arg3 = array())
+    {
+    }
+
     public function customFunction($arg1, $arg2 = 'default', $arg3 = array())
+    {
+    }
+
+    public function customFunctionWithArbitraryArguments()
     {
     }
 }

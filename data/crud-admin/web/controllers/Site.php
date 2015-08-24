@@ -4,7 +4,7 @@
  *      [CodeJm!] Author CodeJm[codejm@163.com].
  *
  *       管理类
- *      $Id: Site.php 2014-09-26 14:54:06 codejm $
+ *      $Id: Site.php 2015-08-21 10:31:24 codejm $
  */
 
 class SiteController extends \Core_BackendCtl {
@@ -22,11 +22,11 @@ class SiteController extends \Core_BackendCtl {
         if($orderby) {
             $orderby = str_replace('.', ' ', $orderby);
         } else {
-            $orderby = 'id asc';
+            $orderby = 'id desc';
         }
 
         // 实例化Model
-        $site = new SiteModel();
+        $siteModel = new SiteModel();
         // 查询条件
         $params = array(
             'field' => array(),
@@ -36,9 +36,9 @@ class SiteController extends \Core_BackendCtl {
             'per' => $pageSize,
         );
         // 列表
-        $result = $site->getLists($params);
+        $result = $siteModel->getLists($params);
         // 数据总条数
-        $total = $site->getCount($params);
+        $total = $siteModel->getCount($params);
 
         // 分页url
         $url = Tools_help::url('backend/site/index').'?page=';
@@ -56,7 +56,7 @@ class SiteController extends \Core_BackendCtl {
      */
     public function addAction() {
         // 实例化Model
-        $site = new SiteModel();
+        $siteModel = new SiteModel();
         // 处理post数据
         if($this->getRequest()->isPost()) {
             // 获取所有post数据
@@ -64,16 +64,16 @@ class SiteController extends \Core_BackendCtl {
             // 处理图片等特殊数据
 
             // 验证
-            $result = $site->validation->validate($pdata, 'add');
-            $site->parseAttributes($pdata);
+            $result = $siteModel->validation->validate($pdata, 'add');
+            $siteModel->parseAttributes($pdata);
 
             // 通过验证
             if($result) {
                 // 入库前数据处理
 
                 // Model转换成数组
-                $data = $site->toArray($pdata);
-                $result = $site->insert($data);
+                $data = $siteModel->toArray($pdata);
+                $result = $siteModel->insert($data);
                 if($result) {
                     // 提示信息并跳转到列表
                     Tools_help::setSession('Message', '添加成功！');
@@ -81,12 +81,12 @@ class SiteController extends \Core_BackendCtl {
                 } else {
                     // 验证失败
                     $this->_view->assign('ErrorMessage', '添加失败！');
-                    $this->_view->assign("errors", $site->validation->getErrorSummary());
+                    $this->_view->assign("errors", $siteModel->validation->getErrorSummary());
                 }
             } else {
                 // 验证失败
                 $this->_view->assign('ErrorMessage', '添加失败！');
-                $this->_view->assign("errors", $site->validation->getErrorSummary());
+                $this->_view->assign("errors", $siteModel->validation->getErrorSummary());
             }
         }
 
@@ -94,7 +94,7 @@ class SiteController extends \Core_BackendCtl {
 
 
         // 模版分配数据
-        $this->_view->assign("site", $site);
+        $this->_view->assign("site", $siteModel);
         $this->_view->assign("pageTitle", '添加');
     }
 
@@ -110,7 +110,7 @@ class SiteController extends \Core_BackendCtl {
         }
 
         // 实例化Model
-        $site = new SiteModel();
+        $siteModel = new SiteModel();
 
         // 处理Post
         if($this->getRequest()->isPost()) {
@@ -119,8 +119,8 @@ class SiteController extends \Core_BackendCtl {
             // 处理图片等特殊数据
 
             // 验证
-            $result = $site->validation->validate($pdata, 'edit');
-            $site->parseAttributes($pdata);
+            $result = $siteModel->validation->validate($pdata, 'edit');
+            $siteModel->parseAttributes($pdata);
 
             // 通过验证
             if($result) {
@@ -128,8 +128,8 @@ class SiteController extends \Core_BackendCtl {
 
 
                 // Model转换成数组
-                $data = $site->toArray($pdata);
-                $result = $site->update(array('id'=>$id), $data);
+                $data = $siteModel->toArray($pdata);
+                $result = $siteModel->update(array('id'=>$id), $data);
 
                 if($result) {
                     // 提示信息并跳转到列表
@@ -138,27 +138,27 @@ class SiteController extends \Core_BackendCtl {
                 } else {
                     // 出错
                     Tools_help::setSession('ErrorMessage', '修改失败, 请确定已修改了某项！');
-                    $this->_view->assign("errors", $site->validation->getErrorSummary());
+                    $this->_view->assign("errors", $siteModel->validation->getErrorSummary());
                 }
-                $site->id = $id;
             } else {
                 // 验证失败
                 Tools_help::setSession('ErrorMessage', '修改失败, 请检查错误项');
-                $this->_view->assign("errors", $site->validation->getErrorSummary());
+                $this->_view->assign("errors", $siteModel->validation->getErrorSummary());
             }
+            $siteModel->id = $id;
         }
 
         // 如果Model数据为空，则获取
-        if(!empty($id) && empty($site->id)) {
-            $data = $site->select(array('where'=>array('id'=>$id)));
-            $site->parseAttributes($data);
+        if(!empty($id) && empty($siteModel->id)) {
+            $data = $siteModel->select(array('where'=>array('id'=>$id)));
+            $siteModel->parseAttributes($data);
         }
 
         // 格式化表单数据
 
 
         // 模版分配数据
-        $this->_view->assign("site", $site);
+        $this->_view->assign("site", $siteModel);
         $this->_view->assign("pageTitle", '修改');
     }
 
@@ -172,8 +172,8 @@ class SiteController extends \Core_BackendCtl {
             $this->error('id 不能为空!');
         }
         // 实例化Model
-        $site = new SiteModel();
-        $row = $site->update(array('id'=>$id), array('status'=>-1));
+        $siteModel = new SiteModel();
+        $row = $siteModel->update(array('id'=>$id), array('status'=>-1));
         if($row) {
             $this->error('恭喜，删除成功', 'Message');
         } else {
@@ -191,8 +191,8 @@ class SiteController extends \Core_BackendCtl {
             $this->error('id 不能为空!');
         }
         // 实例化Model
-        $site = new SiteModel();
-        $row = $site->delSites($ids);
+        $siteModel = new SiteModel();
+        $row = $siteModel->delSites($ids);
         if($row) {
             $this->error('恭喜，删除成功', 'Message');
         } else {
@@ -213,8 +213,8 @@ class SiteController extends \Core_BackendCtl {
         $status = $this->getg('status', 0);
         $status = $status ? 0 : 1;
         // 实例化Model
-        $site = new SiteModel();
-        $row = $site->update(array('id'=>$id), array('status'=>$status));
+        $siteModel = new SiteModel();
+        $row = $siteModel->update(array('id'=>$id), array('status'=>$status));
         if($row) {
             $this->error('恭喜，操作成功', 'Message');
         } else {

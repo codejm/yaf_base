@@ -10,6 +10,7 @@
 class Core_BackendCtl extends \Core_BaseCtl {
 
     public $menuArr = array();
+    public $admin = null;
 
     // 初始化
     public function init() {
@@ -44,30 +45,23 @@ class Core_BackendCtl extends \Core_BaseCtl {
 
         // E
         $this->_view->assign("curr_admin", $admin);
+        $this->admin = $admin;
 
 
-        // 用户权限判断
-        /*$checkTitle = strtolower($this->moduleName.'_'.$this->controllerName.'_'.$this->actionName);
-        $pid = Rbac_Core::getPermissions()->returnId($checkTitle);
-        if($pid) {
-            if($admin['id']!=1){
-                if(!Rbac_Core::getInstance()->check($pid, $admin['id'])) {
-                    exit('您没有权限访问该网页1！<a href="javascript:window.history.back();">返回</a> ');
-                }
+        $rbac = new Rbac_Core();
+        if($admin['rid']) {
+            $checkTitle = strtolower($this->moduleName.'/'.$this->controllerName.'/'.$this->actionName);
+            $pid = $rbac->check($admin['rid'], $checkTitle);
+            if(empty($pid)) {
+                exit('您没有权限访问该网页！<a href="javascript:window.history.back();">返回</a> ');
             }
-        } else {
-            Rbac_Core::getPermissions()->add($checkTitle, $checkTitle);
-            //exit('您没有权限访问该网页2！<a href="javascript:window.history.back();">返回</a> ');
-        }*/
-
-        $purview = null;
+        }
+        $menu = $rbac->getMenu($admin['rid'], false);
 
         // 后台菜单数组 S
-        $backendMenu = new \Core_CBackendMenu(ConstDefine::$backendMenu, $this->controllerName, $this->actionName, $purview);
-        $menustr = $backendMenu->get();
+        $menustr = new \Core_CBackendMenu($menu, $this->controllerName, $this->actionName);
         $this->_view->assign('backendMenu', $menustr);
         // E
-
     }
 }
 

@@ -120,7 +120,7 @@
 
                         <ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
                             <li>
-                            <a href="{{ url('brokerend/commissioner/edit', {'id':curr_admin['id']}) }}">
+                            <a href="{{ url('backend/members/edit', {'uid':curr_admin['uid']}) }}">
                                 <i class="ace-icon fa fa-user"></i>
                                 修改个人资料
                             </a>
@@ -129,7 +129,7 @@
                             <li class="divider"></li>
 
                             <li>
-                            <a href="{{ url('brokerend/login/logout') }}">
+                            <a href="{{ url('backend/login/logout') }}">
                                 <i class="ace-icon fa fa-power-off"></i>
                                 退出
                             </a>

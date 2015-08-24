@@ -27,7 +27,7 @@ class MembersModel extends \Core_CMode {
             'regdate' => '注册时间',
             'email' => '邮箱',
             'email_checked' => '邮箱是否验证',
-            'role_type' => '角色',
+            'rid' => '角色',
             'mobile' => '电话',
             'status' => '状态',
         );
@@ -50,7 +50,7 @@ class MembersModel extends \Core_CMode {
                 array('regdate', 'required'),
                 array('email', 'required|maxlength[50]|email'),
                 array('email_checked', 'maxlength[1]|integer'),
-                array('role_type', 'required|maxlength[10]'),
+                array('rid', 'required|maxlength[10]'),
                 array('mobile', 'maxlength[15]|phone'),
                 array('status', 'maxlength[1]|integer'),
             ),
@@ -83,7 +83,7 @@ class MembersModel extends \Core_CMode {
             'uid' => $data['uid'],
             'username' => $data['username'],
             'password' => $data['password'],
-            'role_type' => $data['role_type']
+            'rid' => $data['rid']
         );
         Tools_help::setSession('admin', $temp);
         // rememberme 记住密码

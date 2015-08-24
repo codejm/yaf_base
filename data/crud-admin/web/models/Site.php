@@ -4,10 +4,10 @@
  *      [CodeJm!] Author CodeJm[codejm@163.com].
  *
  *      
- *      $Id: Site.php 2014-09-26 14:54:06 codejm $
+ *      $Id: Site.php 2015-08-21 10:31:24 codejm $
  */
 
-class SiteModel extends \Core_CMode {
+class SiteModel extends \Core_CModel {
 
     public $_table = '`site`';
 

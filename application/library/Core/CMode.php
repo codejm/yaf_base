@@ -222,8 +222,7 @@ class Core_CMode {
 
         $data = array_merge($pdata, $where);
         $dbconn = $this->db->prepare($query);
-        $dbconn->execute(array_values($data));
-        $row = $dbconn->rowCount();
+        $row = $dbconn->execute(array_values($data));
         $dbconn->closeCursor();
         return $row;
     }

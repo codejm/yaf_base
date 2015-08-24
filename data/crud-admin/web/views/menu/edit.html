@@ -1,0 +1,108 @@
+{% extends 'layouts/base.html' %}
+{% block content %}
+<div class="row">
+    <div class="col-xs-12">
+        <!-- PAGE CONTENT BEGINS -->
+        <form action="{{ url('backend/menu/edit', {id:menu.id}) }}" class="form-horizontal" role="form" method="post" enctype="multipart/form-data">
+
+            <div class="form-group{% if errors['pid'] is not empty %} has-error{%endif%}">
+                <label for="pid" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">pid<span class="red">*</span></label>
+                <div class="col-xs-12 col-sm-4">
+                    <span class="block input-icon input-icon-right">
+                        <input type="text" id="pid" placeholder="pid" name="pid" class="col-xs-12" value="{{menu.pid}}" />
+                    </span>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['pid'] is not empty %}{{errors['pid']}}{% else %} {%endif%} </div>
+            </div>
+
+            <div class="form-group{% if errors['name'] is not empty %} has-error{%endif%}">
+                <label for="name" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">name<span class="red">*</span></label>
+                <div class="col-xs-12 col-sm-4">
+                    <span class="block input-icon input-icon-right">
+                        <input type="text" id="name" placeholder="name" name="name" class="col-xs-12" value="{{menu.name}}" />
+                    </span>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['name'] is not empty %}{{errors['name']}}{% else %} {%endif%} </div>
+            </div>
+
+            <div class="form-group{% if errors['display'] is not empty %} has-error{%endif%}">
+                <label for="display" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">display<span class="red">*</span></label>
+                <div class="col-xs-12 col-sm-4">
+                    <span class="block input-icon input-icon-right">
+                        <input type="text" id="display" placeholder="display" name="display" class="col-xs-12" value="{{menu.display}}" />
+                    </span>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['display'] is not empty %}{{errors['display']}}{% else %} {%endif%} </div>
+            </div>
+
+            <div class="form-group{% if errors['target'] is not empty %} has-error{%endif%}">
+                <label for="target" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">target<span class="red">*</span></label>
+                <div class="col-xs-12 col-sm-4">
+                    <span class="block input-icon input-icon-right">
+                        <input type="text" id="target" placeholder="target" name="target" class="col-xs-12" value="{{menu.target}}" />
+                    </span>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['target'] is not empty %}{{errors['target']}}{% else %} {%endif%} </div>
+            </div>
+
+            <div class="form-group{% if errors['sort'] is not empty %} has-error{%endif%}">
+                <label for="sort" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">sort<span class="red">*</span></label>
+                <div class="col-xs-12 col-sm-4">
+                    <span class="block input-icon input-icon-right">
+                        <input type="text" id="sort" placeholder="sort" name="sort" class="col-xs-12" value="{{menu.sort}}" />
+                    </span>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['sort'] is not empty %}{{errors['sort']}}{% else %} {%endif%} </div>
+            </div>
+
+            <div class="form-group{% if errors['url'] is not empty %} has-error{%endif%}">
+                <label for="url" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">url<span class="red">*</span></label>
+                <div class="col-xs-12 col-sm-4">
+                    <span class="block input-icon input-icon-right">
+                        <input type="text" id="url" placeholder="url" name="url" class="col-xs-12" value="{{menu.url}}" />
+                    </span>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['url'] is not empty %}{{errors['url']}}{% else %} {%endif%} </div>
+            </div>
+
+
+
+            <div class="clearfix form-actions">
+                <div class="col-md-offset-3 col-md-9">
+                    <button class="btn btn-info" type="submit">
+                        <i class="ace-icon fa fa-check bigger-110"></i>
+                        提交
+                    </button>
+
+                    &nbsp; &nbsp; &nbsp;
+                    <a class="btn" href="javascript:;" onclick="history.back(); ">
+                        <i class="ace-icon fa fa-undo bigger-110"></i>
+                        返回
+                    </a>
+                </div>
+            </div>
+
+        </form>
+    </div><!-- /.col -->
+</div><!-- /.row -->
+{% endblock %}
+{% block script %}
+
+<script type="text/javascript">
+    $(document).ready(function(){
+
+        $(".ace-switch").each(function () {
+            var aceswitch = this;
+
+            aceswitch.addEventListener("click", function(){
+                id = this.id.replace("_radio", "");
+                if(this.checked){
+                    $("#"+id).val('1');
+                } else {
+                    $("#"+id).val('0');
+                }
+                });
+        });
+    });
+</script>
+{% endblock %}

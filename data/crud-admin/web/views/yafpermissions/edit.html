@@ -1,0 +1,88 @@
+{% extends 'layouts/base.html' %}
+{% block content %}
+<div class="row">
+    <div class="col-xs-12">
+        <!-- PAGE CONTENT BEGINS -->
+        <form action="{{ url('backend/yafpermissions/edit', {id:yafpermissions.id}) }}" class="form-horizontal" role="form" method="post" enctype="multipart/form-data">
+
+            <div class="form-group{% if errors['fid'] is not empty %} has-error{%endif%}">
+                <label for="fid" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">父ID<span class="red">*</span></label>
+                <div class="col-xs-12 col-sm-4">
+                    <span class="block input-icon input-icon-right">
+                        <input type="text" id="fid" placeholder="父ID" name="fid" class="col-xs-12" value="{{yafpermissions.fid}}" />
+                    </span>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['fid'] is not empty %}{{errors['fid']}}{% else %} {%endif%} </div>
+            </div>
+
+            <div class="form-group{% if errors['name'] is not empty %} has-error{%endif%}">
+                <label for="name" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">权限名称<span class="red">*</span></label>
+                <div class="col-xs-12 col-sm-4">
+                    <span class="block input-icon input-icon-right">
+                        <input type="text" id="name" placeholder="权限名称" name="name" class="col-xs-12" value="{{yafpermissions.name}}" />
+                    </span>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['name'] is not empty %}{{errors['name']}}{% else %} {%endif%} </div>
+            </div>
+
+            <div class="form-group{% if errors['path'] is not empty %} has-error{%endif%}">
+                <label for="path" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">验证路径<span class="red">*</span></label>
+                <div class="col-xs-12 col-sm-4">
+                    <span class="block input-icon input-icon-right">
+                        <input type="text" id="path" placeholder="验证路径" name="path" class="col-xs-12" value="{{yafpermissions.path}}" />
+                    </span>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['path'] is not empty %}{{errors['path']}}{% else %} {%endif%} </div>
+            </div>
+
+            <div class="form-group{% if errors['ismenu'] is not empty %} has-error{%endif%}">
+                <label for="ismenu" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">是否在菜单显示</label>
+                <div class="col-xs-12 col-sm-4">
+                    <span class="block input-icon input-icon-right">
+                        <input type="text" id="ismenu" placeholder="是否在菜单显示" name="ismenu" class="col-xs-12" value="{{yafpermissions.ismenu}}" />
+                    </span>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['ismenu'] is not empty %}{{errors['ismenu']}}{% else %} {%endif%} </div>
+            </div>
+
+
+
+            <div class="clearfix form-actions">
+                <div class="col-md-offset-3 col-md-9">
+                    <button class="btn btn-info" type="submit">
+                        <i class="ace-icon fa fa-check bigger-110"></i>
+                        提交
+                    </button>
+
+                    &nbsp; &nbsp; &nbsp;
+                    <a class="btn" href="javascript:;" onclick="history.back(); ">
+                        <i class="ace-icon fa fa-undo bigger-110"></i>
+                        返回
+                    </a>
+                </div>
+            </div>
+
+        </form>
+    </div><!-- /.col -->
+</div><!-- /.row -->
+{% endblock %}
+{% block script %}
+
+<script type="text/javascript">
+    $(document).ready(function(){
+
+        $(".ace-switch").each(function () {
+            var aceswitch = this;
+
+            aceswitch.addEventListener("click", function(){
+                id = this.id.replace("_radio", "");
+                if(this.checked){
+                    $("#"+id).val('1');
+                } else {
+                    $("#"+id).val('0');
+                }
+                });
+        });
+    });
+</script>
+{% endblock %}

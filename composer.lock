@@ -4,92 +4,21 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "80286d64e2a0b2c6b6fa92c083a65c39",
+    "hash": "6ea65ab62bf3f5278931f4333ba047b2",
     "packages": [
-        {
-            "name": "owasp/phprbac",
-            "version": "2.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/OWASP/rbac.git",
-                "reference": "1af904f69dcfc61f1a27c90fe8de2bfd574c1a71",
-                "mirrors": [
-                    {
-                        "url": "/%package%/%normalizedUrl%.%type%",
-                        "preferred": true
-                    }
-                ]
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/OWASP/rbac/zipball/1af904f69dcfc61f1a27c90fe8de2bfd574c1a71",
-                "reference": "1af904f69dcfc61f1a27c90fe8de2bfd574c1a71",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "http://pkg.phpcomposer.com/repo/packagist/dists/%package%/%version%/%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "PhpRbac": "PhpRbac/src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "CC-BY-SA-3.0"
-            ],
-            "authors": [
-                {
-                    "name": "AbiusX",
-                    "email": "me@abiusx.com",
-                    "homepage": "http://abiusx.com/",
-                    "role": "Lead Developer"
-                },
-                {
-                    "name": "Jesse Burns",
-                    "email": "jesse.burns@alliancecms.com",
-                    "homepage": "http://www.jbwebware.com",
-                    "role": "Developer"
-                }
-            ],
-            "description": "PHP-RBAC is the de-facto authorization library for PHP. It provides developers with NIST Level 2 Standard Role Based Access Control and more, in the fastest implementation yet.",
-            "homepage": "http://phprbac.net/",
-            "keywords": [
-                "owasp",
-                "rbac",
-                "security"
-            ],
-            "time": "2014-03-14 13:39:52"
-        },
         {
             "name": "phpmailer/phpmailer",
             "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPMailer/PHPMailer.git",
-                "reference": "50eac8739fe8e06fe0c91202a5b2b57279960834",
-                "mirrors": [
-                    {
-                        "url": "/%package%/%normalizedUrl%.%type%",
-                        "preferred": true
-                    }
-                ]
+                "reference": "8a719102d2c3ad496530db6f524da222bccf01d4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/50eac8739fe8e06fe0c91202a5b2b57279960834",
-                "reference": "50eac8739fe8e06fe0c91202a5b2b57279960834",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "http://pkg.phpcomposer.com/repo/packagist/dists/%package%/%version%/%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
+                "url": "http://packagist.phpcomposer.com/files/PHPMailer/PHPMailer/8a719102d2c3ad496530db6f524da222bccf01d4.zip",
+                "reference": "8a719102d2c3ad496530db6f524da222bccf01d4",
+                "shasum": ""
             },
             "require": {
                 "php": ">=5.0.0"
@@ -102,8 +31,10 @@
             "autoload": {
                 "classmap": [
                     "class.phpmailer.php",
+                    "class.smtp.php",
                     "class.pop3.php",
-                    "class.smtp.php"
+                    "extras/EasyPeasyICS.php",
+                    "extras/ntlm_sasl_client.php"
                 ]
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -128,20 +59,20 @@
                 }
             ],
             "description": "PHPMailer is a full-featured email creation and transfer class for PHP",
-            "time": "2015-03-25 18:22:55"
+            "time": "2015-08-07 09:57:43"
         },
         {
             "name": "phpoffice/phpexcel",
-            "version": "1.8.0",
+            "version": "1.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPOffice/PHPExcel.git",
-                "reference": "e69a5e4d0ffa7fb6f171859e0a04346e580df30b"
+                "reference": "372c7cbb695a6f6f1e62649381aeaa37e7e70b32"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHPOffice/PHPExcel/zipball/e69a5e4d0ffa7fb6f171859e0a04346e580df30b",
-                "reference": "e69a5e4d0ffa7fb6f171859e0a04346e580df30b",
+                "url": "http://packagist.phpcomposer.com/files/PHPOffice/PHPExcel/372c7cbb695a6f6f1e62649381aeaa37e7e70b32.zip",
+                "reference": "372c7cbb695a6f6f1e62649381aeaa37e7e70b32",
                 "shasum": ""
             },
             "require": {
@@ -185,41 +116,29 @@
                 "xls",
                 "xlsx"
             ],
-            "time": "2014-03-02 15:22:49"
+            "time": "2015-05-01 07:00:55"
         },
         {
             "name": "twig/twig",
-            "version": "v1.18.0",
+            "version": "v1.19.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "4cf7464348e7f9893a93f7096a90b73722be99cf",
-                "mirrors": [
-                    {
-                        "url": "/%package%/%normalizedUrl%.%type%",
-                        "preferred": true
-                    }
-                ]
+                "reference": "edbeaf43b0a606cdaadc32a11d2673614a377b90"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/4cf7464348e7f9893a93f7096a90b73722be99cf",
-                "reference": "4cf7464348e7f9893a93f7096a90b73722be99cf",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "http://pkg.phpcomposer.com/repo/packagist/dists/%package%/%version%/%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
+                "url": "http://packagist.phpcomposer.com/files/twigphp/Twig/edbeaf43b0a606cdaadc32a11d2673614a377b90.zip",
+                "reference": "edbeaf43b0a606cdaadc32a11d2673614a377b90",
+                "shasum": ""
             },
             "require": {
-                "php": ">=5.2.4"
+                "php": ">=5.2.7"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.18-dev"
+                    "dev-master": "1.19-dev"
                 }
             },
             "autoload": {
@@ -254,7 +173,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2015-01-25 17:32:08"
+            "time": "2015-07-31 13:45:26"
         }
     ],
     "packages-dev": [],

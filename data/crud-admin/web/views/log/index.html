@@ -1,5 +1,5 @@
-{{ include('layouts/header.html') }}
-
+{% extends 'layouts/base.html' %}
+{% block content %}
 
 <div class="row">
     <div class="col-xs-12">
@@ -59,12 +59,11 @@
 
                         <td>
                             <div class="hidden-sm hidden-xs btn-group">
-                                <a class="btn btn-xs btn-info" href="{{url('backend/log/edit', {'id':row.id})}}">
-                                    <i class="ace-icon fa fa-pencil bigger-120"></i>
-                                </a>
-
                                 <a class="btn btn-xs btn-danger adel" href="{{url('backend/log/del', {'id':row.id})}}">
                                     <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                                </a>
+                                <a class="btn btn-xs btn-info" href="{{url('backend/log/edit', {'id':row.id})}}">
+                                    <i class="ace-icon fa fa-pencil bigger-120"></i>
                                 </a>
                             </div>
                         </td>
@@ -93,4 +92,4 @@
 </div>
 
 <!-- inline scripts related to this page -->
-{{ include('layouts/footer.html') }}
+{% endblock %}

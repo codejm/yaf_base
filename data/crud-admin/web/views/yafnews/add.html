@@ -1,0 +1,155 @@
+{% extends 'layouts/base.html' %}
+{% block content %}
+<div class="row">
+    <div class="col-xs-12">
+        <!-- PAGE CONTENT BEGINS -->
+        <form action="{{ url('backend/yafnews/add') }}" class="form-horizontal" role="form" method="post" enctype="multipart/form-data">
+
+            <div class="form-group{% if errors['title'] is not empty %} has-error{%endif%}">
+                <label for="title" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">标题<span class="red">*</span></label>
+                <div class="col-xs-12 col-sm-4">
+                    <span class="block input-icon input-icon-right">
+                        <input type="text" id="title" placeholder="标题" name="title" class="col-xs-12" value="{{yafnews.title}}" />
+                    </span>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['title'] is not empty %}{{errors['title']}}{% else %} {%endif%} </div>
+            </div>
+
+            <div class="form-group{% if errors['img'] is not empty %} has-error{%endif%}">
+                <label for="img" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">头图</label>
+                <div class="col-xs-12 col-sm-4">
+                    <span class="block input-icon input-icon-right">
+                        <input multiple="" type="file" id="img" placeholder="头图" name="img" class="col-xs-12" value="{{yafnews.img}}" />
+                    </span>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['img'] is not empty %}{{errors['img']}}{% else %} {%endif%} </div>
+            </div>
+
+            <div class="form-group{% if errors['remark'] is not empty %} has-error{%endif%}">
+                <label for="remark" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">描述</label>
+                <div class="col-xs-12 col-sm-4">
+                    <span class="block input-icon input-icon-right">
+                        <textarea id="remark" name="remark" class="autosize-transition form-control" style="overflow: hidden; word-wrap: break-word; resize: horizontal; height: 52px;">{{yafnews.remark}}</textarea>
+                    </span>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['remark'] is not empty %}{{errors['remark']}}{% else %} {%endif%} </div>
+            </div>
+
+            <div class="form-group{% if errors['detail'] is not empty %} has-error{%endif%}">
+                <label for="detail" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">详情<span class="red">*</span></label>
+                <div class="wysiwyg-editor" id="detail_editor">{{yafnews.detail|raw}}</div>
+                <input type="hidden" name="detail" id="detail" value="{{yafnews.detail}}" />
+                <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['detail'] is not empty %}{{errors['detail']}}{% else %} {%endif%} </div>
+            </div>
+
+            <div class="form-group{% if errors['dateline'] is not empty %} has-error{%endif%}">
+                <label for="dateline" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">创建时间</label>
+                <div class="col-xs-12 col-sm-4">
+                    <span class="block input-icon input-icon-right">
+                        <input type="text" id="dateline" placeholder="创建时间" name="dateline" class="form-control date-picker" value="{{yafnews.dateline | date('Y-m-d H:i:s')}}"/>
+                    </span>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['dateline'] is not empty %}{{errors['dateline']}}{% else %} {%endif%} </div>
+            </div>
+
+            <div class="form-group{% if errors['updatetime'] is not empty %} has-error{%endif%}">
+                <label for="updatetime" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">更新时间</label>
+                <div class="col-xs-12 col-sm-4">
+                    <span class="block input-icon input-icon-right">
+                        <input type="text" id="updatetime" placeholder="更新时间" name="updatetime" class="form-control date-picker" value="{{yafnews.updatetime | date('Y-m-d H:i:s')}}"/>
+                    </span>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['updatetime'] is not empty %}{{errors['updatetime']}}{% else %} {%endif%} </div>
+            </div>
+
+            <div class="form-group{% if errors['status'] is not empty %} has-error{%endif%}">
+                <label for="status" class="col-xs-12 col-sm-3 col-md-3 control-label no-padding-right">状态</label>
+                <div class="col-xs-12 col-sm-4">
+                    <span class="block input-icon input-icon-right">
+                        <input type="text" id="status" placeholder="状态" name="status" class="col-xs-12" value="{{yafnews.status}}" />
+                    </span>
+                </div>
+                <div class="help-block col-xs-12 col-sm-reset inline"> {% if errors['status'] is not empty %}{{errors['status']}}{% else %} {%endif%} </div>
+            </div>
+
+
+
+            <div class="clearfix form-actions">
+                <div class="col-md-offset-3 col-md-9">
+                    <button class="btn btn-info" type="submit">
+                        <i class="ace-icon fa fa-check bigger-110"></i>
+                        提交
+                    </button>
+
+                    &nbsp; &nbsp; &nbsp;
+                    <button class="btn" type="reset">
+                        <i class="ace-icon fa fa-undo bigger-110"></i>
+                        重置
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div><!-- /.col -->
+</div><!-- /.row -->
+
+{% endblock %}
+{% block script %}
+
+<style>
+    .ace-file-multiple .ace-file-container .ace-file-name .ace-icon{
+    width:100%;
+    height:100px;
+}
+.fa-img {
+    background-image: url("{{yafnews.img}}");
+    background-size:100% 100%;
+    background-repeat:no-repeat;
+}
+</style>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+
+       $('#img').ace_file_input({
+           style:'well',
+           btn_choose:'点击这里修改图片',
+           btn_change:null,
+           no_icon:'ace-icon fa {% if yafnews.img %}fa-img{% else %}fa-cloud-upload{% endif %}',
+           droppable:false,
+           thumbnail:'large'//large | fit
+       });
+
+   $('#detail_editor').ace_wysiwyg({
+      'wysiwyg': {
+           uploadScript: "{{ url('backend/upload/upload', {'dir':'yafnews'}) }}",
+           uploadOptions: {
+               post_id: '10',
+               revision_id: '3'
+           }
+       }
+   });
+   $('#detail_editor').focusout(function() {
+       $('#detail').val($('#detail_editor').html());
+   });
+    $('#dateline').datetimepicker({format: 'YYYY-MM-DD hh:mm:ss'}).next().on(ace.click_event, function(){
+        $(this).prev().focus();
+    });
+    $('#updatetime').datetimepicker({format: 'YYYY-MM-DD hh:mm:ss'}).next().on(ace.click_event, function(){
+        $(this).prev().focus();
+    });
+
+        $(".ace-switch").each(function () {
+            var aceswitch = this;
+
+            aceswitch.addEventListener("click", function(){
+                id = this.id.replace("_radio", "");
+                if(this.checked){
+                    $("#"+id).val('1');
+                } else {
+                    $("#"+id).val('0');
+                }
+                });
+        });
+    });
+</script>
+{% endblock %}
