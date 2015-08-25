@@ -13,6 +13,7 @@ yaf base framework from codejm
     - PHPExcel
     - 加密算法(Encrypt3des, Hashids)
     - 后台权限RBAC
+    - xhprof性能分析
     - ...(后期将继续添加)
 
 ## 安装
@@ -21,6 +22,7 @@ yaf base framework from codejm
     - 运行环境:php(5.3及以上)+mysql web服务器推荐使用nginx
     - 框架:yaf(需安装php扩展)
     - composer(生产环境优化自动加载：composer dump-autoload --optimize)
+    - xhprof(请使用鸟哥分支:https://github.com/laruence/xhprof.git,graphviz:2.36.0,xhprof站点自行配置)
 
 ### 获取代码
 ``` shell

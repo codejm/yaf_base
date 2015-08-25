@@ -35,6 +35,10 @@ class Bootstrap extends \Yaf_Bootstrap_Abstract {
         // 初始化模版引擎 twig
         $Twig = new TwigPlugin();
         $dispatcher->registerPlugin($Twig);
+        if($this->config['xhprof']['open']){
+            $xhprof = new xhprofPlugin();
+            $dispatcher->registerPlugin($xhprof);
+        }
     }/*}}}*/
 
     // 路由

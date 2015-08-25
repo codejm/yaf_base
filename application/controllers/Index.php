@@ -11,8 +11,6 @@ class IndexController extends \Core_BaseCtl {
 
     // 默认Action
     public function indexAction() {
-        phpinfo();
-        exit;
     }
 
 }
