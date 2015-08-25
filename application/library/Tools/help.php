@@ -65,14 +65,20 @@ class Tools_help {
      */
     public static function fbu($url='') {
 
+        $uri = $url;
         $config = \Yaf_Registry::get('configarr');
-        $url = $config['application']['site']['uploadUri'].$url;
-        $uploadBaseUrl = rtrim('http://' . $_SERVER['HTTP_HOST']) . $url;
+        $url = rtrim($config['application']['site']['uploadUrl'], '/').'/'.ltrim($url, '/');
 
-        if (empty($url)) {
+        if(stripos($url, 'http://') === false){
+            $uploadBaseUrl = rtrim('http://' . $_SERVER['HTTP_HOST']) .'/'. ltrim($url, '/');
+        } else{
+            $uploadBaseUrl = $url;
+        }
+
+        if (empty($uri)) {
             return $uploadBaseUrl;
         } else {
-            return (stripos($url, 'http://') === 0) ? $url : $uploadBaseUrl;
+            return (stripos($uri, 'http://') === 0) ? $uri : $uploadBaseUrl;
         }
     }
 
