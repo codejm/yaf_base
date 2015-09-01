@@ -138,12 +138,13 @@ if(!$mail->send()) {
 ```shell
 $nohup /path/to/public/Yaf-cli
 参数：
-    pid_path = /tmp/reques/ (进程数存储目录)
-    queue = * (*, 默认值)
-    host = 127.0.0.1:6379 (redis服务器)
-    prefix = '' (redis key前缀)
-    interval = 5 (队列监控间歇时间)
-    count = 1 (线程数)
+    pid_path=/tmp/reques/ (进程数存储目录)
+    queue=* (*, 默认值)
+    host=127.0.0.1:6379 (redis服务器)
+    prefix='' (redis key前缀)
+    interval=5 (队列监控间歇时间)
+    count=1 (线程数)
+    stop[=now] (默认是当前任务执行完停止，now是立即结束)
 
 ```
 #### 进程守护推荐使用：supervisor
