@@ -193,7 +193,7 @@ class Files_FileUpload {
     // 设置允许的文件类型
     public function setAllowMimeType($mime) {
         if(!empty($mime) && is_string($mime)) {
-            if(preg_match('#^[-\w\+]+/[-\w\+]+$#', $mime)) {
+            if(preg_match('#^[-\w\+]+/[-\w\+\.]+$#', $mime)) {
                 $this->log('IMPORTANT! Mime %s enabled', $mime);
                 $this->allowed_mime_types[] = strtolower($mime);
                 $this->file['allowed_mime_types'][] = strtolower($mime);

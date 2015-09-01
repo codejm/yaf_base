@@ -1,64 +1,5 @@
 [
     {
-        "name": "twig/twig",
-        "version": "v1.19.0",
-        "version_normalized": "1.19.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/twigphp/Twig.git",
-            "reference": "edbeaf43b0a606cdaadc32a11d2673614a377b90"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "http://packagist.phpcomposer.com/files/twigphp/Twig/edbeaf43b0a606cdaadc32a11d2673614a377b90.zip",
-            "reference": "edbeaf43b0a606cdaadc32a11d2673614a377b90",
-            "shasum": ""
-        },
-        "require": {
-            "php": ">=5.2.7"
-        },
-        "time": "2015-07-31 13:45:26",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "1.19-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "Twig_": "lib/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "BSD-3-Clause"
-        ],
-        "authors": [
-            {
-                "name": "Fabien Potencier",
-                "email": "fabien@symfony.com",
-                "homepage": "http://fabien.potencier.org",
-                "role": "Lead Developer"
-            },
-            {
-                "name": "Armin Ronacher",
-                "email": "armin.ronacher@active-4.com",
-                "role": "Project Founder"
-            },
-            {
-                "name": "Twig Team",
-                "homepage": "http://twig.sensiolabs.org/contributors",
-                "role": "Contributors"
-            }
-        ],
-        "description": "Twig, the flexible, fast, and secure template language for PHP",
-        "homepage": "http://twig.sensiolabs.org",
-        "keywords": [
-            "templating"
-        ]
-    },
-    {
         "name": "phpoffice/phpexcel",
         "version": "1.8.1",
         "version_normalized": "1.8.1.0",
@@ -118,18 +59,126 @@
         ]
     },
     {
+        "name": "chrisboulton/php-resque",
+        "version": "1.2",
+        "version_normalized": "1.2.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/chrisboulton/php-resque.git",
+            "reference": "0549d6c88a4aed934655b7c03b6153349d6c3ad0"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "http://packagist.phpcomposer.com/files/chrisboulton/php-resque/0549d6c88a4aed934655b7c03b6153349d6c3ad0.zip",
+            "reference": "0549d6c88a4aed934655b7c03b6153349d6c3ad0",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.0"
+        },
+        "time": "2012-10-13 07:28:16",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Resque": "lib"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Chris Boulton",
+                "email": "chris@bigcommerce.com"
+            }
+        ],
+        "description": "Redis backed library for creating background jobs and processing them later. Based on resque for Ruby.",
+        "homepage": "http://www.github.com/chrisboulton/php-resque/",
+        "keywords": [
+            "background",
+            "job",
+            "redis",
+            "resque"
+        ]
+    },
+    {
+        "name": "twig/twig",
+        "version": "v1.21.0",
+        "version_normalized": "1.21.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/twigphp/Twig.git",
+            "reference": "913d282caca9ee0e8d05940c6caa486d58810dd4"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "http://packagist.phpcomposer.com/files/twigphp/Twig/913d282caca9ee0e8d05940c6caa486d58810dd4.zip",
+            "reference": "913d282caca9ee0e8d05940c6caa486d58810dd4",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.2.7"
+        },
+        "require-dev": {
+            "symfony/debug": "~2.7",
+            "symfony/phpunit-bridge": "~2.7"
+        },
+        "time": "2015-08-24 09:51:18",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.21-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Twig_": "lib/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "BSD-3-Clause"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com",
+                "homepage": "http://fabien.potencier.org",
+                "role": "Lead Developer"
+            },
+            {
+                "name": "Armin Ronacher",
+                "email": "armin.ronacher@active-4.com",
+                "role": "Project Founder"
+            },
+            {
+                "name": "Twig Team",
+                "homepage": "http://twig.sensiolabs.org/contributors",
+                "role": "Contributors"
+            }
+        ],
+        "description": "Twig, the flexible, fast, and secure template language for PHP",
+        "homepage": "http://twig.sensiolabs.org",
+        "keywords": [
+            "templating"
+        ]
+    },
+    {
         "name": "phpmailer/phpmailer",
         "version": "dev-master",
         "version_normalized": "9999999-dev",
         "source": {
             "type": "git",
             "url": "https://github.com/PHPMailer/PHPMailer.git",
-            "reference": "8a719102d2c3ad496530db6f524da222bccf01d4"
+            "reference": "58a6a5cf1453789deff2ce74d2f1f90b7696d156"
         },
         "dist": {
             "type": "zip",
-            "url": "http://packagist.phpcomposer.com/files/PHPMailer/PHPMailer/8a719102d2c3ad496530db6f524da222bccf01d4.zip",
-            "reference": "8a719102d2c3ad496530db6f524da222bccf01d4",
+            "url": "http://packagist.phpcomposer.com/files/PHPMailer/PHPMailer/58a6a5cf1453789deff2ce74d2f1f90b7696d156.zip",
+            "reference": "58a6a5cf1453789deff2ce74d2f1f90b7696d156",
             "shasum": ""
         },
         "require": {
@@ -139,7 +188,7 @@
             "phpdocumentor/phpdocumentor": "*",
             "phpunit/phpunit": "4.3.*"
         },
-        "time": "2015-08-07 09:57:43",
+        "time": "2015-08-25 10:06:47",
         "type": "library",
         "installation-source": "source",
         "autoload": {

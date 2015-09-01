@@ -1,3 +1,17 @@
+* 1.21.0 (2015-08-24)
+
+ * added deprecation notices for deprecated features
+ * added a deprecation "framework" for filters/functions/tests and test fixtures
+
+* 1.20.0 (2015-08-12)
+
+ * forbid access to the Twig environment from templates and internal parts of Twig_Template
+ * fixed limited RCEs when in sandbox mode
+ * deprecated Twig_Template::getEnvironment()
+ * deprecated the _self variable for usage outside of the from and import tags
+ * added Twig_BaseNodeVisitor to ease the compatibility of node visitors 
+   between 1.x and 2.x
+
 * 1.19.0 (2015-07-31)
 
  * fixed wrong error message when including an undefined template in a child template

@@ -4,20 +4,63 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "6ea65ab62bf3f5278931f4333ba047b2",
+    "hash": "95f845969809ac4d51b0ffd62c0fb09f",
     "packages": [
+        {
+            "name": "chrisboulton/php-resque",
+            "version": "1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/chrisboulton/php-resque.git",
+                "reference": "0549d6c88a4aed934655b7c03b6153349d6c3ad0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "http://packagist.phpcomposer.com/files/chrisboulton/php-resque/0549d6c88a4aed934655b7c03b6153349d6c3ad0.zip",
+                "reference": "0549d6c88a4aed934655b7c03b6153349d6c3ad0",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Resque": "lib"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Chris Boulton",
+                    "email": "chris@bigcommerce.com"
+                }
+            ],
+            "description": "Redis backed library for creating background jobs and processing them later. Based on resque for Ruby.",
+            "homepage": "http://www.github.com/chrisboulton/php-resque/",
+            "keywords": [
+                "background",
+                "job",
+                "redis",
+                "resque"
+            ],
+            "time": "2012-10-13 07:28:16"
+        },
         {
             "name": "phpmailer/phpmailer",
             "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHPMailer/PHPMailer.git",
-                "reference": "8a719102d2c3ad496530db6f524da222bccf01d4"
+                "reference": "58a6a5cf1453789deff2ce74d2f1f90b7696d156"
             },
             "dist": {
                 "type": "zip",
-                "url": "http://packagist.phpcomposer.com/files/PHPMailer/PHPMailer/8a719102d2c3ad496530db6f524da222bccf01d4.zip",
-                "reference": "8a719102d2c3ad496530db6f524da222bccf01d4",
+                "url": "http://packagist.phpcomposer.com/files/PHPMailer/PHPMailer/58a6a5cf1453789deff2ce74d2f1f90b7696d156.zip",
+                "reference": "58a6a5cf1453789deff2ce74d2f1f90b7696d156",
                 "shasum": ""
             },
             "require": {
@@ -59,7 +102,7 @@
                 }
             ],
             "description": "PHPMailer is a full-featured email creation and transfer class for PHP",
-            "time": "2015-08-07 09:57:43"
+            "time": "2015-08-25 10:06:47"
         },
         {
             "name": "phpoffice/phpexcel",
@@ -120,25 +163,29 @@
         },
         {
             "name": "twig/twig",
-            "version": "v1.19.0",
+            "version": "v1.21.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "edbeaf43b0a606cdaadc32a11d2673614a377b90"
+                "reference": "913d282caca9ee0e8d05940c6caa486d58810dd4"
             },
             "dist": {
                 "type": "zip",
-                "url": "http://packagist.phpcomposer.com/files/twigphp/Twig/edbeaf43b0a606cdaadc32a11d2673614a377b90.zip",
-                "reference": "edbeaf43b0a606cdaadc32a11d2673614a377b90",
+                "url": "http://packagist.phpcomposer.com/files/twigphp/Twig/913d282caca9ee0e8d05940c6caa486d58810dd4.zip",
+                "reference": "913d282caca9ee0e8d05940c6caa486d58810dd4",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.2.7"
             },
+            "require-dev": {
+                "symfony/debug": "~2.7",
+                "symfony/phpunit-bridge": "~2.7"
+            },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.19-dev"
+                    "dev-master": "1.21-dev"
                 }
             },
             "autoload": {
@@ -173,7 +220,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2015-07-31 13:45:26"
+            "time": "2015-08-24 09:51:18"
         }
     ],
     "packages-dev": [],

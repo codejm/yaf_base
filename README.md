@@ -14,6 +14,7 @@ yaf base framework from codejm
     - 加密算法(Encrypt3des, Hashids)
     - 后台权限RBAC
     - xhprof性能分析
+    - php-resque(消息队列, supervisor对进程进行守护)
     - ...(后期将继续添加)
 
 ## 安装
@@ -64,9 +65,7 @@ server
 ``` php
 php cli.php request_uri="/controller/action"
 ```
-
 ## coding
-
 ### 目录结构
     ▾ application/      -- 应用程序核心目录
       ▾ conf/           -- 配置文件目录
@@ -134,6 +133,36 @@ if(!$mail->send()) {
 } else {
     echo 'Message has been sent';
 }
+```
+### Yaf-cli消息队列处理
+```shell
+$nohup /path/to/public/Yaf-cli
+参数：
+    pid_path = /tmp/reques/ (进程数存储目录)
+    queue = * (*, 默认值)
+    host = 127.0.0.1:6379 (redis服务器)
+    prefix = '' (redis key前缀)
+    interval = 5 (队列监控间歇时间)
+    count = 1 (线程数)
+
+```
+#### 进程守护推荐使用：supervisor
+#### job class demo
+```shell
+$ cd /path/to/application/job
+$ vim ./jobfirst.php
+```
+#### 加入队列
+```php
+    Resque::setBackend($this->config['resque']['redis']['host']);
+    $args = array(
+        'time' => time(),
+        'argarr' => array(
+            'test' => 'test'
+        )
+    );
+    $jobId = Resque::enqueue('default', 'JobFirst', $args, true); // JobFirst 任务处理类, 返回任务id
+    echo 'Queued job:'.$jobId;
 ```
 
 
