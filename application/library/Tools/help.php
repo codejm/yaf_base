@@ -41,14 +41,14 @@ class Tools_help {
         'onrowenter|onrowexit|onrowsdelete|onrowsinserted|onscroll|onselect|onselectionchange|onselectstart|onstart|onstop|onsubmit|onunload';
 
         if(!empty($allow)) {
-            $allows = explode(',',$allow);
-            $danger = str_replace($allow,'',$danger);
+            $allows = explode(',', $allow);
+            $danger = str_replace($allow, '', $danger);
         }
-        $danger = str_replace(',','|',$danger);
+        $danger = str_replace(',', '|', $danger);
         //替换所有危险标签
-        $content = preg_replace("/<\s*($danger)[^>]*>[^<]*(<\s*\/\s*\\1\s*>)?/is",'',$content);
+        $content = preg_replace("/<\s*({$danger})[^>]*>[^<]*(<\s*\/\s*\\1\s*>)?/is", '', $content);
         //替换所有危险的JS事件
-        $content = preg_replace("/<([^>]*)($event)\s*\=([^>]*)>/is","<\\1 \\3>",$content);
+        $content = preg_replace("/<([^>]*)({$event})\s*\=([^>]*)>/is", "<\\1 \\3>", $content);
         return $content;
     }
 
@@ -64,7 +64,6 @@ class Tools_help {
      *
      */
     public static function fbu($url='') {
-
         $uri = $url;
         $config = \Yaf_Registry::get('configarr');
         $url = rtrim($config['application']['site']['uploadUrl'], '/').'/'.ltrim($url, '/');
@@ -155,7 +154,7 @@ class Tools_help {
 
             // backend sort 处理
             if(isset($arr['sort'])){
-                $sort = explode(".", $arr['sort']);
+                $sort = explode('.', $arr['sort']);
                 if($params['sort']  == $sort[0])
                     unset($params['sort']);
                 else
@@ -357,7 +356,7 @@ class Tools_help {
         $config = \Yaf_Registry::get('configarr');
         $url = $config['application']['site']['uploadUri'];
         $dir = PUBLIC_PATH.$url.$subdir;
-        $dir = str_replace("//", "/", $dir);
+        $dir = str_replace('//', '/', $dir);
 
 
         $fileUpload = new Files_FileUpload();
@@ -378,18 +377,16 @@ class Tools_help {
     }
 
     /**
-     *  获取用户的ip，使用方法 : help:user_ip();
+     *  获取用户的ip
      */
     public static function getIp() {
-        $ip = '';
-        if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && !empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
-        } elseif(isset($_SERVER['REMOTE_ADDR'])  && !empty($_SERVER['REMOTE_ADDR'])) {
-            $ip = $_SERVER['REMOTE_ADDR'];
-        } elseif(isset($_SERVER['HTTP_CLIENT_IP'])  && !empty($_SERVER['HTTP_CLIENT_IP'])) {
-            $ip = $_SERVER['HTTP_CLIENT_IP'];
+        $keys = array('X_FORWARDED_FOR', 'HTTP_X_FORWARDED_FOR', 'CLIENT_IP', 'REMOTE_ADDR');
+        foreach($keys as $key) {
+            if(isset($_SERVER[$key])) {
+                return $_SERVER[$key];
+            }
         }
-        return $ip;
+        return '';
     }
 
     /**
@@ -407,390 +404,12 @@ class Tools_help {
     public static function iplookup($ip){
         $add = '未知区域';
 
-        $str = file_get_contents("http://ip.taobao.com/service/getIpInfo.php?ip=".$ip);
+        $str = file_get_contents('http://ip.taobao.com/service/getIpInfo.php?ip='.$ip);
         $str = json_decode($str, true);
         if($str) {
             $add = $str['data']['region'].' '.$str['data']['city'];
         }
         return $add;
-    }
-
-    /**
-     *  curl方式post数据  $arr数组用来设置要post的字段和数值 help::getpost("http://www.123.com",$array);
-     *  $array = array('name'=>'good','pass'=>'wrong');
-     *
-     */
-    public static function getpost($URL, $arr, $build=1, $header=false) {
-        if($build)
-            $arr = http_build_query($arr);
-
-        $ch = curl_init();
-        if($header){
-            curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
-        }
-        curl_setopt($ch, CURLOPT_URL, $URL);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);      //设置返回信息的内容和方式
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $arr);       //发送post数据
-        curl_setopt($ch, CURLOPT_TIMEOUT, 30);            //设置30秒超时
-        $result = curl_exec($ch);                         //进行数据传输
-        curl_close($ch);                                  //关闭
-        return $result;
-    }
-
-    /**
-     * curl 方式 get数据 help::getget('http://www.123.com')
-     *
-     */
-    public static function getget($url) {
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_HEADER, 0);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_TIMEOUT, 30);            //设置30秒超时
-        $result = curl_exec($ch);
-        curl_close($ch);
-        return $result;
-    }
-
-    /**
-     * 获取内存限制
-     *
-     * @return int
-     */
-    public static function getMemoryLimit() {
-        $memory_limit = @ini_get('memory_limit');
-        return self::sizeInBytes($memory_limit);
-    }
-
-    /**
-     * 获取系统临时文件路径
-     */
-    public static function sys_get_temp_dir() {
-        if (function_exists('sys_get_temp_dir')) {
-            return sys_get_temp_dir();
-        }
-        if ($temp = getenv('TMP')) {
-            return $temp;
-        }
-        if ($temp = getenv('TEMP')) {
-            return $temp;
-        }
-        if ($temp = getenv('TMPDIR')) {
-            return $temp;
-        }
-        $temp = tempnam(__FILE__, '');
-        if (file_exists($temp)) {
-            unlink($temp);
-            return dirname($temp);
-        }
-        return null;
-    }
-
-    /**
-     * 下载文件保存到指定位置
-     *
-     * @param $url
-     * @param $filepath
-     *
-     * @return bool
-     */
-    public static function saveFile($url, $filepath) {
-        if ($url && !empty($filepath)) {
-            $file = file_get_contents($url);
-            $fp = @fopen($filepath, 'w');
-            if ($fp) {
-                @fwrite($fp, $file);
-                @fclose($fp);
-                return $filepath;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * 获取文件扩展名
-     *
-     */
-    public static function getFileExt($filename) {
-        return addslashes(strtolower(substr(strrchr($filename, '.'), 1, 10)));
-    }
-
-    /**
-     * 人性化文件大小单位
-     */
-    public static function sizeFormat($size, $precision = 2) {
-        $base       = log($size) / log(1024);
-        $suffixes   = array('B', 'K', 'M', 'G');
-        return round(pow(1024, $base-floor($base)), $precision) . $suffixes[floor($base)];
-    }
-
-    /**
-     * 将人性化的文件大小转换成byte
-     */
-    public static function sizeInBytes($size) {
-        $unit = 'B';
-        $units = array('B'=>0, 'K'=>1, 'M'=>2, 'G'=>3);
-        $matches = array();
-        preg_match('/(?<size>[\d\.]+)\s*(?<unit>b|k|m|g)?/i', $size, $matches);
-        if(array_key_exists('unit', $matches)) {
-            $unit = strtoupper($matches['unit']);
-        }
-        return (floatval($matches['size']) * pow(1024, $units[$unit]) ) ;
-    }
-
-    /**
-     * 显示错误信息
-     *
-     * @param string $string
-     * @param array $error
-     * @param bool $htmlentities
-     *
-     * @return mixed|string
-     */
-    public static function displayError($string = 'Fatal error', $error = array(), $htmlentities = true) {
-        if (DEBUG_MODE)
-        {
-            if (!is_array($error) || empty($error))
-                return str_replace('"', '&quot;', $string) . ('<pre>' . print_r(debug_backtrace(), true) . '</pre>');
-            $key = md5(str_replace('\'', '\\\'', $string));
-            $str = (isset($error) AND is_array($error) AND key_exists($key, $error)) ? ($htmlentities ? htmlentities($error[$key], ENT_COMPAT, 'UTF-8') : $error[$key]) : $string;
-            return str_replace('"', '&quot;', stripslashes($str));
-        }
-        else
-        {
-            return str_replace('"', '&quot;', $string);
-        }
-    }
-
-    /**
-     * 数字转为汉字
-     * @param $num_str
-     * @return mixed
-     */
-    public static function num2han($num) {
-        $number = array('〇','一','二','三','四','五','六','七','八','九');
-        return str_replace(range(0,9), $number, $num);
-    }
-
-    /**
-     * 根据格式获取当前时间
-     *
-     */
-    public static function hdate($format='Y-m-d H:i:s', $time=0) {
-        if(empty($time)){
-            return date($format);
-        }
-        return date($format, $time);
-    }
-
-    /**
-     * 根据参数获取当前时间戳
-     *
-     */
-    public static function htime($date='') {
-        if(empty($date)){
-            return time();
-        }
-        return strtotime($date);
-    }
-
-    /**
-     * 多久之前
-     * @param $datetime
-     * @return unknown_type
-     */
-    public static function howLongAgo($datetime) {
-        $timestamp = strtotime($datetime);
-        $seconds = time();
-
-        // 年
-        $time = date('Y', $seconds) - date('Y', $timestamp);
-        if ($time > 0) {
-            return self::hdate('Y-m-d H:i:s', $datetime);
-        }
-
-        // 月
-        $time = date('m', $seconds) - date('m', $timestamp);
-        if ($time > 0) {
-            if ($time == 1) return '上月';
-            else return self::hdate('Y-m-d H:i:s', $datetime);
-        }
-
-        // 天
-        $time = date('d', $seconds) - date('d', $timestamp);
-        if ($time > 0) {
-            if ($time == 1) return '昨天';
-            elseif ($time == 2) return '前天'; else return $time . '天前';
-        }
-
-        // 小时
-        $time = date('H', $seconds) - date('H', $timestamp);
-        if ($time >= 1) return $time . '小时前';
-
-        // 分钟
-        $time = date('i', $seconds) - date('i', $timestamp);
-        if ($time >= 1) return $time . '分钟前';
-
-        // 秒
-        $time = date('s', $seconds) - date('s', $timestamp);
-        return $time . '秒前';
-    }
-
-    /**
-     * 根据生日中的月份和日期来计算所属星座*
-     * @param int $birth_month
-     * @param int $birth_date
-     * @return string
-     */
-    static function get_constellation($birth_month, $birth_date) {
-        //判断的时候，为避免出现1和true的疑惑，或是判断语句始终为真的问题，这里统一处理成字符串形式
-        $birth_month = strval($birth_month);
-        $constellation_name = array('水瓶座', '双鱼座', '白羊座', '金牛座', '双子座', '巨蟹座', '狮子座', '处女座', '天秤座', '天蝎座', '射手座', '摩羯座');
-        if ($birth_date <= 22) {
-            if ('1' !== $birth_month) {
-                $constellation = $constellation_name[$birth_month - 2];
-            } else {
-                $constellation = $constellation_name[11];
-            }
-        } else {
-            $constellation = $constellation_name[$birth_month - 1];
-        }
-        return $constellation;
-    }
-
-    /**
-     * 根据生日中的年份来计算所属生肖
-     *
-     * @param int $birth_year
-     * @return string
-     */
-    static function get_animal($birth_year, $format = '1') {
-        //1900年是子鼠年
-        if ($format == '2') $animal = array('子鼠', '丑牛', '寅虎', '卯兔', '辰龙', '巳蛇', '午马', '未羊', '申猴', '酉鸡', '戌狗', '亥猪');
-        elseif ($format == '1') $animal = array('鼠', '牛', '虎', '兔', '龙', '蛇', '马', '羊', '猴', '鸡', '狗', '猪');
-        $my_animal = ($birth_year - 1900) % 12;
-        return $animal[$my_animal];
-    }
-
-    /**
-     * 根据生日来计算年龄
-     *
-     * 用Unix时间戳计算是最准确的，但不太好处理1970年之前出生的情况
-     * 而且还要考虑闰年的问题，所以就暂时放弃这种方式的开发，保留思想
-     *
-     * @param int $birth_year
-     * @param int $birth_month
-     * @param int $birth_date
-     * @return int
-     */
-    static function get_age($birth_year, $birth_month, $birth_date) {
-        $now_age = 1; //实际年龄，以出生时为1岁计
-        $full_age = 0; //周岁，该变量放着，根据具体情况可以随时修改
-        $now_year = date('Y', time());
-        $now_date_num = date('z', time()); //该年份中的第几天
-        $birth_date_num = date('z', mktime(0, 0, 0, $birth_month, $birth_date, $birth_year));
-        $difference = $now_date_num - $birth_date_num;
-
-        if ($difference > 0) {
-            $full_age = $now_year - $birth_year;
-        } else {
-            $full_age = $now_year - $birth_year - 1;
-        }
-        $now_age = $full_age + 1;
-        return $now_age;
-    }
-
-    /**
-     * 将数组中所有的值转换为整形
-     * @param array $array
-     * @return array
-     *
-     */
-    static function arrayValue2num($array) {
-        foreach($array as $key=>$value){
-            $array[$key] = intval($value);
-        }
-        return $array;
-    }
-
-    /**
-     * 生成订单id随机数
-     * @return string
-     *
-     */
-    static function createOrder() {
-        $idstr = time().rand(10000, 20000);
-        $idstr = md5($idstr);
-        return $idstr;
-    }
-
-
-    /**
-     * 主键为key
-     *
-     */
-    static function formatkey($result, $key='') {
-        // key 键值对
-        $data = array();
-        if($result && $key) {
-            foreach($result as $value) {
-                $data[$value[$key]] = $value;
-            }
-        } else if($result) {
-            $data = $result;
-        }
-        return $data;
-    }
-
-    /**
-     * 获取当前请求的完整URL
-     */
-    static function getCurrURL() {
-        $pageURL = 'http';
-        if (isset($_SERVER["HTTPS"])  && $_SERVER["HTTPS"] == "on") {
-            $pageURL .= "s";
-        }
-        $pageURL .= "://";
-        if ($_SERVER["SERVER_PORT"] != "80") {
-            $pageURL .= $_SERVER["SERVER_NAME"] . ":" . $_SERVER["SERVER_PORT"] . $_SERVER["REQUEST_URI"];
-        } else {
-            $pageURL .= $_SERVER["SERVER_NAME"] . $_SERVER["REQUEST_URI"];
-        }
-        $pageURL = str_replace(array('?lang=en-us', '&lang=en-us', '?lang=zh-cn', '&lang=zh-cn', '?lang=zh-tw', '&lang=zh-tw'), '', $pageURL);
-        return $pageURL;
-    }
-
-    /***
-     * 清除html
-     *
-     */
-    public static function clearHTML($str) {
-        $str = preg_replace(array("/<br[^>]*>\s*\r*\n*/is", "/<br \/>/is"), "\r\n\r\n", $str);
-        $str = preg_replace("/\n\n/is", "\r\n\r\n", $str);
-
-        $str = str_replace(array('&nbsp;', '&bull;', '&mdash;', '&quot;', '&rdquo;', '&ldquo;', '&#8226;', '&#160;'), ' ', strip_tags(htmlspecialchars_decode($str, ENT_NOQUOTES)));
-        return $str;
-
-    }
-
-    /***
-     * ajaxReturn
-     * @param mixed $data 要返回的数据
-     * @param String $type AJAX返回数据格式
-     */
-    static function ajaxReturn($data,$type='JSON'){
-        switch (strtoupper($type)){
-        case 'JSON':
-            // 返回JSON数据格式到客户端 包含状态信息
-            header('Content-Type:application/json; charset=utf-8');
-            exit(json_encode($data));
-        case 'JSONP':
-            // 返回JSON数据格式到客户端 包含状态信息
-            header('Content-Type:application/json; charset=utf-8');
-            $handler = self::getg('callback', 'callfun');
-            exit($handler.'('.json_encode($data).');');
-        }
     }
 
     /**
@@ -865,32 +484,252 @@ class Tools_help {
     }
 
     /**
-     * 数组转换成xml
-     *
+     * 获取当前请求的完整URL
      */
-    static function arrayToXml($arr){
-        $xml = '<xml>';
-        foreach ($arr as $key=>$val) {
-            if (is_numeric($val)) {
-                $xml.='<'.$key.'>'.$val.'</'.$key.'>';
-            }
-            else {
-                $xml.='<'.$key.'><![CDATA['.$val.']]></'.$key.'>';
-            }
+    static function getCurrURL() {
+        $pageURL = 'http';
+        if (isset($_SERVER['HTTPS'])  && $_SERVER['HTTPS'] == 'on') {
+            $pageURL .= 's';
         }
-        $xml.='</xml>';
-        return $xml;
+        $pageURL .= '://';
+        if ($_SERVER['SERVER_PORT'] != '80') {
+            $pageURL .= $_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'] . $_SERVER['REQUEST_URI'];
+        } else {
+            $pageURL .= $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
+        }
+        $pageURL = str_replace(array('?lang=en-us', '&lang=en-us', '?lang=zh-cn', '&lang=zh-cn', '?lang=zh-tw', '&lang=zh-tw'), '', $pageURL);
+        return $pageURL;
     }
 
     /**
-     * xml转换成数据
+     * 获取内存限制
      *
+     * @return int
      */
-    static function xmlToArray($xml){
-		$array_data = json_decode(json_encode(simplexml_load_string($xml, 'SimpleXMLElement', LIBXML_NOCDATA)), true);
-		return $array_data;
+    public static function getMemoryLimit() {
+        $memory_limit = @ini_get('memory_limit');
+        return self::sizeInBytes($memory_limit);
     }
 
+    /**
+     * 获取系统临时文件路径
+     */
+    public static function sys_get_temp_dir() {
+        if (function_exists('sys_get_temp_dir')) {
+            return sys_get_temp_dir();
+        }
+        if ($temp = getenv('TMP')) {
+            return $temp;
+        }
+        if ($temp = getenv('TEMP')) {
+            return $temp;
+        }
+        if ($temp = getenv('TMPDIR')) {
+            return $temp;
+        }
+        $temp = tempnam(__FILE__, '');
+        if (file_exists($temp)) {
+            unlink($temp);
+            return dirname($temp);
+        }
+        return null;
+    }
+
+    /**
+     * 下载文件保存到指定位置
+     *
+     * @param $url
+     * @param $filepath
+     *
+     * @return bool
+     */
+    public static function saveFile($url, $filepath) {
+        if ($url && !empty($filepath)) {
+            $file = file_get_contents($url);
+            $fp = @fopen($filepath, 'w');
+            if ($fp) {
+                @fwrite($fp, $file);
+                @fclose($fp);
+                return $filepath;
+            }
+        }
+        return false;
+    }
+
+    /**
+     *  curl方式post数据  $arr数组用来设置要post的字段和数值 help::getpost("http://www.123.com",$array);
+     *  $array = array('name'=>'good','pass'=>'wrong');
+     *
+     */
+    public static function getpost($URL, $arr, $build=1, $header=false) {
+        if($build)
+            $arr = http_build_query($arr);
+
+        $ch = curl_init();
+        if($header){
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
+        }
+        curl_setopt($ch, CURLOPT_URL, $URL);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);      //设置返回信息的内容和方式
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $arr);       //发送post数据
+        curl_setopt($ch, CURLOPT_TIMEOUT, 30);            //设置30秒超时
+        $result = curl_exec($ch);                         //进行数据传输
+        curl_close($ch);                                  //关闭
+        return $result;
+    }
+
+    /**
+     * curl 方式 get数据 help::getget('http://www.123.com')
+     *
+     */
+    public static function getget($url) {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 30);            //设置30秒超时
+        $result = curl_exec($ch);
+        curl_close($ch);
+        return $result;
+    }
+
+    /**
+     * 获取文件扩展名
+     *
+     */
+    public static function getFileExt($filename) {
+        return addslashes(strtolower(substr(strrchr($filename, '.'), 1, 10)));
+    }
+
+    /**
+     * 人性化文件大小单位
+     */
+    public static function sizeFormat($size, $precision = 2) {
+        $base = log($size) / log(1024);
+        $suffixes = array('B', 'K', 'M', 'G');
+        return round(pow(1024, $base-floor($base)), $precision) . $suffixes[floor($base)];
+    }
+
+    /**
+     * 将人性化的文件大小转换成byte
+     */
+    public static function sizeInBytes($size) {
+        $unit = 'B';
+        $units = array('B'=>0, 'K'=>1, 'M'=>2, 'G'=>3);
+        $matches = array();
+        preg_match('/(?<size>[\d\.]+)\s*(?<unit>b|k|m|g)?/i', $size, $matches);
+        if(array_key_exists('unit', $matches)) {
+            $unit = strtoupper($matches['unit']);
+        }
+        return (floatval($matches['size']) * pow(1024, $units[$unit]) ) ;
+    }
+
+    /**
+     * 显示错误信息
+     *
+     * @param string $string
+     * @param array $error
+     * @param bool $htmlentities
+     *
+     * @return mixed|string
+     */
+    public static function displayError($string = 'Fatal error', $error = array(), $htmlentities = true) {
+        if(DEBUG_MODE) {
+            if(!is_array($error) || empty($error))
+                return str_replace('"', '&quot;', $string) . ('<pre>' . print_r(debug_backtrace(), true) . '</pre>');
+            $key = md5(str_replace('\'', '\\\'', $string));
+            $str = (isset($error) AND is_array($error) AND key_exists($key, $error)) ? ($htmlentities ? htmlentities($error[$key], ENT_COMPAT, 'UTF-8') : $error[$key]) : $string;
+            return str_replace('"', '&quot;', stripslashes($str));
+        } else {
+            return str_replace('"', '&quot;', $string);
+        }
+    }
+
+    /**
+     * 根据格式获取当前时间
+     *
+     */
+    public static function hdate($format='Y-m-d H:i:s', $time=0) {
+        if(empty($time)){
+            return date($format);
+        }
+        return date($format, $time);
+    }
+
+    /**
+     * 根据参数获取当前时间戳
+     *
+     */
+    public static function htime($date='') {
+        if(empty($date)){
+            return time();
+        }
+        return strtotime($date);
+    }
+
+    /**
+     * 将数组中所有的值转换为整形
+     * @param array $array
+     * @return array
+     *
+     */
+    static function arrayValue2num($array) {
+        foreach($array as $key=>$value){
+            $array[$key] = intval($value);
+        }
+        return $array;
+    }
+
+
+    /**
+     * 主键为key
+     *
+     */
+    static function formatkey($result, $key='') {
+        // key 键值对
+        $data = array();
+        if($result && $key) {
+            foreach($result as $value) {
+                $data[$value[$key]] = $value;
+            }
+        } else if($result) {
+            $data = $result;
+        }
+        return $data;
+    }
+
+    /***
+     * 清除html
+     *
+     */
+    public static function clearHTML($str) {
+        $str = preg_replace(array("/<br[^>]*>\s*\r*\n*/is", "/<br \/>/is"), "\r\n\r\n", $str);
+        $str = preg_replace("/\n\n/is", "\r\n\r\n", $str);
+
+        $str = str_replace(array('&nbsp;', '&bull;', '&mdash;', '&quot;', '&rdquo;', '&ldquo;', '&#8226;', '&#160;'), ' ', strip_tags(htmlspecialchars_decode($str, ENT_NOQUOTES)));
+        return $str;
+
+    }
+
+    /***
+     * ajaxReturn
+     * @param mixed $data 要返回的数据
+     * @param String $type AJAX返回数据格式
+     */
+    static function ajaxReturn($data,$type='JSON'){
+        switch (strtoupper($type)){
+        case 'JSON':
+            // 返回JSON数据格式到客户端 包含状态信息
+            header('Content-Type:application/json; charset=utf-8');
+            exit(json_encode($data));
+        case 'JSONP':
+            // 返回JSON数据格式到客户端 包含状态信息
+            header('Content-Type:application/json; charset=utf-8');
+            $handler = self::getg('callback', 'callfun');
+            exit($handler.'('.json_encode($data).');');
+        }
+    }
 }
 
 ?>

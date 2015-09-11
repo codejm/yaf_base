@@ -7,7 +7,7 @@
  *      $Id: defines.inc.php 2014-07-27 17:05:52 codejm $
  */
 
-class ConstDefine{
+class ConstDefine {
 
     // 后台菜单数组 1.3 后废弃，不使用rbac可以使用该方式
     public static $backendMenu = array(

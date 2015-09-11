@@ -13,7 +13,7 @@ class API {
      * @params
      * @return
      */
-    public function some_method($parameter, $option = "foo") {
+    public function some_method($parameter, $option = 'foo') {
         $data = array(1, 2, 3, 4);
         return $data;
     }
