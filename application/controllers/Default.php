@@ -11,6 +11,7 @@ class DefaultController extends \Core_BaseCtl {
 
     // 默认Action
     public function indexAction() {
+        echo '{"errcode": 1,"errmsg": "×øÏ¯Î´µÇÂ¼"}';exit;
     }
 
 

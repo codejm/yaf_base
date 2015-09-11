@@ -51,8 +51,6 @@ class Bootstrap extends \Yaf_Bootstrap_Abstract {
         if($modules) {
             foreach ($modules as $module) {
                 $name = strtolower($module);
-                if($name == 'index')
-                    continue;
                 $route[$name] = new Yaf_Route_Rewrite(
                     '/('.$name.'|'.$name.'/|'.$name.'/index|'.$name.'/index/)$',
                     array(
