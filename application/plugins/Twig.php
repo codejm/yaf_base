@@ -25,7 +25,6 @@ class TwigPlugin extends Yaf_Plugin_Abstract {
             $twig = new \Core_Twig(APP_PATH.'modules/'.$request->module.'/views', $config['twig']);
         }
 
-        // url generate
         $twig->twig->addFunction("url", new Twig_Function_Function("Tools_help::url"));
         // 语言对应
         $twig->twig->addFunction("lang", new Twig_Function_Function("Tools_help::lang"));
