@@ -15,13 +15,14 @@ class Cache_Memcache {
     protected $memcached = false;
     protected $cache;
     //启用压缩
-    protected $set_flags = MEMCACHE_COMPRESSED;
+    protected $set_flags = 0;
 
     function __construct($config) {
         if (empty($config['use_memcached'])) {
-            $this->cache = new \Memcache;
+            $this->set_flags = MEMCACHE_COMPRESSED;
+            $this->cache = new \Memcache();
         } else {
-            $this->cache = new \Memcached;
+            $this->cache = new \Memcached();
             $this->memcached = true;
         }
 
@@ -66,7 +67,7 @@ class Cache_Memcache {
      * @see libs/system/ICache#get($key)
      */
     function get($key) {
-        return $this->memcached?$this->cache->getMulti($key):$this->cache->get($key);
+        return $this->memcached ? $this->cache->get($key) : $this->cache->get($key);
     }
 
     function set($key, $value, $expire = 0) {

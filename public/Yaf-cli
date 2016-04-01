@@ -19,6 +19,7 @@ require_once BASE_PATH.'vendor/autoload.php';
 
 // 框架入口
 $app  = new Yaf_Application(APP_PATH.'conf/application.ini');
+$app->bootstrap();
 $config = Yaf_Application::app()->getConfig()->toArray();
 
 // 参数格式化
@@ -49,7 +50,7 @@ $params['interval']  = !empty($params['interval']) ? (int)$params['interval'] : 
 $params['count']     = !empty($params['count']) ? (int)$params['count'] : $config['resque']['count'];
 
 // redis config and redis prefix
-Resque::setBackend($params['host']);
+Resque::setBackend($params['host'], 1);
 if(!empty($params['prefix'])) {
     Resque_Redis::prefix($params['prefix']);
 }
@@ -61,7 +62,7 @@ foreach($jobfiles as $job) {
 }
 unset($jobfiles);
 
-if($params['count'] > 0) {
+if($params['count'] > 1) {
     for($i=0; $i <$params['count']; ++$i) {
 		$pid = pcntl_fork();
         if($pid == -1) {

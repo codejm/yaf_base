@@ -11,6 +11,7 @@ class JobFirst extends \Core_CJob {
 
     public function perform() {
         parent::perform();
+        echo '<pre>'; var_dump($this->args); echo '</pre>';
         echo "\n".$this->job->payload['id'].':first job....';
         sleep(10);
     }

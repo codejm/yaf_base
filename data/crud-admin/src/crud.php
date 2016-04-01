@@ -8,8 +8,9 @@
  */
 date_default_timezone_get('PRC');
 $options = array(PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ, PDO::ATTR_ERRMODE => PDO::ERRMODE_WARNING);
-$table_pre = '_';
-$db = new PDO('mysql:host=localhost;dbname=yaf_demo', 'root', 'root', $options);
+$table_pre = 'yaf_';
+$db = new PDO('mysql:host=127.0.0.1;dbname=yaf', 'root', 'root', $options);
+$db->exec('SET CHARACTER SET UTF8');
 
 $query = "SHOW TABLES";
 $sth = $db->prepare($query);
@@ -555,7 +556,9 @@ foreach($tables as $table_name => $table){
     $_edit_template = str_replace("__EDIT_FORM_TEMPLATE_STYLE__", $EDIT_FORM_TEMPLATE_STYLE, $_edit_template);
     $_edit_template = str_replace("__EDIT_FORM_TEMPLATE_SCRIPT__", $EDIT_FORM_TEMPLATE_SCRIPT, $_edit_template);
 
-    //@mkdir(__DIR__."/../web/controllers/".$TABLENAME, 0755);
+    @mkdir(__DIR__."/../web/controllers/", 0755, true);
+    @mkdir(__DIR__."/../web/models/", 0755, true);
+    @mkdir(__DIR__."/../web/views/", 0755, true);
     @mkdir(__DIR__."/../web/views/".$TABLENAMES, 0755);
 
     $fp = fopen(__DIR__."/../web/controllers/".$TABLENAMEBAK.".php", "w+");
