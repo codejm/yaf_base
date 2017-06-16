@@ -7,6 +7,4 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Twig_' => array($vendorDir . '/twig/twig/lib'),
-    'Resque' => array($vendorDir . '/chrisboulton/php-resque/lib'),
-    'PHPExcel' => array($vendorDir . '/phpoffice/phpexcel/Classes'),
 );

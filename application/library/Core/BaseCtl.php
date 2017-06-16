@@ -46,6 +46,25 @@ class Core_BaseCtl extends \Yaf_Controller_Abstract {
     }
 
     /**
+     * 输出指定模板并结束
+     *
+     */
+    public function _exitTpl($tpl='') {
+        $tpl = $tpl ? $tpl : strtolower($this->actionName);
+        $this->display($tpl);
+        $this->_exit();
+    }
+
+    /**
+     * 跳转并结束代码执行
+     *
+     */
+    public function _redirect($url) {
+        $this->redirect($url);
+        $this->_exit();
+    }
+
+    /**
      *
      *
      */
@@ -106,7 +125,7 @@ class Core_BaseCtl extends \Yaf_Controller_Abstract {
      *
      */
     protected function getAllPost() {
-        return $_POST;
+        return Tools_help::filter($_POST);
     }
 
 }

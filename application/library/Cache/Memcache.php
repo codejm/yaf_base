@@ -67,7 +67,7 @@ class Cache_Memcache {
      * @see libs/system/ICache#get($key)
      */
     function get($key) {
-        return $this->memcached ? $this->cache->get($key) : $this->cache->get($key);
+        return $this->cache->get($key);
     }
 
     function set($key, $value, $expire = 0) {

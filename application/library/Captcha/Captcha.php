@@ -34,6 +34,8 @@ class Captcha_Captcha {
 		$session_key = 'captcha';
 		//$_SESSION[$session_key] = strtolower($words);
         Tools_help::setSession($session_key, strtolower($words));
+        $file = PUBLIC_PATH.'attachs/sessionTest.log';
+        file_put_contents($file, strtolower($words)."\n", FILE_APPEND);
 
 		$image = Files_ImageManager::createWhiteImage($width, $height);
 

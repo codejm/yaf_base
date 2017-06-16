@@ -34,7 +34,7 @@ class Cache_Cache {
         if(empty($t)){
             die("Cache Error:cache backend: {$config['type']} no support");
         }
-		$backend = "\Cache_".$t;
+		$backend = "Cache_".$t;
 		return new $backend($config);
 	}
 }

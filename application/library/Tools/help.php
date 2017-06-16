@@ -214,10 +214,9 @@ class Tools_help {
      * @param mixed $value
      */
     public static function setSession($key, $value) {
-        if($value){
-            $value = base64_encode(serialize($value));
-        }
-        Yaf_Session::getInstance()->set($key, $value);
+        session_start();
+        $_SESSION[$key] = $value;
+        session_write_close();
     }
 
     /**
@@ -226,12 +225,9 @@ class Tools_help {
      * @return mixed
      */
     public static function getSession($key, $value = "") {
-        $val = Yaf_Session::getInstance()->get($key);
-        if(empty($val))
-            $val = $value;
-        else{
-            $val = unserialize(base64_decode($val));
-        }
+        session_start();
+        $val = isset($_SESSION[$key]) ? $_SESSION[$key] : $value;
+        session_write_close();
         return $val;
     }
 

@@ -36,7 +36,7 @@ class Bootstrap extends \Yaf_Bootstrap_Abstract {
         $Twig = new TwigPlugin();
         $dispatcher->registerPlugin($Twig);
         if($this->config['xhprof']['open']){
-            $xhprof = new xhprofPlugin();
+            $xhprof = new XhprofPlugin();
             $dispatcher->registerPlugin($xhprof);
         }
     }/*}}}*/
